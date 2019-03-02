@@ -1,0 +1,42 @@
+{
+  "name": "frontend-taskmanager",
+  "description": "A Vue.js project",
+  "version": "1.0.0",
+  "author": "SandyCandy <sandratieben@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "vue": "^2.6.7",
+    "vue-cookies": "^1.5.12",
+    "vue-router": "^3.0.2"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "bootstrap": "^4.3.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.4",
+    "jquery": "^3.2",
+    "node-sass": "^4.5.3",
+    "popper.js": "^1.12",
+    "sass-loader": "^6.0.6",
+    "vue-loader": "^15.6.4",
+    "vue-template-compiler": "^2.6.7",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.0"
+  }
+}
