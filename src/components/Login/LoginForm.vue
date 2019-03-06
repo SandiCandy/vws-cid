@@ -88,7 +88,6 @@ export default {
     },
     auth(user, token) {
       this.$cookies.set("token", token, "7d");
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
       this.$emit("login");
     }
   }

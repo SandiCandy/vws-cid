@@ -1,0 +1,101 @@
+<template>
+  <div class="tudu-blu row vh-100">
+    <div class="alert alert-danger" v-if="errors.length > 0">
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+    </div>
+
+    <form class="col-sm-12">
+      <div class="form-group">
+        <label for="name">Name *</label>
+        <input type="text" name="name" id="name" class="form-control" v-model="room.name">
+      </div>
+
+      <div class="form-group">
+        <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
+        <button type="button" @click="updateRoom" class="btn btn-outline-light">Änderung speichern</button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      room: {
+        name: ""
+      },
+      errors: []
+    };
+  },
+  mounted() {
+    this.$store.commit("changePage", "Ort ändern");
+    this.fetchRoom();
+  },
+
+  methods: {
+    fetchRoom() {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + $cookies.get("token");
+
+      axios
+        .get(
+          "http://localhost:8000/api/auth/roomtype/" +
+            this.$route.params.id +
+            "/rooms/" +
+            this.$route.params.rid
+        )
+        .then(response => {
+          this.room = response.data.room;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error.data);
+        });
+    },
+    updateRoom() {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + $cookies.get("token");
+      axios
+        .put(
+          "http://localhost:8000/api/auth/roomtype/" +
+            this.$route.params.id +
+            "/rooms/" +
+            this.$route.params.rid +
+            "/update",
+          {
+            name: this.room.name
+          }
+        )
+        .then(response => {
+          console.log(response);
+          this.reset();
+        })
+        .catch(error => {
+          this.errors = [];
+          console.log(error.response);
+
+          if (error.response.data.errors && error.response.data.errors.name) {
+            this.errors.push(error.response.data.errors.name[0]);
+          }
+        });
+    },
+    reset() {
+      this.room.name = "";
+      history.back();
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+.tudu-blu label {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+.full-width {
+  margin-left: -15px;
+}
+</style>
