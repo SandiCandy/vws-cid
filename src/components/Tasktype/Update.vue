@@ -9,16 +9,12 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
-        <input type="text" name="name" id="name" class="form-control" v-model="tasktype.name">
+        <input type="text" name="name" id="name" class="form-control" v-model="task.name">
       </div>
 
       <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-        <button
-          type="button"
-          @click="updateTasktype"
-          class="btn btn-outline-light"
-        >Änderung speichern</button>
+        <button type="button" @click="updateTask" class="btn btn-outline-light">Änderung speichern</button>
       </div>
     </form>
   </div>
@@ -28,49 +24,42 @@
 export default {
   data() {
     return {
-      tasktype: {
-        name: ""
-      },
+      task: null,
       errors: []
     };
   },
   mounted() {
-    this.$store.commit("changePage", "Aufgabenart ändern");
-    this.fetchTasktype();
+    this.$store.commit("changePage", "Aufgabe ändern");
+    this.fetchTask();
   },
 
   methods: {
-    fetchTasktype() {
+    fetchTask() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
 
       axios
-        .get(
-          "http://localhost:8000/api/auth/group/" +
-            this.$route.params.id +
-            "/tasktypes/" +
-            this.$route.params.ttid
-        )
+        .get("http://localhost:8000/tasks/" + this.$route.params.ttid)
         .then(response => {
-          this.tasktype = response.data.tasktype;
+          this.task = response.data.task;
           console.log(response.data);
         })
         .catch(error => {
           console.log(error.data);
         });
     },
-    updateTasktype() {
+    updateTask() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
         .put(
           "http://localhost:8000/api/auth/group/" +
             this.$route.params.id +
-            "/tasktypes/" +
+            "/tasks/" +
             this.$route.params.ttid +
             "/update",
           {
-            name: this.tasktype.name
+            name: this.task.name
           }
         )
         .then(response => {
@@ -87,7 +76,7 @@ export default {
         });
     },
     reset() {
-      this.tasktype.name = "";
+      this.task.name = "";
       history.back();
     }
   }
