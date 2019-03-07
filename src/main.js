@@ -5,15 +5,24 @@ import Vue from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
+  faCheck,
+  faChevronLeft,
+  faEllipsisV,
+  faHome,
+  faPlus,
+  faSpinner,
+  faTag
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+  faCheck,
   faHome,
   faTag,
   faEllipsisV,
   faChevronLeft,
   faPlus,
-  faCheck
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(faHome, faTag, faEllipsisV, faChevronLeft, faPlus, faCheck);
+  faSpinner
+);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
@@ -22,8 +31,9 @@ import VueRouter from "vue-router";
 import VueCookies from "vue-cookies";
 import App from "./App.vue";
 
-import Tasks from "./components/Task/Tasks.vue";
+import ShowTask from "./components/Task/Show.vue";
 import NewTask from "./components/Task/New.vue";
+import UpdateTask from "./components/Task/Update.vue";
 
 import ShowTasktype from "./components/Tasktype/Show.vue";
 import NewTasktype from "./components/Tasktype/New.vue";
@@ -54,13 +64,19 @@ const routes = [
   {
     path: "/group/:id/tasks",
     name: "tasks",
-    component: Tasks,
+    component: ShowTask,
     meta: { requiresAuth: true }
   },
   {
     path: "/group/:id/tasks/new",
     name: "tasks.new",
     component: NewTask,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/tasks/:tid",
+    name: "tasks.update",
+    component: UpdateTask,
     meta: { requiresAuth: true }
   },
   {

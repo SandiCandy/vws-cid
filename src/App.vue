@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark tudu-blu">
+      <a @click="$router.go(-1)">
+        <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>TODO
+      </a>
       <router-link to="/" class="navbar-brand">{{ $store.getters.pagetitle }}</router-link>
       <button
         class="navbar-toggler"
@@ -85,6 +88,10 @@ div.tudu-blu {
   color: #ffffff;
 }
 
+[type="button"].btn {
+  -webkit-appearance: inherit;
+}
+
 .btn.tudu-blu-outline {
   background-color: #ffffff;
   border: 2px solid #39d8d8;
@@ -102,7 +109,7 @@ section h1 {
 }
 
 .btn.btn-plus {
-  position: absolute;
+  position: fixed;
   bottom: 20vh;
   right: 5vw;
   height: 60px;
@@ -113,5 +120,10 @@ section h1 {
   box-shadow: 2px 2px 4px #afafaf;
   color: #ffffff;
   z-index: 100;
+}
+
+.loading,
+.success {
+  padding-top: 30vh;
 }
 </style>

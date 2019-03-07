@@ -1,11 +1,5 @@
 <template>
   <div class="tudu-blu row vh-100">
-    <div class="success d-flex justify-content-center" v-if="success">
-        <font-awesome-icon
-          :icon="['fas', 'check']"
-          class="display-4 d-flex justify-content-center"
-        ></font-awesome-icon>
-      </div>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -14,7 +8,7 @@
 
     <form class="col-sm-12">
       <div class="form-group">
-        <label for="title">Name *</label>
+        <label for="title">Name</label>
         <input type="text" name="title" id="title" class="form-control" v-model="task.title">
       </div>
 
@@ -47,15 +41,17 @@
       </div>
 
       <div class="form-group">
-        <label for="roomtype_id">Bereich </label>
+        <label for="roomtype_id">Bereich</label>
         <select v-model="roomtype_id" class="form-control" name="roomtype_id" id="roomtype_id">
           <option value="-1"></option>
-
-          <option v-for="(rtype, index) in roomtypes" :value="rtype.id">{{ rtype.name }} ({{ rtype.rooms_count}} Orte)</option>
+          <option
+            v-for="(rtype, index) in roomtypes"
+            :value="rtype.id"
+          >{{ rtype.name }} ({{ rtype.rooms_count}} Orte)</option>
         </select>
       </div>
 
-      <div class="form-group" v-if="roomtype_id > -1">
+      <div class="form-group" v-if="roomtype_id > -1 || task.room_id">
         <label for="room_id">Ort</label>
         <select v-model="task.room_id" class="form-control" name="room_id" id="room_id">
           <option v-for="(room, index) in rooms" :value="room.id">{{ room.name }}</option>
@@ -64,10 +60,9 @@
 
       <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-        <button type="button" @click="createTask" class="btn btn-outline-light">Aufgabe erstellen</button>
+        <button type="button" @click="updateTask" class="btn btn-outline-light">Änderung speichern</button>
       </div>
     </form>
-  </div>
   </div>
 </template>
 
@@ -76,43 +71,36 @@ export default {
   data() {
     return {
       success: false,
-      task: {
-        title: "",
-        description: "",
-        tasktype_id: "",
-        priority: 5,
-        room_id: ""
-      },
+      errors: [],
+      task: {},
       roomtype_id: -1,
       tasktypes: [],
       roomtypes: [],
-      rooms: [],
-      errors: []
+      rooms: []
     };
   },
-
   watch: {
     roomtype_id: function(id) {
-      this.fetchRooms(id);
+      if (id > -1) {
+        this.fetchRooms(id);
+      }
     }
   },
-
   mounted() {
-    this.$store.commit("changePage", "Neue Aufgabe");
+    this.$store.commit("changePage", "Aufgaben ändern");
+    this.fetchTask();
     this.fetchTasktypes();
     this.fetchRoomtypes();
+    //TODO: Handling von Rooms & Roomtypes
+    //
   },
 
   methods: {
-    createTask() {
+    updateTask() {
       this.success = false;
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + $cookies.get("token");
       axios
-        .post(
-          "http://localhost:8000/api/auth/group/" +
-            this.$route.params.id +
-            "/task/create",
+        .put(
+          "http://localhost:8000/api/auth/tasks/" + this.task.id + "/update",
           {
             title: this.task.title,
             description: this.task.description,
@@ -121,41 +109,47 @@ export default {
             room_id: this.task.room_id
           }
         )
+
         .then(response => {
-          this.$emit("newtask");
+          console.log(response.data);
           this.success = true;
           setTimeout(this.reset, 1000);
-          //this.reset();
         })
         .catch(error => {
-          this.errors = [];
           console.log(error.response);
+          this.errors = [];
 
-          if (error.response.data.errors && error.response.data.errors.title) {
-            this.errors.push(error.response.data.errors.title[0]);
-          }
-          if (
-            error.response.data.errors &&
-            error.response.data.errors.description
-          ) {
-            this.errors.push(error.response.data.errors.description[0]);
-          }
+          // if (error.response.data && error.data.title) {
+          //   this.errors.push(error.response.data.errors.title[0]);
+          // }
 
-          if (
-            error.response.data.errors &&
-            error.response.data.errors.tasktype
-          ) {
-            this.errors.push(error.response.data.errors.tasktype[0]);
-          }
+          // if (error.response.data.errors.description) {
+          //   this.errors.push(error.response.data.errors.description[0]);
+          // }
+
+          // if (error.response.data.errors.tasktype) {
+          //   this.errors.push(error.response.data.errors.tasktype[0]);
+          // }
+        });
+    },
+    fetchTask() {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + $cookies.get("token");
+
+      axios
+        .get("http://localhost:8000/api/auth/tasks/" + this.$route.params.tid)
+        .then(response => {
+          this.task = response.data.task;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error.data);
         });
     },
     reset() {
       this.task.title = "";
       this.task.description = "";
       this.task.tasktype_id = "";
-      this.task.priority = 5;
-      this.task.roomtype = "";
-      this.task.roomname = "";
       history.back();
     },
     fetchTasktypes() {
@@ -197,9 +191,7 @@ export default {
         "Bearer " + $cookies.get("token");
 
       axios
-        .get(
-          "http://localhost:8000/api/auth/roomtype/" + id + "/rooms"
-        )
+        .get("http://localhost:8000/api/auth/roomtype/" + id + "/rooms")
         .then(response => {
           this.rooms = response.data.rooms;
           console.log(response.data);
@@ -212,21 +204,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.tudu-blu label {
-  margin-bottom: 0;
-  font-size: 0.9rem;
-}
-
-.success {
-  z-index: 10;
-  background-color: green;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-
-}
-</style>
