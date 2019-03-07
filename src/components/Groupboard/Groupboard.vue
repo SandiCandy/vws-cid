@@ -33,7 +33,7 @@
     </router-link>
 
     <router-link
-      :to="{name: '', params: { id: this.$route.params.id}}"
+      :to="{name: 'roomtypes.show', params: { id: this.$route.params.id}}"
       type="button"
       class="btn btn-default tudu-blu btn-action btn-6"
     >
