@@ -15,7 +15,7 @@
               class="btn btn-info btn-block btn-group"
               v-for="group in groups"
               :key="group.id"
-              :to="{ name: 'group', params: {id: group.id} }"
+              :to="{ name: 'groups', params: {id: group.id} }"
               v-bind:class="group.name"
             >{{group.name}} ({{group.pivot.role}})</router-link>
           </section>
@@ -99,7 +99,6 @@ export default {
         .then(response => {
           this.$store.commit("isLoading", false);
           this.groups = response.data.groups;
-          console.log(this.groups);
         })
         .catch(error => {
           this.$store.commit("hasError", error.toString());
@@ -113,13 +112,11 @@ export default {
         .get("http://localhost:8000/api/auth/myinvitations")
         .then(response => {
           this.invitations = response.data.invitations;
-          if (this.invitations.length > 0) {
-            $("#invitationModal").modal("show");
-          }
-          console.log("response", response.data);
+          this.showInvitationIfExist();
+          console.log(response.data);
         })
         .catch(error => {
-          console.log(error.response);
+          console.log("bla", error);
         });
     },
     acceptInvitation() {
@@ -131,7 +128,7 @@ export default {
         )
         .then(response => {
           this.invitations.splice(0, 1);
-          $("#invitationModal").modal("hide"); //was ist, wenn mehrere Einladungen da sind???
+          this.showInvitationIfExist();
           console.log("response", response.data);
           this.findGroups();
         })
@@ -148,12 +145,19 @@ export default {
         )
         .then(response => {
           this.invitations.splice(0, 1);
-          $("#invitationModal").modal("hide"); //was ist, wenn mehrere Einladungen da sind???
+          this.showInvitationIfExist();
           console.log("response", response.data);
         })
         .catch(error => {
           console.log(error.response);
         });
+    },
+    showInvitationIfExist() {
+      if (this.invitations.length > 0) {
+        $("#invitationModal").modal("show");
+      } else {
+        $("#invitationModal").modal("hide");
+      }
     }
   }
 };

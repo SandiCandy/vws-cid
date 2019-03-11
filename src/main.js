@@ -60,7 +60,10 @@ import NewQuote from "./components/new-quote.vue";
 
 import Login from "./components/Login/Login.vue";
 import Signup from "./components/Signup/Signup.vue";
+
 import Dashboard from "./components/Dashboard/Dashboard.vue";
+import NewGroup from "./components/Dashboard/New.vue";
+
 import GroupBoard from "./components/Groupboard/Groupboard.vue";
 
 //import moment from "vue-moment";
@@ -160,8 +163,14 @@ const routes = [
   },
   {
     path: "/group/:id",
-    name: "group",
+    name: "groups",
     component: GroupBoard,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/new",
+    name: "groups.new",
+    component: NewGroup,
     meta: { requiresAuth: true }
   },
   {
