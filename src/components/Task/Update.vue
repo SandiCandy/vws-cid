@@ -43,7 +43,7 @@
       <div class="form-group">
         <label for="roomtype_id">Bereich</label>
         <select v-model="roomtype_id" class="form-control" name="roomtype_id" id="roomtype_id">
-          <option value="-1"></option>
+          <option value="0"></option>
           <option
             v-for="(rtype, index) in roomtypes"
             :value="rtype.id"
@@ -51,7 +51,7 @@
         </select>
       </div>
 
-      <div class="form-group" v-if="roomtype_id > -1 || task.room_id">
+      <div class="form-group" v-if="roomtype_id > 0 || task.room_id">
         <label for="room_id">Ort</label>
         <select v-model="task.room_id" class="form-control" name="room_id" id="room_id">
           <option v-for="(room, index) in rooms" :value="room.id">{{ room.name }}</option>
@@ -80,13 +80,18 @@ export default {
     };
   },
   watch: {
-    roomtype_id: function(id) {
-      if (id > -1) {
-        this.fetchRooms(id);
+    roomtype_id: function(newId, oldId) {
+      /* -1 --> initialisierung */
+
+      if (oldId != -1) {
+        this.task.room_id = "";
+      }
+      if (newId > 0) {
+        this.fetchRooms(newId);
       }
     }
   },
-  mounted() {
+  created() {
     this.$store.commit("changePage", "Aufgaben ändern");
     this.fetchTask();
     this.fetchTasktypes();
@@ -119,17 +124,21 @@ export default {
           console.log(error.response);
           this.errors = [];
 
-          // if (error.response.data && error.data.title) {
-          //   this.errors.push(error.response.data.errors.title[0]);
-          // }
+          if (error.response.data && error.data.title) {
+            this.errors.push(error.response.data.errors.title[0]);
+          }
 
-          // if (error.response.data.errors.description) {
-          //   this.errors.push(error.response.data.errors.description[0]);
-          // }
+          if (error.response.data.errors.description) {
+            this.errors.push(error.response.data.errors.description[0]);
+          }
 
-          // if (error.response.data.errors.tasktype) {
-          //   this.errors.push(error.response.data.errors.tasktype[0]);
-          // }
+          if (error.response.data.errors.priority) {
+            this.errors.push(error.response.data.errors.priority[0]);
+          }
+
+          if (error.response.data.errors.tasktype_id) {
+            this.errors.push(error.response.data.errors.tasktype_id[0]);
+          }
         });
     },
     fetchTask() {
@@ -141,6 +150,9 @@ export default {
         .then(response => {
           this.task = response.data.task;
           console.log(response.data);
+          if (this.task.room_id) {
+            this.getRoomtype(this.task.room_id);
+          }
         })
         .catch(error => {
           console.log(error.data);
@@ -195,7 +207,20 @@ export default {
         .then(response => {
           this.rooms = response.data.rooms;
           console.log(response.data);
-          this.loading = false;
+        })
+        .catch(error => {
+          console.log(error.data);
+        });
+    },
+    getRoomtype(room_id) {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + $cookies.get("token");
+
+      axios
+        .get("http://localhost:8000/api/auth/room/" + room_id + "/roomtype")
+        .then(response => {
+          this.roomtype_id = response.data.roomtype.id;
+          console.log(response.data);
         })
         .catch(error => {
           console.log(error.data);

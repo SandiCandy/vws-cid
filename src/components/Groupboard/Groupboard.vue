@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <router-link
-      :to="{name: 'tasks', params: { id: this.$route.params.id } }"
+      :to="{name: 'tasks.current', params: { id: this.$route.params.id } }"
       type="button"
       class="btn btn-default tudu-blu btn-action btn-12"
     >
@@ -9,7 +9,7 @@
     </router-link>
 
     <router-link
-      :to="{name: '', params: { id: this.$route.params.id } }"
+      :to="{name: 'tasks.finished', params: { id: this.$route.params.id } }"
       type="button"
       class="btn btn-default tudu-blu btn-action btn-6"
     >
@@ -25,7 +25,7 @@
     </router-link>
 
     <router-link
-      :to="{name: '', params: { id: this.$route.params.id}}"
+      :to="{name: 'group.team', params: { id: this.$route.params.id}}"
       type="button"
       class="btn btn-default tudu-blu btn-action btn-6"
     >

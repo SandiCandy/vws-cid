@@ -1,11 +1,7 @@
 <template>
   <div class="vh-100">
-    <div class="loading d-flex justify-content-center" v-if="loading">
-      <font-awesome-icon
-        :icon="['fas', 'spinner']"
-        class="fa-pulse display-4 d-flex justify-content-center"
-      ></font-awesome-icon>
-    </div>
+    <loading class="loading" v-if="$store.getters.loading"></loading>
+    <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content" v-else>
       <div class="list-group">
         <section v-if="rooms.length > 0">
@@ -33,22 +29,12 @@
             </button>
           </article>
         </section>
-        <section
-          class="lead"
-          v-else
-        >Es gibt noch keine Orte für diesen Bereich 😢. Möchtest du einen
-          <router-link
-            :to="{name: 'rooms.new', params: { id: this.$route.params.id } }"
-          >Bereich anlegen?</router-link>
-        </section>
+        <div v-else>
+          <no-content contenttype="Orte" routename="rooms.new"></no-content>
+        </div>
       </div>
 
-      <router-link
-        :to="{name: 'rooms.new', params: { id: this.$route.params.id } }"
-        class="btn btn-plus"
-      >
-        <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
-      </router-link>
+      <add-button routename="rooms.new"></add-button>
 
       <!-- Modal -->
       <div
@@ -79,10 +65,14 @@
 
 
 <script>
-//import Newroom from "./New.vue";
+import Loading from "../common/Loading.vue";
+import NoContent from "../common/NoContent.vue";
+import AddButton from "../common/AddButton.vue";
 export default {
   components: {
-    //Newroom
+    Loading,
+    NoContent,
+    AddButton
   },
   data() {
     return {
@@ -97,7 +87,7 @@ export default {
       rooms: []
     };
   },
-  mounted() {
+  created() {
     this.fetchRooms();
     this.fetchRoomtype();
   },
@@ -128,7 +118,8 @@ export default {
     },
 
     fetchRooms() {
-      this.loading = true;
+      this.$store.commit("isLoading", true);
+      this.error = null;
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
 
@@ -141,10 +132,11 @@ export default {
         .then(response => {
           this.rooms = response.data.rooms;
           console.log(response.data);
-          this.loading = false;
+          this.$store.commit("isLoading", false);
         })
         .catch(error => {
-          console.log(error.data);
+          this.$store.commit("hasError", error.toString());
+          this.$store.commit("isLoading", false);
         });
     },
 

@@ -47,13 +47,17 @@
 
 <script>
 import NavigationLeft from "./components/Navigation/NavigationLeft.vue";
+import Loading from "./components/common/Loading.vue";
+var moment = require("moment");
 export default {
   name: "app",
   components: {
-    NavigationLeft
+    NavigationLeft,
+    Loading
   },
   data() {
     return {
+      moment: moment,
       isLoggedIn: $cookies.isKey("token")
     };
   },

@@ -1,11 +1,8 @@
 <template>
   <div class="tudu-blu row vh-100">
-    <div class="success d-flex justify-content-center" v-if="success">
-        <font-awesome-icon
-          :icon="['fas', 'check']"
-          class="display-4 d-flex justify-content-center"
-        ></font-awesome-icon>
-      </div>
+    <div v-if="success">
+      <successful></successful>
+    </div>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -47,11 +44,14 @@
       </div>
 
       <div class="form-group">
-        <label for="roomtype_id">Bereich </label>
+        <label for="roomtype_id">Bereich</label>
         <select v-model="roomtype_id" class="form-control" name="roomtype_id" id="roomtype_id">
           <option value="-1"></option>
 
-          <option v-for="(rtype, index) in roomtypes" :value="rtype.id">{{ rtype.name }} ({{ rtype.rooms_count}} Orte)</option>
+          <option
+            v-for="(rtype, index) in roomtypes"
+            :value="rtype.id"
+          >{{ rtype.name }} ({{ rtype.rooms_count}} Orte)</option>
         </select>
       </div>
 
@@ -68,11 +68,14 @@
       </div>
     </form>
   </div>
-  </div>
 </template>
 
 <script>
+import Successful from "../common/Successful.vue";
 export default {
+  components: {
+    Successful
+  },
   data() {
     return {
       success: false,
@@ -197,9 +200,7 @@ export default {
         "Bearer " + $cookies.get("token");
 
       axios
-        .get(
-          "http://localhost:8000/api/auth/roomtype/" + id + "/rooms"
-        )
+        .get("http://localhost:8000/api/auth/roomtype/" + id + "/rooms")
         .then(response => {
           this.rooms = response.data.rooms;
           console.log(response.data);
@@ -227,6 +228,5 @@ export default {
   left: 0;
   height: 100vh;
   width: 100vw;
-
 }
 </style>

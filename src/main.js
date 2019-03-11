@@ -8,19 +8,23 @@ import {
   faCheck,
   faChevronLeft,
   faEllipsisV,
+  faHammer,
   faHome,
   faPlus,
   faSpinner,
+  faStar,
   faTag
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
   faCheck,
+  faHammer,
   faHome,
   faTag,
   faEllipsisV,
   faChevronLeft,
   faPlus,
+  faStar,
   faSpinner
 );
 
@@ -31,7 +35,8 @@ import VueRouter from "vue-router";
 import VueCookies from "vue-cookies";
 import App from "./App.vue";
 
-import ShowTask from "./components/Task/Show.vue";
+import CurrentTasks from "./components/Task/Current.vue";
+import FinishedTasks from "./components/Task/Finished.vue";
 import NewTask from "./components/Task/New.vue";
 import UpdateTask from "./components/Task/Update.vue";
 
@@ -47,6 +52,9 @@ import ShowRoom from "./components/Room/Show.vue";
 import NewRoom from "./components/Room/New.vue";
 import UpdateRoom from "./components/Room/Update.vue";
 
+import Team from "./components/Team/Team.vue";
+import AddMember from "./components/Team/New.vue";
+
 import Quotes from "./components/quotes.vue";
 import NewQuote from "./components/new-quote.vue";
 
@@ -55,6 +63,11 @@ import Signup from "./components/Signup/Signup.vue";
 import Dashboard from "./components/Dashboard/Dashboard.vue";
 import GroupBoard from "./components/Groupboard/Groupboard.vue";
 
+//import moment from "vue-moment";
+import moment from "moment";
+moment.locale("de");
+Vue.prototype.moment = moment;
+// Vue.use(moment);
 Vue.use(VueRouter);
 Vue.use(VueCookies);
 
@@ -63,8 +76,14 @@ const routes = [
   { path: "/new-quote", component: NewQuote },
   {
     path: "/group/:id/tasks",
-    name: "tasks",
-    component: ShowTask,
+    name: "tasks.current",
+    component: CurrentTasks,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/tasks/finished",
+    name: "tasks.finished",
+    component: FinishedTasks,
     meta: { requiresAuth: true }
   },
   {
@@ -133,11 +152,28 @@ const routes = [
     component: UpdateRoom,
     meta: { requiresAuth: true }
   },
-  { path: "/dashboard", component: Dashboard, meta: { requiresAuth: true } },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: Dashboard,
+    meta: { requiresAuth: true }
+  },
   {
     path: "/group/:id",
     name: "group",
     component: GroupBoard,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/team",
+    name: "group.team",
+    component: Team,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/team/add",
+    name: "group.add",
+    component: AddMember,
     meta: { requiresAuth: true }
   },
   { path: "/login", component: Login, meta: { guest: true } },
@@ -161,7 +197,7 @@ router.beforeEach((to, from, next) => {
         if (user.is_admin == 1) {
           next();
         } else {
-          next({ path: "/dashboard" });
+          next({ name: "dashboard" });
         }
       } else {
         next();
@@ -171,7 +207,7 @@ router.beforeEach((to, from, next) => {
     if (VueCookies.get("token") == null) {
       next();
     } else {
-      next({ path: "/dashboard" });
+      next({ name: "dashboard" });
     }
   } else {
     next();

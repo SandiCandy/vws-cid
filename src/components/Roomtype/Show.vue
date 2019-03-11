@@ -1,8 +1,7 @@
 <template>
   <div class="vh-100">
-    <div class="loading d-flex justify-content-center" v-if="loading">
-      <font-awesome-icon :icon="['fas', 'spinner']" class="display-4 d-flex justify-content-center"></font-awesome-icon>
-    </div>
+    <loading class="loading" v-if="$store.getters.loading"></loading>
+    <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content" v-else>
       <div class="list-group">
         <section v-if="roomtypes.length > 0">
@@ -10,11 +9,14 @@
             v-for="(roomtype, index) in roomtypes"
             class="list-group-item list-group-item-action"
           >
-            <h3>
-              <font-awesome-icon :icon="['fas', 'home']"></font-awesome-icon>
-              {{ roomtype.name }} ({{ roomtype.rooms_count }})
-            </h3>
-            <p>Bla bla</p>
+            <router-link :to="{name: 'rooms.show', params: { id: roomtype.id } }">
+              <h3>
+                <font-awesome-icon :icon="['fas', 'home']"></font-awesome-icon>
+                {{ roomtype.name }} ({{ roomtype.rooms_count }})
+              </h3>
+              <p>Bla bla</p>
+            </router-link>
+
             <router-link
               class="btn btn-success btn-xs"
               style="padding:8px"
@@ -33,19 +35,12 @@
             </button>
           </article>
         </section>
-        <section class="lead" v-else>Es gibt noch keine Bereiche 😢. Möchtest du einen
-          <router-link
-            :to="{name: 'roomtypes.new', params: { id: this.$route.params.id } }"
-          >Bereich anlegen?</router-link>
-        </section>
+        <div v-else>
+          <no-content contenttype="Bereiche" routename="roomtypes.new"></no-content>
+        </div>
       </div>
 
-      <router-link
-        :to="{name: 'roomtypes.new', params: { id: this.$route.params.id } }"
-        class="btn btn-plus"
-      >
-        <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
-      </router-link>
+      <add-button routename="roomtypes.new"></add-button>
 
       <!-- Modal -->
       <div
@@ -76,10 +71,14 @@
 
 
 <script>
-//import Newroomtype from "./New.vue";
+import Loading from "../common/Loading.vue";
+import NoContent from "../common/NoContent.vue";
+import AddButton from "../common/AddButton.vue";
 export default {
   components: {
-    //Newroomtype
+    Loading,
+    NoContent,
+    AddButton
   },
   data() {
     return {
@@ -124,7 +123,7 @@ export default {
     },
 
     fetchRoomtypes() {
-      this.loading = true;
+      this.$store.commit("isLoading", true);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
 
@@ -137,10 +136,11 @@ export default {
         .then(response => {
           this.roomtypes = response.data.roomtypes;
           console.log(response.data);
-          this.loading = false;
+          this.$store.commit("isLoading", false);
         })
         .catch(error => {
-          console.log(error.data);
+          this.$store.commit("hasError", error.toString());
+          this.$store.commit("isLoading", false);
         });
     }
   }
