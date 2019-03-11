@@ -45,7 +45,7 @@
           aria-labelledby="deleteModalLabel"
           aria-hidden="true"
         >
-          <!-- <delete-user-modal v-bind:user="delete_user" v-on:userDeleted="removeDeleteduser"></delete-user-modal> -->
+          <delete-user-modal v-bind:user="delete_user" v-on:userDeleted="removeDeletedUser"></delete-user-modal>
         </div>
       </div>
     </div>
@@ -56,13 +56,15 @@
 
 <script>
 import Loading from "../common/Loading.vue";
-import NoMember from "./TeamComponents/NoMember.vue";
 import AddButton from "../common/AddButton.vue";
+import NoMember from "./TeamComponents/NoMember.vue";
+import DeleteUserModal from "./TeamComponents/DeleteUserModal.vue";
 export default {
   components: {
     Loading,
     NoMember,
-    AddButton
+    AddButton,
+    DeleteUserModal
   },
   data() {
     return {
@@ -77,37 +79,22 @@ export default {
   },
 
   created() {
-    this.readteam();
+    this.readTeam();
     this.$store.commit("changePage", "Team");
   },
 
   methods: {
-    isDone(index) {
-      axios
-        .patch(
-          "http://localhost:8000/api/auth/team/" +
-            this.team[index].id +
-            "/finished"
-        )
-        .then(response => {
-          this.team.splice(this.index, 1);
-          console.log("user finished");
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-    },
     showDeleteDialog(index) {
       this.delete_user = this.team[index];
       this.delete_index = index;
       $("#deleteModal").modal("show");
     },
-    removeDeleteduser(index) {
+    removeDeletedUser(index) {
       console.log("remove");
       this.team.splice(this.delete_index, 1);
     },
 
-    readteam() {
+    readTeam() {
       this.$store.commit("isLoading", true);
       this.error = null;
       axios.defaults.headers.common["Authorization"] =
@@ -126,6 +113,7 @@ export default {
         .catch(error => {
           this.$store.commit("hasError", error.toString());
           this.$store.commit("isLoading", false);
+          console.log(error.response);
         });
     }
   }
