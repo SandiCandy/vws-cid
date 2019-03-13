@@ -12,6 +12,7 @@ export const store = new Vuex.Store({
   mutations: {
     changePage(state, pagetitle) {
       state.pagetitle = pagetitle;
+      //state.loading = false;
     },
     isLoading(state, loading) {
       state.loading = loading;

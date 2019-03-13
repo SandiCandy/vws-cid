@@ -1,7 +1,7 @@
 <template>
   <div class="tudu-blu row vh-100">
     <div v-if="success">
-      <successful></successful>
+      <successful :msg="msg"></successful>
     </div>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
@@ -36,7 +36,8 @@ export default {
         name: "",
         role: "Admin"
       },
-      errors: []
+      errors: [],
+      msg: ""
     };
   },
 
@@ -62,6 +63,7 @@ export default {
         .then(response => {
           console.log(response.data);
           this.success = true;
+          this.msg = response.data.message;
           setTimeout(this.reset, 1000);
         })
         .catch(error => {

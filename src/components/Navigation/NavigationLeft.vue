@@ -1,13 +1,13 @@
 <template>
-  <ul class="nav navbar-nav mr-auto">
+  <ul class="nav navbar-nav mr-auto tudu-blu">
     <li class="nav-item">
-      <router-link to="/">Gruppenübersicht</router-link>
+      <router-link :to="{name: 'dashboard' }">Gruppenübersicht</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/new-quote">Neue Gruppe</router-link>
+      <router-link :to="{name: 'user.settings' }">Einstellungen</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/tasks">Aufgaben</router-link>
+      <router-link :to="{name: ''}">Gruppeneinstellungen</router-link>
     </li>
   </ul>
 </template>

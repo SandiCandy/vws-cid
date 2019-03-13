@@ -82,9 +82,15 @@ export default {
   // min-height: 800px;
 }
 
-html a {
+html a,
+.text-tudu-blu {
   color: #39d8d8;
 }
+
+.navbar a {
+  color: #ffffff;
+}
+
 .navbar.tudu-blu,
 .btn.tudu-blu,
 div.tudu-blu {
@@ -129,5 +135,11 @@ section h1 {
 .loading,
 .success {
   padding-top: 30vh;
+}
+.success .display-5 {
+  padding-top: 1rem;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.2;
 }
 </style>

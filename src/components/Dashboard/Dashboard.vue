@@ -70,7 +70,8 @@ export default {
       user: {
         name: ""
       },
-      invitations: []
+      invitations: [],
+      error: {}
     };
   },
 

@@ -1,6 +1,12 @@
 <template>
   <div class="row">
     <router-link
+      :to="{name: 'groups.settings', params: { id: this.$route.params.id } }"
+      class="text-right"
+    >
+      <span>Einstellungen</span>
+    </router-link>
+    <router-link
       :to="{name: 'tasks.current', params: { id: this.$route.params.id } }"
       type="button"
       class="btn btn-default tudu-blu btn-action btn-12"

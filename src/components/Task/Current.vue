@@ -4,40 +4,19 @@
       <loading class="loading" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content" v-else>
-        <div class="list-group">
-          <section v-if="tasks.length > 0">
-            <article v-for="(task, index) in tasks" class="list-group-item list-group-item-action">
-              <p>{{ moment(task.created_at).format('LL') }} von {{ task.creator.name}}</p>
-              <h3>
-                <font-awesome-icon :icon="['fas', 'hammer']"></font-awesome-icon>
-                {{ task.title }}
-              </h3>
-              <p>{{task.description}}</p>
-              <p>{{task.priority}}</p>
-              <button @click="isDone(index)" type="button">
-                <font-awesome-icon :icon="['fas', 'check']" class="display-4"></font-awesome-icon>
-              </button>
-              <router-link
-                class="btn btn-success btn-xs"
-                style="padding:8px"
-                :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }"
-              >
-                <span class="glyphicon glyphicon-edit"></span>
-              </router-link>
-              <button
-                @click="showDeleteDialog(index)"
-                data-toggle="modal"
-                data-target="#deleteModal"
-                class="btn btn-danger btn-xs"
-                style="padding:8px"
-              >
-                <span class="glyphicon glyphicon-trash"></span>
-              </button>
-            </article>
-          </section>
-          <div v-else>
-            <no-tasks></no-tasks>
-          </div>
+        <section v-if="tasks.length > 0">
+          <article v-for="(task, index) in tasks" :key="task.id">
+            <task-item
+              :task="task"
+              :index="index"
+              v-on:done="spliceArray"
+              v-on:deletemodal="fetchTask"
+            ></task-item>
+            <hr>
+          </article>
+        </section>
+        <div v-else>
+          <no-tasks></no-tasks>
         </div>
 
         <add-task-button></add-task-button>
@@ -61,12 +40,14 @@
 
 <script>
 import Loading from "../common/Loading.vue";
+import TaskItem from "./TaskComponents/TaskItem.vue";
 import NoTasks from "./TaskComponents/NoTasks.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
 import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
 export default {
   components: {
     Loading,
+    TaskItem,
     NoTasks,
     AddTaskButton,
     DeleteTaskModal
@@ -87,22 +68,10 @@ export default {
   },
 
   methods: {
-    isDone(index) {
-      axios
-        .patch(
-          "http://localhost:8000/api/auth/tasks/" +
-            this.tasks[index].id +
-            "/finished"
-        )
-        .then(response => {
-          this.tasks.splice(this.index, 1);
-          console.log("Task finished");
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
+    spliceArray(index) {
+      this.tasks.splice(index, 1);
     },
-    showDeleteDialog(index) {
+    fetchTask(index) {
       this.delete_task = this.tasks[index];
       this.delete_index = index;
       $("#deleteModal").modal("show");
@@ -137,3 +106,5 @@ export default {
   }
 };
 </script>
+
+

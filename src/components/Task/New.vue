@@ -63,6 +63,19 @@
       </div>
 
       <div class="form-group">
+        <label for="title">Foto</label>
+        <input
+          v-on:change="handleFileUpload"
+          type="file"
+          name="file"
+          id="file"
+          class="form-control"
+          ref="file"
+          accept="image/*"
+        >
+      </div>
+
+      <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
         <button type="button" @click="createTask" class="btn btn-outline-light">Aufgabe erstellen</button>
       </div>
@@ -109,26 +122,31 @@ export default {
   methods: {
     createTask() {
       this.success = false;
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + $cookies.get("token");
+      console.log(this.task.file);
+      const formData = new FormData();
+      formData.append("title", this.task.title);
+      formData.append("description", this.task.description);
+      formData.append("priority", this.task.priority);
+      formData.append("tasktype_id", this.task.tasktype_id);
+      formData.append("room_id", this.task.room_id);
+      formData.append("file", this.task.file);
       axios
         .post(
           "http://localhost:8000/api/auth/group/" +
             this.$route.params.id +
             "/task/create",
+          formData,
           {
-            title: this.task.title,
-            description: this.task.description,
-            priority: this.task.priority,
-            tasktype_id: this.task.tasktype_id,
-            room_id: this.task.room_id
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           }
         )
         .then(response => {
+          console.log(response.data);
           this.$emit("newtask");
           this.success = true;
           setTimeout(this.reset, 1000);
-          //this.reset();
         })
         .catch(error => {
           this.errors = [];
@@ -209,6 +227,10 @@ export default {
         .catch(error => {
           console.log(error.data);
         });
+    },
+    handleFileUpload() {
+      console.log(this.$refs);
+      this.task.file = this.$refs.file.files[0];
     }
   }
 };

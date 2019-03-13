@@ -10,6 +10,7 @@ import {
   faEllipsisV,
   faHammer,
   faHome,
+  faMapMarkerAlt,
   faPlus,
   faSpinner,
   faStar,
@@ -18,14 +19,15 @@ import {
 
 library.add(
   faCheck,
-  faHammer,
-  faHome,
-  faTag,
   faEllipsisV,
   faChevronLeft,
+  faHammer,
+  faHome,
+  faMapMarkerAlt,
   faPlus,
   faStar,
-  faSpinner
+  faSpinner,
+  faTag
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
@@ -37,6 +39,7 @@ import App from "./App.vue";
 
 import CurrentTasks from "./components/Task/Current.vue";
 import FinishedTasks from "./components/Task/Finished.vue";
+import SingleTask from "./components/Task/SingleTask.vue";
 import NewTask from "./components/Task/New.vue";
 import UpdateTask from "./components/Task/Update.vue";
 
@@ -61,10 +64,13 @@ import NewQuote from "./components/new-quote.vue";
 import Login from "./components/Login/Login.vue";
 import Signup from "./components/Signup/Signup.vue";
 
+import UserSettings from "./components/User/Settings.vue";
+
 import Dashboard from "./components/Dashboard/Dashboard.vue";
 import NewGroup from "./components/Dashboard/New.vue";
 
-import GroupBoard from "./components/Groupboard/Groupboard.vue";
+import GroupBoard from "./components/Group/Groupboard.vue";
+import GroupSettings from "./components/Group/Settings.vue";
 
 //import moment from "vue-moment";
 import moment from "moment";
@@ -87,6 +93,12 @@ const routes = [
     path: "/group/:id/tasks/finished",
     name: "tasks.finished",
     component: FinishedTasks,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/tasks/:tid",
+    name: "tasks.show",
+    component: SingleTask,
     meta: { requiresAuth: true }
   },
   {
@@ -168,6 +180,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: "group/:id/settings",
+    name: "groups.settings",
+    component: GroupSettings,
+    meta: { requiresAuth: true }
+  },
+  {
     path: "/group/new",
     name: "groups.new",
     component: NewGroup,
@@ -183,6 +201,12 @@ const routes = [
     path: "/group/:id/team/add",
     name: "group.add",
     component: AddMember,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/settings",
+    name: "user.settings",
+    component: UserSettings,
     meta: { requiresAuth: true }
   },
   { path: "/login", component: Login, meta: { guest: true } },
