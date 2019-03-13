@@ -96,7 +96,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: "/group/:id/tasks/:tid",
+    path: "/group/:id/task/:tid",
     name: "tasks.show",
     component: SingleTask,
     meta: { requiresAuth: true }
@@ -108,7 +108,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: "/group/:id/tasks/:tid",
+    path: "/group/:id/tasks/:tid/update",
     name: "tasks.update",
     component: UpdateTask,
     meta: { requiresAuth: true }
@@ -180,7 +180,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: "group/:id/settings",
+    path: "/group/:id/settings",
     name: "groups.settings",
     component: GroupSettings,
     meta: { requiresAuth: true }

@@ -1,5 +1,8 @@
 <template>
   <div class="tudu-blu row vh-100">
+    <div v-if="success">
+      <successful msg="Aufgabentyp erfolgreich angelegt."></successful>
+    </div>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -25,13 +28,18 @@
 </template>
 
 <script>
+import Successful from "../common/Successful.vue";
 export default {
+  components: {
+    Successful
+  },
   data() {
     return {
       tasktype: {
         name: ""
       },
-      errors: []
+      errors: [],
+      success: false
     };
   },
   mounted() {
@@ -40,6 +48,7 @@ export default {
 
   methods: {
     createTasktype() {
+      this.success = false;
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
@@ -54,7 +63,8 @@ export default {
         .then(response => {
           this.$emit("newtasktype");
           console.log(response.data);
-          this.reset();
+          this.success = true;
+          setTimeout(this.reset, 1000);
         })
         .catch(error => {
           this.errors = [];

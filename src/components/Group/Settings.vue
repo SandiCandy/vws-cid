@@ -13,6 +13,11 @@
             <p>API-Key</p>
             <p class="text-tudu-blu">{{ group.apikey}}</p>
           </section>
+          <section class="list-group-item">
+            <router-link
+              :to="{name: 'tasktypes.show', params: { id: this.$route.params.id} }"
+            >Meine Aufgabenarten</router-link>
+          </section>
           <section
             @click="openDeleteDialog()"
             class="list-group-item text-danger"

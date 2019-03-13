@@ -1,11 +1,11 @@
 <template>
   <div class="tudu-blu row vh-100">
     <div v-if="success">
-      <successful></successful>
+      <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
-        <li v-for="error in errors">{{ error }}</li>
+        <li v-for="error in errors" :key="error">{{ error }}</li>
       </ul>
     </div>
 
@@ -30,7 +30,7 @@
       <div class="form-group">
         <label for="tasktype_id">Aufgabenart *</label>
         <select v-model="task.tasktype_id" class="form-control" name="tasktype_id" id="tasktype_id">
-          <option v-for="(ttype, index) in tasktypes" :value="ttype.id">{{ ttype.name }}</option>
+          <option v-for="ttype in tasktypes" :key="ttype.id" :value="ttype.id">{{ ttype.name }}</option>
         </select>
       </div>
 
@@ -49,7 +49,8 @@
           <option value="-1"></option>
 
           <option
-            v-for="(rtype, index) in roomtypes"
+            v-for="rtype in roomtypes"
+            :key="rtype.id"
             :value="rtype.id"
           >{{ rtype.name }} ({{ rtype.rooms_count}} Orte)</option>
         </select>
@@ -58,7 +59,7 @@
       <div class="form-group" v-if="roomtype_id > -1">
         <label for="room_id">Ort</label>
         <select v-model="task.room_id" class="form-control" name="room_id" id="room_id">
-          <option v-for="(room, index) in rooms" :value="room.id">{{ room.name }}</option>
+          <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
         </select>
       </div>
 
@@ -113,7 +114,7 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     this.$store.commit("changePage", "Neue Aufgabe");
     this.fetchTasktypes();
     this.fetchRoomtypes();
@@ -122,8 +123,7 @@ export default {
   methods: {
     createTask() {
       this.success = false;
-      console.log(this.task.file);
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append("title", this.task.title);
       formData.append("description", this.task.description);
       formData.append("priority", this.task.priority);
@@ -146,7 +146,7 @@ export default {
           console.log(response.data);
           this.$emit("newtask");
           this.success = true;
-          setTimeout(this.reset, 1000);
+          setTimeout(this.reset, 800);
         })
         .catch(error => {
           this.errors = [];
@@ -214,6 +214,7 @@ export default {
         });
     },
     fetchRooms(id) {
+      this.$store.commit("isLoading", true);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
 
@@ -222,10 +223,11 @@ export default {
         .then(response => {
           this.rooms = response.data.rooms;
           console.log(response.data);
-          this.loading = false;
+          this.$store.commit("isLoading", false);
         })
         .catch(error => {
-          console.log(error.data);
+          console.log(error.response);
+          this.$store.commit("isLoading", true);
         });
     },
     handleFileUpload() {
@@ -250,5 +252,9 @@ export default {
   left: 0;
   height: 100vh;
   width: 100vw;
+}
+
+.tudu-blu.vh-100 {
+  min-height: 120wh;
 }
 </style>

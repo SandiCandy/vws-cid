@@ -4,6 +4,7 @@
       <font-awesome-icon :icon="['fas', 'spinner']" class="display-4 d-flex justify-content-center"></font-awesome-icon>
     </div>
     <div class="content" v-else>
+      <p>Für eine optimale Organisation der Aufgaben kannst du eigene Aufgabentypen anlegen, z. B. "Reinigung", "Reperaturen" und "Gartenarbeiten".</p>
       <div class="list-group">
         <section v-if="tasktypes.length > 0">
           <article

@@ -47,13 +47,11 @@
 
 <script>
 import NavigationLeft from "./components/Navigation/NavigationLeft.vue";
-import Loading from "./components/common/Loading.vue";
 var moment = require("moment");
 export default {
   name: "app",
   components: {
-    NavigationLeft,
-    Loading
+    NavigationLeft
   },
   data() {
     return {

@@ -1,51 +1,55 @@
 <template>
-  <div class="card" v-if="task">
-    <div class="card-body">
-      <p>
-        <strong>{{task.tasktype.name}}</strong>
-      </p>
-      <h3 class="card-title">{{task.title}}</h3>
-      <div class="card-text">
+  <div class="vh-100">
+    <loading class="loading" v-if="$store.getters.loading"></loading>
+    <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
+    <div class="content card" v-else>
+      <div class="card-body" v-if="task">
         <p>
-          <small
-            class="text-muted"
-          >{{ moment(task.created_at).format('LL') }} von {{ task.creator.name}}</small>
+          <strong>{{task.tasktype.name}}</strong>
         </p>
-        <p>{{task.description}}</p>
+        <h3 class="card-title">{{task.title}}</h3>
+        <div class="card-text">
+          <p>
+            <small
+              class="text-muted"
+            >{{ moment(task.created_at).format('LL') }} von {{ task.creator.name}}</small>
+          </p>
+          <p>{{task.description}}</p>
 
-        <p v-if="room && room.roomtype">
-          <font-awesome-icon :icon="['fas', 'map-marker-alt']" class="mr-3"></font-awesome-icon>
-          {{room.roomtype.name }} / {{room.name}}
-        </p>
+          <p v-if="room && room.roomtype">
+            <font-awesome-icon :icon="['fas', 'map-marker-alt']" class="mr-3"></font-awesome-icon>
+            {{room.roomtype.name }} / {{room.name}}
+          </p>
+        </div>
+        <img
+          :src="'http://localhost:8000/storage/' + task.images[0].name"
+          class="card-img-top"
+          alt="..."
+          v-if="task.images && task.images.length > 0"
+        >
       </div>
-      <img
-        :src="'http://localhost:8000/storage/' + task.images[0].name"
-        class="card-img-top"
-        alt="..."
-        v-if="task.images && task.images.length > 0"
-      >
     </div>
   </div>
 </template>
 
 <script>
+import Loading from "../common/Loading.vue";
 export default {
-  components: {},
+  components: { Loading },
   data() {
     return {
       task: null,
-      error: null,
-      room: {}
+      room: null
     };
   },
   created() {
     this.fetchTask();
-    this.$store.commit("changePage", "toooodoooo");
+    this.$store.commit("changePage", "SingleTaskTODO");
   },
   methods: {
     fetchTask() {
       this.$store.commit("isLoading", true);
-      this.error = null;
+      this.$store.commit("hasError", false);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
