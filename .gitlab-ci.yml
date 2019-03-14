@@ -11,7 +11,7 @@ build site:
 
 unit test:
   # image: node:11
-  # stage: test
+  stage: test
   # script:
   #   - npm install --progress=false
   #   - npm run unit
