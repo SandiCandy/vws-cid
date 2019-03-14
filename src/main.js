@@ -225,16 +225,7 @@ router.beforeEach((to, from, next) => {
         params: { nextUrl: to.fullPath }
       });
     } else {
-      let user = JSON.parse(VueCookies.get("user"));
-      if (to.matched.some(record => record.meta.is_admin)) {
-        if (user.is_admin == 1) {
-          next();
-        } else {
-          next({ name: "dashboard" });
-        }
-      } else {
-        next();
-      }
+      next();
     }
   } else if (to.matched.some(record => record.meta.guest)) {
     if (VueCookies.get("token") == null) {

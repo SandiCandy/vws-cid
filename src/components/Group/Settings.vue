@@ -1,61 +1,59 @@
 <template>
-  <div>
-    <div class="vh-100">
-      <loading class="loading" v-if="$store.getters.loading"></loading>
-      <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
-      <div class="content" v-else>
-        <div class="list-group list-group-flush text-center">
-          <section @click="changeNameDialog()" class="list-group-item">
-            <p>Gruppenname</p>
-            <p class="text-tudu-blu">{{group.name}}</p>
-          </section>
-          <section @click="openApikeyDialog()" class="list-group-item">
-            <p>API-Key</p>
-            <p class="text-tudu-blu">{{ group.apikey}}</p>
-          </section>
-          <section class="list-group-item">
-            <router-link
-              :to="{name: 'tasktypes.show', params: { id: this.$route.params.id} }"
-            >Meine Aufgabenarten</router-link>
-          </section>
-          <section
-            @click="openDeleteDialog()"
-            class="list-group-item text-danger"
-          >Benutzerkonto löschen</section>
-        </div>
+  <div class="vh-100">
+    <loading class="loading" v-if="$store.getters.loading"></loading>
+    <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
+    <div class="content" v-else>
+      <div class="list-group list-group-flush text-center">
+        <section @click="changeNameDialog()" class="list-group-item">
+          <p>Gruppenname</p>
+          <p class="text-tudu-blu">{{group.name}}</p>
+        </section>
+        <section @click="openApikeyDialog()" class="list-group-item">
+          <p>API-Key</p>
+          <p class="text-tudu-blu">{{ group.apikey}}</p>
+        </section>
+        <section class="list-group-item">
+          <router-link
+            :to="{name: 'tasktypes.show', params: { id: this.$route.params.id} }"
+          >Meine Aufgabenarten</router-link>
+        </section>
+        <section
+          @click="openDeleteDialog()"
+          class="list-group-item text-danger"
+        >Benutzerkonto löschen</section>
+      </div>
 
-        <div
-          class="modal fade"
-          id="changeNameModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="changeModalLabel"
-          aria-hidden="true"
-        >
-          <change-name-modal v-bind:setting="group.name" v-on:changed="update"></change-name-modal>
-        </div>
+      <div
+        class="modal fade"
+        id="changeNameModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="changeModalLabel"
+        aria-hidden="true"
+      >
+        <change-name-modal v-bind:setting="group.name" v-on:changed="update"></change-name-modal>
+      </div>
 
-        <div
-          class="modal fade"
-          id="changeApikeyModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="changeModalLabel"
-          aria-hidden="true"
-        >
-          <change-apikey-modal v-bind:setting="group.apikey" v-on:changed="update"></change-apikey-modal>
-        </div>
+      <div
+        class="modal fade"
+        id="changeApikeyModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="changeModalLabel"
+        aria-hidden="true"
+      >
+        <change-apikey-modal v-bind:setting="group.apikey" v-on:changed="update"></change-apikey-modal>
+      </div>
 
-        <div
-          class="modal fade"
-          id="deleteModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="deleteModalLabel"
-          aria-hidden="true"
-        >
-          <delete-modal v-bind:group="group"></delete-modal>
-        </div>
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="deleteModalLabel"
+        aria-hidden="true"
+      >
+        <delete-modal v-bind:group="group"></delete-modal>
       </div>
     </div>
   </div>
