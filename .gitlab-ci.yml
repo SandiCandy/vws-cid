@@ -1,8 +1,5 @@
 image: node:latest
 
-stages: -build
-  -deploy
-
 build site:
   stage: build
   cache:
