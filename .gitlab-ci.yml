@@ -10,9 +10,9 @@ build site:
       - dist
 
 unit test:
-  # image: node:11
+  #image: node:11
   stage: test
-  # script:
+  script:
   #   - npm install --progress=false
   #   - npm run unit
 
