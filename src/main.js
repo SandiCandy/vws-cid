@@ -58,8 +58,7 @@ import UpdateRoom from "./components/Room/Update.vue";
 import Team from "./components/Team/Team.vue";
 import AddMember from "./components/Team/New.vue";
 
-import Quotes from "./components/quotes.vue";
-import NewQuote from "./components/new-quote.vue";
+import Home from "./components/Home.vue";
 
 import Login from "./components/Login/Login.vue";
 import Signup from "./components/Signup/Signup.vue";
@@ -72,17 +71,14 @@ import NewGroup from "./components/Dashboard/New.vue";
 import GroupBoard from "./components/Group/Groupboard.vue";
 import GroupSettings from "./components/Group/Settings.vue";
 
-//import moment from "vue-moment";
 import moment from "moment";
 moment.locale("de");
 Vue.prototype.moment = moment;
-// Vue.use(moment);
 Vue.use(VueRouter);
 Vue.use(VueCookies);
 
 const routes = [
-  { path: "", component: Quotes },
-  { path: "/new-quote", component: NewQuote },
+  { path: "", component: Home },
   {
     path: "/group/:id/tasks",
     name: "tasks.current",

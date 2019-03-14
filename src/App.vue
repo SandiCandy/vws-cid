@@ -2,7 +2,7 @@
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark tudu-blu">
       <a @click="$router.go(-1)">
-        <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>TODO
+        <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
       </a>
       <router-link to="/" class="navbar-brand">{{ $store.getters.pagetitle }}</router-link>
       <button
@@ -104,6 +104,13 @@ div.tudu-blu {
   background-color: #ffffff;
   border: 2px solid #39d8d8;
   color: #39d8d8;
+}
+
+.btn.tudu-blu-outline-invers {
+  border: 2px solid #ffffff;
+  & a {
+    color: #ffffff;
+  }
 }
 
 .navbar li {
