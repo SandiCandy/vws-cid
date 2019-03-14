@@ -32,9 +32,14 @@
       >
         <span class="glyphicon glyphicon-trash"></span>
       </button>
+      <p v-if="task.is_done">
+        Erledigt
+        <span v-if="task.completed_at">am {{ moment(task.completed_at).format('LL') }}</span>
+        <span v-if="task.editor">von {{ task.editor.name}}</span>
+      </p>
     </div>
 
-    <button @click="isDone(index)" type="button" class="ml-3 checkbox">
+    <button @click="isDone(index)" type="button" class="ml-3 checkbox" v-if="task.is_done != 1">
       <font-awesome-icon :icon="['fas', 'check']" class="checkbox"></font-awesome-icon>
     </button>
   </div>

@@ -14,7 +14,7 @@
           class="btn text-secondary"
           data-dismiss="modal"
         >Abbrechen</button>
-        <button @click="changeName()" type="button" class="btn btn-danger">Ändern</button>
+        <button @click="changeName()" type="button" class="btn btn-success">Ändern</button>
       </div>
     </div>
   </div>
@@ -24,7 +24,7 @@
 export default {
   data() {
     return {
-      name: ""
+      name: this.setting
     };
   },
   watch: {

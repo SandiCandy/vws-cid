@@ -1,11 +1,10 @@
 <template>
-  <div class="row">
-    <router-link
-      :to="{name: 'groups.settings', params: { id: this.$route.params.id } }"
-      class="text-right"
-    >
-      <span>Einstellungen</span>
-    </router-link>
+  <div class="row flex-container">
+    <div class="col-12 text-right">
+      <router-link
+        :to="{name: 'groups.settings', params: { id: this.$route.params.id } }"
+      >Einstellungen</router-link>
+    </div>
     <router-link
       :to="{name: 'tasks.current', params: { id: this.$route.params.id } }"
       type="button"
@@ -95,30 +94,41 @@ export default {
 
 <style lang="scss">
 .btn.btn-action {
-  height: 75px;
+  height: 90px;
   border-radius: 0.1rem;
-  line-height: 70px;
+  line-height: 80px;
   & span {
     display: inline-block;
     vertical-align: middle;
-    line-height: normal;
   }
 }
 
 .btn-12 {
-  width: calc(100vw - 10px);
-  margin: 5px 5px 2px 5px;
+  //width: calc(100vw - 10px);
+  margin: 5px 5px 3px 5px;
+  flex: 0 1 calc(90% + 6px);
 }
 
 .btn-6:nth-child(even) {
-  margin: 3px 2px 2px 5px;
+  margin: 3px 5px 3px 3px;
 }
 
 .btn-6:nth-child(odd) {
-  margin: 3px 5px 2px 2px;
+  margin: 3px 3px 3px 5px;
 }
 
 .btn.btn-6 {
-  width: calc(50vw - 7px);
+  //width: calc(50vw - 8px);
+
+  flex: 0 1 45%;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: space-around;
+  align-items: center;
 }
 </style>

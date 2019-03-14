@@ -30,7 +30,7 @@
           </article>
         </section>
         <div v-else>
-          <no-content contenttype="Orte" routename="rooms.new"></no-content>
+          <no-content contenttype="Orte in diesem Bereich" routename="rooms.new"></no-content>
         </div>
       </div>
 

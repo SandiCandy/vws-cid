@@ -1,5 +1,8 @@
 <template>
   <div class="vh-100 col-sm-12">
+    <div v-if="success">
+      <successful msg="Erfolgreich."></successful>
+    </div>
     <h1>Login</h1>
     <p>Willkommen zurück!</p>
     <form>
@@ -51,13 +54,18 @@
 
 
 <script>
+import Successful from "../common/Successful.vue";
 export default {
+  components: {
+    Successful
+  },
   data() {
     return {
       email: "",
       password: "",
       remember_me: true,
-      errors: []
+      errors: [],
+      success: false
     };
   },
 
@@ -74,8 +82,8 @@ export default {
         .then(response => {
           this.auth(this.email, response.data.access_token);
           this.reset();
-
-          $("#login_modal").modal("hide");
+          this.success = true;
+          setTimeout(this.redirect, 1000);
         })
         .catch(error => {
           this.errors = [];
@@ -90,6 +98,9 @@ export default {
     auth(user, token) {
       this.$cookies.set("token", token, "7d");
       this.$emit("login");
+    },
+    redirect() {
+      this.$router.push({ name: dashboard });
     }
   }
 };

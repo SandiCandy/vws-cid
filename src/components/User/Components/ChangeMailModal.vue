@@ -9,7 +9,7 @@
       </form>
       <div class="modal-footer">
         <button type="button" class="btn text-secondary" data-dismiss="modal">Abbrechen</button>
-        <button @click="changeEmail()" type="button" class="btn btn-danger">Ändern</button>
+        <button @click="changeEmail()" type="button" class="btn btn-success">Ändern</button>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
 export default {
   data() {
     return {
-      email: ""
+      email: this.setting
     };
   },
   watch: {

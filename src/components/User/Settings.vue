@@ -13,8 +13,7 @@
             <p>E-mailadresse ändern</p>
             <p class="text-tudu-blu">{{user.email}}</p>
           </section>
-          <section class="list-group-item">E-mailadresse ändern</section>
-          <section class="list-group-item">Passwort ändern</section>
+          <section @click="openPWDialog()" class="list-group-item">Passwort ändern</section>
           <section class="list-group-item text-danger">Benutzerkonto löschen</section>
         </div>
 
@@ -39,6 +38,17 @@
         >
           <change-mail-modal v-bind:setting="user.email" v-on:changed="update"></change-mail-modal>
         </div>
+
+        <div
+          class="modal fade"
+          id="changePWModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="changeModalLabel"
+          aria-hidden="true"
+        >
+          <change-pw-modal v-bind:setting="user.email"></change-pw-modal>
+        </div>
       </div>
     </div>
   </div>
@@ -48,13 +58,16 @@
 
 <script>
 import Loading from "../common/Loading.vue";
-import ChangeNameModal from "./Components/ChangeNameModal.vue";
 import ChangeMailModal from "./Components/ChangeMailModal.vue";
+import ChangeNameModal from "./Components/ChangeNameModal.vue";
+import ChangePwModal from "./Components/ChangePWModal.vue";
+
 export default {
   components: {
     Loading,
     ChangeNameModal,
-    ChangeMailModal
+    ChangeMailModal,
+    ChangePwModal
   },
   data() {
     return {
@@ -80,6 +93,9 @@ export default {
     openMailDialog() {
       this.change_setting = this.user.email;
       $("#changeMailModal").modal("show");
+    },
+    openPWDialog() {
+      $("#changePWModal").modal("show");
     },
     update(changedUser) {
       this.user = changedUser;

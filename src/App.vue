@@ -140,4 +140,9 @@ section h1 {
   font-weight: 300;
   line-height: 1.2;
 }
+
+.media .media-body a,
+.list-group-item a {
+  color: #707070;
+}
 </style>
