@@ -50,7 +50,7 @@ deploy:
     - ssh ssh-w0138428@vegane-prinzessin.de "ls www/htdocs/w0138428/tuudu.emsgold.de"
 
     - scp index.html ssh-w0138428@vegane-prinzessin.de:/www/htdocs/w0138428/tuudu.emsgold.de
-    - scp -r /dist ssh-w0138428@vegane-prinzessin.de:www/htdocs/w0138428/tuudu.emsgold.de
+    - scp -r dist ssh-w0138428@vegane-prinzessin.de:www/htdocs/w0138428/tuudu.emsgold.de
     - ssh ssh-w0138428@vegane-prinzessin.de "ls www/htdocs/w0138428/tuudu.emsgold.de"
 
     - npm --version
