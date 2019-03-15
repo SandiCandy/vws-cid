@@ -30,16 +30,19 @@ deploy:
     # Install ssh-agent if not already installed, it is required by Docker
     - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
 
+    - mkdir -p ~/.ssh
+
     # Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
 
     # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
 
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
   script:
     - echo "Deploy to production server"
-    - ssh ssh-w0138428@vegane-prinzessin.de "cd /tuudu.emsgold.de && git pull && npm install && sudo systemctl rest
+    # scp ssh-w0138428@vegane-prinzessin.de:/tudu.emsgold.de
+    - ssh ssh-w0138428@vegane-prinzessin.de "cd /tuudu.emsgold.de && git pull && npm install && sudo systemctl rest"
   #only: master
