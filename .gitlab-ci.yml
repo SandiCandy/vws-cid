@@ -46,8 +46,8 @@ deploy:
   script:
     - echo "Deploy to production server"
     - echo $(ls)
-    - ssh ssh-w0138428@vegane-prinzessin.de
-    - ssh ssh-w0138428@vegane-prinzessin.de "cd tuudu.emsgold.de/"
+    - ssh ssh-w0138428@vegane-prinzessin.de "ls"
+    - ssh ssh-w0138428@vegane-prinzessin.de "cd /tuudu.emsgold.de/"
     - echo $(ls)
     - scp -r /dist ssh-w0138428@vegane-prinzessin.de "cd tuudu.emsgold.de/"
     #- ssh ssh-w0138428@vegane-prinzessin.de "cd tuudu.emsgold.de && git pull && npm install && sudo systemctl rest"
