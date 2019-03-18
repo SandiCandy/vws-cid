@@ -95,7 +95,12 @@ module.exports = {
       })
     ]
   },
-  plugins: [new VueLoaderPlugin(), new Dotenv()]
+  plugins: [
+    new VueLoaderPlugin(),
+    new Dotenv({
+      path: `./.env.${env === "production" ? "prod" : ""}`
+    })
+  ]
 };
 
 if (process.env.NODE_ENV === "production") {
