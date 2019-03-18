@@ -98,7 +98,7 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new Dotenv({
-      path: `./.env.${process.env.NODE_ENV === "production" ? "prod" : ""}`
+      path: `./.env${process.env.NODE_ENV === "production" ? ".prod" : ""}`
     })
   ]
 };
