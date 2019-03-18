@@ -12,7 +12,13 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="title">Name *</label>
-        <input type="text" name="title" id="title" class="form-control" v-model="task.title">
+        <input
+          type="text"
+          name="title"
+          id="title"
+          class="form-control"
+          v-model="tasktemplate.title"
+        >
       </div>
 
       <div class="form-group">
@@ -23,20 +29,25 @@
           cols="30"
           rows="5"
           class="form-control"
-          v-model="task.description"
+          v-model="tasktemplate.description"
         ></textarea>
       </div>
 
       <div class="form-group">
         <label for="tasktype_id">Aufgabenart *</label>
-        <select v-model="task.tasktype_id" class="form-control" name="tasktype_id" id="tasktype_id">
+        <select
+          v-model="tasktemplate.tasktype_id"
+          class="form-control"
+          name="tasktype_id"
+          id="tasktype_id"
+        >
           <option v-for="ttype in tasktypes" :key="ttype.id" :value="ttype.id">{{ ttype.name }}</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="priority">Priorität *</label>
-        <select v-model="task.priority" class="form-control" name="priority" id="priority">
+        <select v-model="tasktemplate.priority" class="form-control" name="priority" id="priority">
           <option value="0">Niedrig</option>
           <option value="5">Normal</option>
           <option value="10">Hoch</option>
@@ -44,66 +55,61 @@
       </div>
 
       <div class="form-group">
-        <label for="roomtype_id">Bereich</label>
-        <select v-model="roomtype_id" class="form-control" name="roomtype_id" id="roomtype_id">
-          <option value="-1"></option>
-
-          <option
-            v-for="rtype in roomtypes"
-            :key="rtype.id"
-            :value="rtype.id"
-          >{{ rtype.name }} ({{ rtype.rooms_count}} Orte)</option>
-        </select>
-      </div>
-
-      <div class="form-group" v-if="roomtype_id > -1">
-        <label for="room_id">Ort</label>
-        <select v-model="task.room_id" class="form-control" name="room_id" id="room_id">
-          <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
-        </select>
+        <label for="dtstart">Erste Ausführung</label>
+        <datepicker v-model="tasktemplate.dtstart"></datepicker>
       </div>
 
       <div class="form-group">
-        <label for="title">Foto</label>
-        <input
-          v-on:change="handleFileUpload"
-          type="file"
-          name="file"
-          id="file"
-          class="form-control"
-          ref="file"
-          accept="image/*"
-        >
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="freq" id="freq1" value="daily" checked>
+          <label class="form-check-label" for="freq1">Default radio</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="freq" id="freq2" value="weekly">
+          <label class="form-check-label" for="freq2">Second default radio</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="freq" id="freq3" value="monthly">
+          <label class="form-check-label" for="freq3">Disabled radio</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="freq" id="freq3" value="yearly">
+          <label class="form-check-label" for="freq3">Disabled radio</label>
+        </div>
       </div>
 
       <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-        <button type="button" @click="createTask" class="btn btn-outline-light">Aufgabe erstellen</button>
+        <button
+          type="button"
+          @click="createTasktemplate"
+          class="btn btn-outline-light"
+        >Aufgaben erstellen</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import Datepicker from "vuejs-datepicker";
 import Successful from "../common/Successful.vue";
 export default {
   components: {
-    Successful
+    Successful,
+    Datepicker
   },
   data() {
     return {
       success: false,
-      task: {
+      tasktemplate: {
         title: "",
         description: "",
         tasktype_id: "",
         priority: 5,
-        room_id: ""
+        dtstart: new Date()
       },
-      roomtype_id: -1,
       tasktypes: [],
-      roomtypes: [],
-      rooms: [],
       errors: []
     };
   },
@@ -121,7 +127,7 @@ export default {
   },
 
   methods: {
-    createTask() {
+    createTasktemplate() {
       this.success = false;
       let formData = new FormData();
       formData.append("title", this.task.title);
@@ -129,9 +135,7 @@ export default {
       formData.append("priority", this.task.priority);
       formData.append("tasktype_id", this.task.tasktype_id);
       formData.append("room_id", this.task.room_id);
-      if (this.task.file) {
-        formData.append("file", this.task.file);
-      }
+      formData.append("file", this.task.file);
       axios
         .post(
           process.env.ROOT_API + "/auth/group/" +
@@ -146,7 +150,6 @@ export default {
         )
         .then(response => {
           console.log(response.data);
-          this.$emit("newtask");
           this.success = true;
           setTimeout(this.reset, 800);
         })

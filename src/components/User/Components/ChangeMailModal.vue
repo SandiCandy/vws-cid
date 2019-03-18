@@ -31,7 +31,7 @@ export default {
   methods: {
     changeEmail() {
       axios
-        .put("http://localhost:8000/api/auth/settings/update", {
+        .put(process.env.ROOT_API + "/auth/settings/update", {
           email: this.email
         })
         .then(response => {

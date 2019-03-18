@@ -71,6 +71,9 @@ import NewGroup from "./components/Dashboard/New.vue";
 import GroupBoard from "./components/Group/Groupboard.vue";
 import GroupSettings from "./components/Group/Settings.vue";
 
+import TasktemplateList from "./components/Tasktemplate/TasktemplateList.vue";
+import NewTasktemplate from "./components/Tasktemplate/New.vue";
+
 import moment from "moment";
 moment.locale("de");
 Vue.prototype.moment = moment;
@@ -203,6 +206,18 @@ const routes = [
     path: "/settings",
     name: "user.settings",
     component: UserSettings,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/tasktemplate/new",
+    name: "tasktemplates.new",
+    component: NewTasktemplate,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/tasktemplates",
+    name: "tasktemplates.show",
+    component: TasktemplateList,
     meta: { requiresAuth: true }
   },
   { path: "/login", component: Login, meta: { guest: true } },

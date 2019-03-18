@@ -42,7 +42,7 @@ export default {
 
       axios
         .get(
-          "http://localhost:8000/api/auth/roomtype/" +
+          process.env.ROOT_API + "/auth/roomtype/" +
             this.$route.params.id +
             "/rooms/" +
             this.$route.params.rid
@@ -60,7 +60,7 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .put(
-          "http://localhost:8000/api/auth/roomtype/" +
+          process.env.ROOT_API + "/auth/roomtype/" +
             this.$route.params.id +
             "/rooms/" +
             this.$route.params.rid +

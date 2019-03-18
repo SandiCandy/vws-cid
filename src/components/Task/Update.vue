@@ -149,7 +149,7 @@ export default {
       console.log(formData.get("title"));
       axios
         .post(
-          "http://localhost:8000/api/auth/tasks/" + this.task.id + "/update",
+          process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/update",
           formData,
           {
             headers: {
@@ -186,7 +186,7 @@ export default {
         "Bearer " + $cookies.get("token");
 
       axios
-        .get("http://localhost:8000/api/auth/tasks/" + this.$route.params.tid)
+        .get(process.env.ROOT_API + "/auth/tasks/" + this.$route.params.tid)
         .then(response => {
           this.task = response.data.task;
           console.log(response.data);
@@ -212,7 +212,7 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          "http://localhost:8000/api/auth/group/" +
+          process.env.ROOT_API + "/auth/group/" +
             this.$route.params.id +
             "/tasktypes"
         )
@@ -229,7 +229,7 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          "http://localhost:8000/api/auth/group/" +
+          process.env.ROOT_API + "/auth/group/" +
             this.$route.params.id +
             "/roomtypes"
         )
@@ -246,7 +246,7 @@ export default {
         "Bearer " + $cookies.get("token");
 
       axios
-        .get("http://localhost:8000/api/auth/roomtype/" + id + "/rooms")
+        .get(process.env.ROOT_API + "/auth/roomtype/" + id + "/rooms")
         .then(response => {
           this.rooms = response.data.rooms;
           console.log(response.data);
@@ -260,7 +260,7 @@ export default {
         "Bearer " + $cookies.get("token");
 
       axios
-        .get("http://localhost:8000/api/auth/room/" + room_id + "/roomtype")
+        .get(process.env.ROOT_API + "/auth/room/" + room_id + "/roomtype")
         .then(response => {
           this.roomtype_id = response.data.roomtype.id;
           console.log(response.data);

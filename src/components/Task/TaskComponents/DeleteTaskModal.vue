@@ -18,7 +18,7 @@ export default {
   methods: {
     deleteTask(id) {
       axios
-        .delete("http://localhost:8000/api/auth/tasks/" + id)
+        .delete(process.env.ROOT_API + "/auth/tasks/" + id)
         .then(response => {
           $("#deleteModal").modal("hide");
           this.$emit("taskDeleted", id);

@@ -52,7 +52,7 @@ export default {
     isDone() {
       axios
         .patch(
-          "http://localhost:8000/api/auth/tasks/" + this.task.id + "/finished"
+          process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/finished"
         )
         .then(response => {
           //this.tasks.splice(this.index, 1);

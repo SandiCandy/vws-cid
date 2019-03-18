@@ -86,7 +86,7 @@ export default {
     getName() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
-      axios.get("http://localhost:8000/api/auth/user").then(response => {
+      axios.get(process.env.ROOT_API + "/auth/user").then(response => {
         this.user = response.data;
       });
     },
@@ -96,7 +96,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get("http://localhost:8000/api/auth/mygroups")
+        .get(process.env.ROOT_API + "/auth/mygroups")
         .then(response => {
           this.$store.commit("isLoading", false);
           this.groups = response.data.groups;
@@ -110,7 +110,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get("http://localhost:8000/api/auth/myinvitations")
+        .get(process.env.ROOT_API + "/auth/myinvitations")
         .then(response => {
           this.invitations = response.data.invitations;
           this.showInvitationIfExist();
@@ -125,7 +125,7 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          "http://localhost:8000/api/auth/invitation/" + this.invitations[0].id
+          process.env.ROOT_API + "/auth/invitation/" + this.invitations[0].id
         )
         .then(response => {
           this.invitations.splice(0, 1);
@@ -142,7 +142,7 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .delete(
-          "http://localhost:8000/api/auth/invitation/" + this.invitations[0].id
+          process.env.ROOT_API + "/auth/invitation/" + this.invitations[0].id
         )
         .then(response => {
           this.invitations.splice(0, 1);
