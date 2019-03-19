@@ -6,10 +6,10 @@ build site:
     paths:
       - node_modules/
   before_script:
-    - echo $(ls)
-    - rm .env
-    - echo $(ls)
-    - mv .env.prod .env
+    - echo $(ls) -a
+    # - rm .env
+    #- echo $(ls) -a
+    - mv -f .env.prod .env
     - echo $(ls)
     - apt-get update
     - apt-get install zip unzip nodejs -y
