@@ -6,7 +6,7 @@ build site:
     paths:
       - node_modules/
   before_script:
-    - $(ls)
+    - $ls
     - rm .env
     - mv .env.prod .env
     - apt-get update
