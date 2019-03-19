@@ -6,9 +6,9 @@ build site:
     paths:
       - node_modules/
   before_script:
-    - echo $(ls) -a
+    - echo $(ls -a) -a
     # - rm .env
-    #- echo $(ls) -a
+    #- echo $(ls -a) -a
     - mv -f .env.prod .env
     - echo $(ls)
     - apt-get update
