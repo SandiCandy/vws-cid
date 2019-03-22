@@ -45,8 +45,8 @@
 import Loading from "../common/Loading.vue";
 import NoContent from "../common/NoContent.vue";
 import AddButton from "../common/AddButton.vue";
-import TasktemplateItem from "./TasktemplateItem.vue";
-import DeleteTasktemplateModal from "./DeleteTasktemplateModal.vue";
+import TasktemplateItem from "./Components/TasktemplateItem.vue";
+import DeleteTasktemplateModal from "./Components/DeleteTasktemplateModal.vue";
 export default {
   components: {
     Loading,
