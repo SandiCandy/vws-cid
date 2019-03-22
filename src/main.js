@@ -73,6 +73,7 @@ import GroupSettings from "./components/Group/Settings.vue";
 
 import TasktemplateList from "./components/Tasktemplate/TasktemplateList.vue";
 import NewTasktemplate from "./components/Tasktemplate/New.vue";
+import UpdateTasktemplate from "./components/Tasktemplate/Update.vue";
 
 import moment from "moment";
 moment.locale("de");
@@ -218,6 +219,12 @@ const routes = [
     path: "/group/:id/tasktemplates",
     name: "tasktemplates.show",
     component: TasktemplateList,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/tasktemplate/:tid",
+    name: "tasktemplates.update",
+    component: UpdateTasktemplate,
     meta: { requiresAuth: true }
   },
   { path: "/login", component: Login, meta: { guest: true } },
