@@ -45,16 +45,15 @@
 import Loading from "../common/Loading.vue";
 import NoContent from "../common/NoContent.vue";
 import AddButton from "../common/AddButton.vue";
-//import TasktemplateItem from "./TasktemplateComponents/TasktemplateItem.vue";
-// import AddTasktemplateButton from "./TasktemplateComponents/AddTasktemplateButton.vue";
-// import DeleteTasktemplateModal from "./TasktemplateComponents/DeleteTasktemplateModal.vue";
+import TasktemplateItem from "./TasktemplateItem.vue";
+import DeleteTasktemplateModal from "./DeleteTasktemplateModal.vue";
 export default {
   components: {
     Loading,
     NoContent,
-    AddButton
-    // TasktemplateItem,
-    // DeleteTasktemplateModal
+    AddButton,
+    TasktemplateItem,
+    DeleteTasktemplateModal
   },
   data() {
     return {
@@ -93,7 +92,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/tasktemplates"
         )

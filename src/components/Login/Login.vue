@@ -88,7 +88,7 @@ export default {
         .catch(error => {
           this.errors = [];
           this.errors.push(error.response.data.message);
-          console.log(error.data);
+          console.log(error.reponse);
         });
     },
     reset() {

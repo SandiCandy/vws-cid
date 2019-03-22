@@ -61,21 +61,49 @@
 
       <div class="form-group">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="freq" id="freq1" value="daily" checked>
-          <label class="form-check-label" for="freq1">Default radio</label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="freq1"
+            id="freq1"
+            value="daily"
+            v-model="tasktemplate.freq"
+          >
+          <label class="form-check-label" for="freq1">Täglich</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="freq" id="freq2" value="weekly">
-          <label class="form-check-label" for="freq2">Second default radio</label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="freq2"
+            id="freq2"
+            value="weekly"
+            v-model="tasktemplate.freq"
+          >
+          <label class="form-check-label" for="freq2">Wöchentlich</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="freq" id="freq3" value="monthly">
-          <label class="form-check-label" for="freq3">Disabled radio</label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="freq3"
+            id="freq3"
+            value="monthly"
+            v-model="tasktemplate.freq"
+          >
+          <label class="form-check-label" for="freq3">Monatlich</label>
         </div>
 
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="freq" id="freq3" value="yearly">
-          <label class="form-check-label" for="freq3">Disabled radio</label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="freq"
+            id="freq4"
+            value="yearly"
+            v-model="tasktemplate.freq"
+          >
+          <label class="form-check-label" for="freq4">Jährlich</label>
         </div>
       </div>
 
@@ -107,7 +135,8 @@ export default {
         description: "",
         tasktype_id: "",
         priority: 5,
-        dtstart: new Date()
+        dtstart: this.moment().format(),
+        freq: "daily"
       },
       tasktypes: [],
       errors: []
@@ -128,25 +157,25 @@ export default {
 
   methods: {
     createTasktemplate() {
+      console.log("b", this.tasktemplate.freq);
       this.success = false;
       let formData = new FormData();
-      formData.append("title", this.task.title);
-      formData.append("description", this.task.description);
-      formData.append("priority", this.task.priority);
-      formData.append("tasktype_id", this.task.tasktype_id);
-      formData.append("room_id", this.task.room_id);
-      formData.append("file", this.task.file);
+      formData.append("title", this.tasktemplate.title);
+      formData.append("description", this.tasktemplate.description);
+      formData.append("priority", this.tasktemplate.priority);
+      formData.append("tasktype_id", this.tasktemplate.tasktype_id);
+      formData.append("freq", this.tasktemplate.freq);
+      formData.append(
+        "dtstart",
+        this.moment(this.tasktemplate.dtstart).format()
+      );
       axios
         .post(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
-            "/task/create",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          }
+            "/tasktemplates/create",
+          formData
         )
         .then(response => {
           console.log(response.data);
@@ -176,12 +205,6 @@ export default {
         });
     },
     reset() {
-      this.task.title = "";
-      this.task.description = "";
-      this.task.tasktype_id = "";
-      this.task.priority = 5;
-      this.task.roomtype = "";
-      this.task.roomname = "";
       history.back();
     },
     fetchTasktypes() {
@@ -189,7 +212,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/tasktypes"
         )
@@ -206,7 +230,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/roomtypes"
         )
