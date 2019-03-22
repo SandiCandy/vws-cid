@@ -33,14 +33,8 @@
         </ul>
       </div>
     </nav>
-    <div class="container bg-white">
-      <div class="row">
-        <div class="col-lg-12">
-          <div id="view">
-            <router-view v-on:onLogin="onLogin"></router-view>
-          </div>
-        </div>
-      </div>
+    <div id="view">
+      <router-view v-on:onLogin="onLogin"></router-view>
     </div>
   </div>
 </template>
