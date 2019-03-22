@@ -285,6 +285,6 @@ export default {
 }
 
 .tudu-blu.vh-100 {
-  min-height: 120wh;
+  min-height: 120vh;
 }
 </style>
