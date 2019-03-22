@@ -116,7 +116,7 @@ export default {
     login() {
       this.validateInput();
       axios
-        .post("http://localhost:8000/api/auth/signup", {
+        .post(process.env.ROOT_API + "/auth/signup", {
           name: this.username,
           email: this.email,
           password: this.password,

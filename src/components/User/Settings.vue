@@ -107,7 +107,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get("http://localhost:8000/api/auth/settings")
+        .get(process.env.ROOT_API + "/auth/settings")
         .then(response => {
           this.user = response.data;
           console.log(response.data);

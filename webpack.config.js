@@ -2,6 +2,7 @@ var path = require("path");
 var webpack = require("webpack");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: "./src/main.js",
@@ -94,7 +95,7 @@ module.exports = {
       })
     ]
   },
-  plugins: [new VueLoaderPlugin()]
+  plugins: [new VueLoaderPlugin(), new Dotenv()]
 };
 
 if (process.env.NODE_ENV === "production") {

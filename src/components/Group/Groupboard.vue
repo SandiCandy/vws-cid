@@ -22,7 +22,7 @@
     </router-link>
 
     <router-link
-      :to="{name: '', params: { id: this.$route.params.id } }"
+      :to="{name: 'tasktemplates.show', params: { id: this.$route.params.id } }"
       type="button"
       class="btn btn-default tudu-blu btn-action btn-6"
     >
@@ -78,7 +78,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get("http://localhost:8000/api/auth/group/" + this.$route.params.id)
+        .get(process.env.ROOT_API + "/auth/group/" + this.$route.params.id)
         .then(response => {
           this.group = response.data.group;
           console.log(this.group);

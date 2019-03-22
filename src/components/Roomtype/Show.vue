@@ -108,7 +108,7 @@ export default {
     deleteroom() {
       axios
         .delete(
-          "http://localhost:8000/api/auth/group/" +
+          process.env.ROOT_API + "/auth/group/" +
             this.$route.params.id +
             "/roomtypes/" +
             this.roomtypes[this.delete_index].id
@@ -129,7 +129,7 @@ export default {
 
       axios
         .get(
-          "http://localhost:8000/api/auth/group/" +
+          process.env.ROOT_API + "/auth/group/" +
             this.$route.params.id +
             "/roomtypes"
         )
