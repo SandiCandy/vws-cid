@@ -2,11 +2,15 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <p>Möchtest du "{{ task.title}}" wirklich löschen?</p>
+        <p>Möchtest du "{{ tasktemplate.title}}" wirklich löschen?</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn text-secondary" data-dismiss="modal">Abbrechen</button>
-        <button @click="deleteTask(task.id)" type="button" class="btn btn-danger">Löschen</button>
+        <button
+          @click="deleteTasktemplate(tasktemplate.id)"
+          type="button"
+          class="btn btn-danger"
+        >Löschen</button>
       </div>
     </div>
   </div>
@@ -14,16 +18,18 @@
 
 <script>
 export default {
-  props: ["task"],
+  props: ["tasktemplate"],
   methods: {
-    deleteTask(id) {
+    deleteTasktemplate(id) {
       axios
-        .delete(process.env.ROOT_API + "/auth/tasks/" + id)
+        .delete(process.env.ROOT_API + "/auth/tasktemplates/" + id)
         .then(response => {
           $("#deleteModal").modal("hide");
-          this.$emit("taskDeleted", id);
+          this.$emit("tasktemplateDeleted", id);
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log(error.response);
+        });
     }
   }
 };

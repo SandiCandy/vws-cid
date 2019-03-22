@@ -19,7 +19,7 @@ export default {
     deleteUser(id) {
       axios
         .delete(
-          "http://localhost:8000/api/auth/group/" +
+          process.env.ROOT_API + "/auth/group/" +
             this.$route.params.id +
             "/member/" +
             id

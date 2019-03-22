@@ -1,28 +1,57 @@
+image: node:latest
+
 build site:
-  image: node:11
   stage: build
-  script:
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - echo $(ls -a)
+    # - rm .env
+    #- echo $(ls -a) -a
+    - mv -f .env.prod .env
+    - echo $(ls -a)
+    - apt-get update
+    - apt-get install zip unzip nodejs -y
     - npm install --progress=false
+  script:
     - npm run build
   artifacts:
     expire_in: 1 week
     paths:
       - dist
 
-unit test:
-  # image: node:11
-  # stage: test
-  # script:
-  #   - npm install --progress=false
-  #   - npm run unit
+# unit test:
+#   #image: node:11
+#   stage: test
+#   script:
+#   #   - npm install --progress=false
+#   #   - npm run unit
 
 deploy:
-  image: alpine
   stage: deploy
-  script:
-    - apk add --no-cache rsync openssh
+  image: ubuntu:latest
+  #when: manual
+  before_script:
+    # Install ssh-agent if not already installed, it is required by Docker
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
+    # Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
-    - chmod 600 ~/.ssh/id_dsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav --delete dist/ user@server.com:/your/project/path/
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    #- echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    #- ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+  script:
+    - echo "Deploy to production server"
+    - echo $(ls)
+    - ssh ssh-w0138428@vegane-prinzessin.de "ls"
+    - ssh ssh-w0138428@vegane-prinzessin.de "ls www/htdocs/w0138428/tuudu.emsgold.de"
+    - ssh ssh-w0138428@vegane-prinzessin.de "rm -rf www/htdocs/w0138428/tuudu.emsgold.de/* "
+
+    - scp index.html ssh-w0138428@vegane-prinzessin.de:/www/htdocs/w0138428/tuudu.emsgold.de
+    - scp -r dist ssh-w0138428@vegane-prinzessin.de:www/htdocs/w0138428/tuudu.emsgold.de
+    - ssh ssh-w0138428@vegane-prinzessin.de "ls www/htdocs/w0138428/tuudu.emsgold.de"
+  only:
+    - master

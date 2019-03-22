@@ -74,7 +74,7 @@ export default {
   methods: {
     login() {
       axios
-        .post("http://localhost:8000/api/auth/login", {
+        .post(process.env.ROOT_API + "/auth/login", {
           email: this.email,
           password: this.password,
           remember_me: this.remember_me
@@ -88,7 +88,7 @@ export default {
         .catch(error => {
           this.errors = [];
           this.errors.push(error.response.data.message);
-          console.log(error.data);
+          console.log(error.reponse);
         });
     },
     reset() {
@@ -100,7 +100,7 @@ export default {
       this.$emit("login");
     },
     redirect() {
-      this.$router.push({ name: dashboard });
+      this.$router.push({ name: "dashboard" });
     }
   }
 };

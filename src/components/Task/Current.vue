@@ -89,7 +89,7 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          "http://localhost:8000/api/auth/group/" +
+          process.env.ROOT_API + "/auth/group/" +
             this.$route.params.id +
             "/tasks/current"
         )

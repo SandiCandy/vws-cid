@@ -53,7 +53,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get("http://localhost:8000/api/auth/tasks/" + this.$route.params.tid)
+        .get(process.env.ROOT_API + "/auth/tasks/" + this.$route.params.tid)
         .then(response => {
           this.task = response.data.task;
           this.room = response.data.room[0];

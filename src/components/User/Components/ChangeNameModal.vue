@@ -36,7 +36,7 @@ export default {
   methods: {
     changeName() {
       axios
-        .put("http://localhost:8000/api/auth/settings/update", {
+        .put(process.env.ROOT_API + "/auth/settings/update", {
           name: this.name
         })
         .then(response => {

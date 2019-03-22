@@ -11,7 +11,8 @@
     <div class="no-image mr-3" v-else></div>
     <div class="media-body">
       <router-link :to="{name: 'tasks.show', params: { id: $route.params.id, tid: task.id }}">
-        <p>{{ moment(task.created_at).format('LL') }} von {{ task.creator.name}}</p>
+        <p v-if="task.creator">{{ moment(task.created_at).format('LL') }}von {{ task.creator.name}}</p>
+        <p v-else>{{ moment(task.startet_at).format('LL')}}</p>
         <h3 class="mt-0">{{ task.title }}</h3>
         <p>{{task.description}}</p>
       </router-link>
@@ -52,7 +53,7 @@ export default {
     isDone() {
       axios
         .patch(
-          "http://localhost:8000/api/auth/tasks/" + this.task.id + "/finished"
+          process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/finished"
         )
         .then(response => {
           //this.tasks.splice(this.index, 1);

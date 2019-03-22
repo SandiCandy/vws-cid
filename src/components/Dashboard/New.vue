@@ -48,7 +48,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .post("http://localhost:8000/api/auth/group/create", {
+        .post(process.env.ROOT_API + "/auth/group/create", {
           name: this.group.name
         })
         .then(response => {
