@@ -40,7 +40,12 @@
       </p>
     </div>
 
-    <button @click="isDone(index)" type="button" class="ml-3 checkbox" v-if="task.is_done != 1">
+    <button
+      @click="isDone(index)"
+      type="button"
+      class="ml-3 checkbox is-done"
+      v-if="task.is_done != 1"
+    >
       <font-awesome-icon :icon="['fas', 'check']" class="checkbox"></font-awesome-icon>
     </button>
   </div>
@@ -91,6 +96,11 @@ div.no-image {
 
 .prio-10 .no-image {
   border-color: red transparent transparent transparent;
+}
+
+button.is-done {
+  background: transparent;
+  border: inherit;
 }
 
 svg.checkbox {

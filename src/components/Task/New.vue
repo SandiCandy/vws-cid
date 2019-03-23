@@ -134,7 +134,8 @@ export default {
       }
       axios
         .post(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/task/create",
           formData,
@@ -186,7 +187,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/tasktypes"
         )
@@ -203,7 +205,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/roomtypes"
         )
@@ -257,6 +260,6 @@ export default {
 }
 
 .tudu-blu.vh-100 {
-  min-height: 120wh;
+  min-height: 120vh;
 }
 </style>

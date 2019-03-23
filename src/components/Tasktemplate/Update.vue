@@ -1,8 +1,8 @@
 <template>
-  <div class="tudu-blu row vh-100">
+  <div class="tudu-blu vh-100">
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
-    <div class="content" v-else>
+    <div class="content container" v-else>
       <div class="alert alert-danger" v-if="errors.length > 0">
         <ul>
           <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
@@ -241,3 +241,4 @@ export default {
   }
 };
 </script>
+

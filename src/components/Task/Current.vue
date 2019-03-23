@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="vh-100">
-      <loading class="loading" v-if="$store.getters.loading"></loading>
+      <loading class="loading container" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
-      <div class="content" v-else>
+      <div class="content container" v-else>
         <section v-if="tasks.length > 0">
           <article v-for="(task, index) in tasks" :key="task.id">
             <task-item
@@ -89,7 +89,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/tasks/current"
         )

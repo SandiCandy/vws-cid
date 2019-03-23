@@ -33,14 +33,8 @@
         </ul>
       </div>
     </nav>
-    <div class="container bg-white">
-      <div class="row">
-        <div class="col-lg-12">
-          <div id="view">
-            <router-view v-on:onLogin="onLogin"></router-view>
-          </div>
-        </div>
-      </div>
+    <div id="view">
+      <router-view v-on:onLogin="onLogin"></router-view>
     </div>
   </div>
 </template>
@@ -77,7 +71,6 @@ export default {
 #app {
   margin: 0;
   background: #f7f8fb;
-  // min-height: 800px;
 }
 
 html a,
@@ -85,8 +78,16 @@ html a,
   color: #39d8d8;
 }
 
+html a:hover {
+  color: #afafaf;
+}
+
 .navbar a {
   color: #ffffff;
+
+  &:hover {
+    color: #3dbdbd;
+  }
 }
 
 .navbar.tudu-blu,
@@ -151,5 +152,9 @@ section h1 {
 .media .media-body a,
 .list-group-item a {
   color: #707070;
+}
+
+article hr {
+  border: 1px solid #ffffff;
 }
 </style>
