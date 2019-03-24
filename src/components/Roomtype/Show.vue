@@ -2,7 +2,7 @@
   <div class="vh-100">
     <loading class="loading" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
-    <div class="content" v-else>
+    <div class="content container" v-else>
       <div class="list-group">
         <section v-if="roomtypes.length > 0">
           <article
@@ -108,7 +108,8 @@ export default {
     deleteroom() {
       axios
         .delete(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/roomtypes/" +
             this.roomtypes[this.delete_index].id
@@ -129,7 +130,8 @@ export default {
 
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/roomtypes"
         )

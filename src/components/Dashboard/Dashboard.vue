@@ -1,8 +1,8 @@
 <template>
   <div class="vh-100">
-    <loading class="loading" v-if="$store.getters.loading"></loading>
+    <loading class="loading container" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
-    <div class="content" v-else>
+    <div class="content container" v-else>
       <div class="panel-heading">
         <p>Hallo {{user.name}}</p>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <section class="lead">
+  <section class="lead mx-2">
     Es gibt noch keine {{contenttype}} 😢. Trage doch einfach deine
     <router-link
       :to="{name: routename, params: { id: this.$route.params.id } }"
