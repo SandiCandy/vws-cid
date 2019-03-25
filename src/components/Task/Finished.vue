@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="vh-100">
+    <div class="vh-100 task-list">
       <loading class="loading container" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content container" v-else>
         <div class="list-group">
-          <section v-if="tasks.length > 0">
+          <section v-if="tasks.length > 0" class="main-sec">
             <article v-for="(task, index) in tasks" :key="task.id">
               <task-item
                 :task="task"

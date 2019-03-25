@@ -70,6 +70,7 @@ import NewGroup from "./components/Dashboard/New.vue";
 
 import GroupBoard from "./components/Group/Groupboard.vue";
 import GroupSettings from "./components/Group/Settings.vue";
+import CampingCare from "./components/Group/Campingcare.vue";
 
 import TasktemplateList from "./components/Tasktemplate/TasktemplateList.vue";
 import NewTasktemplate from "./components/Tasktemplate/New.vue";
@@ -183,6 +184,12 @@ const routes = [
     path: "/group/:id/settings",
     name: "groups.settings",
     component: GroupSettings,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/group/:id/settings/campingcare",
+    name: "groups.campingcare",
+    component: CampingCare,
     meta: { requiresAuth: true }
   },
   {
