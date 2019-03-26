@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu row vh-100">
+  <div class="tudu-blu vh-100">
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -9,7 +9,7 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
-        <input type="text" name="name" id="name" class="form-control" v-model="task.name">
+        <input type="text" name="name" id="name" class="form-control" v-model="tasktype.name">
       </div>
 
       <div class="form-group">
@@ -24,12 +24,12 @@
 export default {
   data() {
     return {
-      task: null,
+      tasktype: null,
       errors: []
     };
   },
   mounted() {
-    this.$store.commit("changePage", "Aufgabe ändern");
+    this.$store.commit("changePage", "Aufgabenart ändern");
     this.fetchTask();
   },
 
@@ -39,13 +39,17 @@ export default {
         "Bearer " + $cookies.get("token");
 
       axios
-        .get("http://localhost:8000/tasks/" + this.$route.params.ttid)
+        .get(
+          process.env.ROOT_API +
+            "/auth/group/tasktypes/" +
+            this.$route.params.ttid
+        )
         .then(response => {
-          this.task = response.data.task;
+          this.tasktype = response.data.tasktype;
           console.log(response.data);
         })
         .catch(error => {
-          console.log(error.data);
+          console.log(error.response);
         });
     },
     updateTask() {
@@ -53,13 +57,14 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .put(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
-            "/tasks/" +
+            "/tasktypes/" +
             this.$route.params.ttid +
             "/update",
           {
-            name: this.task.name
+            name: this.tasktype.name
           }
         )
         .then(response => {
@@ -76,7 +81,7 @@ export default {
         });
     },
     reset() {
-      this.task.name = "";
+      this.tasktype.name = "";
       history.back();
     }
   }

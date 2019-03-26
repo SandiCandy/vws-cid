@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu row vh-100">
+  <div class="tudu-blu vh-100">
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -46,7 +46,8 @@ export default {
 
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/roomtypes/" +
+          process.env.ROOT_API +
+            "/auth/group/roomtypes/" +
             this.$route.params.rtid
         )
         .then(response => {
@@ -62,7 +63,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .put(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/roomtypes/" +
             this.$route.params.rtid +

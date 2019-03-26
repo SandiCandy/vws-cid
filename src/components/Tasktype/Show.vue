@@ -3,7 +3,7 @@
     <div class="loading d-flex justify-content-center" v-if="loading">
       <font-awesome-icon :icon="['fas', 'spinner']" class="display-4 d-flex justify-content-center"></font-awesome-icon>
     </div>
-    <div class="content" v-else>
+    <div class="content container" v-else>
       <p>Für eine optimale Organisation der Aufgaben kannst du eigene Aufgabentypen anlegen, z. B. "Reinigung", "Reperaturen" und "Gartenarbeiten".</p>
       <div class="list-group">
         <section v-if="tasktypes.length > 0">
@@ -34,10 +34,8 @@
             </button>
           </article>
         </section>
-        <section
-          class="lead"
-          v-else
-        >Es gibt noch keine Aufgabenarten 😢. Du könntest z. B. "Allgemein", "Wartung" und "Sonstiges" als Kategorien eintragen. Möchtest du deinen
+        <section class="lead" v-else>
+          Es gibt noch keine Aufgabenarten 😢. Du könntest z. B. "Allgemein", "Wartung" und "Sonstiges" als Kategorien eintragen. Möchtest du deinen
           <router-link
             :to="{name: 'tasktypes.new', params: { id: this.$route.params.id } }"
           >ersten Bereich anlegen?</router-link>
@@ -115,7 +113,8 @@ export default {
     deleteTasktype() {
       axios
         .delete(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/tasktypes/" +
             this.tasktypes[this.delete_index].id
@@ -135,7 +134,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/tasktypes"
         )
