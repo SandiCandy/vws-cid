@@ -4,7 +4,7 @@
       <a @click="$router.go(-1)">
         <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
       </a>
-      <router-link to="/" class="navbar-brand">{{ $store.getters.pagetitle }}</router-link>
+      <h1 class="nav-active-heading">{{ $store.getters.pagetitle }}</h1>
       <button
         class="navbar-toggler"
         type="button"
@@ -17,8 +17,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <navigation-left></navigation-left>
-        <ul class="nav navbar-nav navbar-right" v-if="this.isLoggedIn">
+        <navigation-left v-if="isLoggedIn"></navigation-left>
+        <ul class="nav navbar-nav navbar-right" v-if="isLoggedIn">
           <li class="nav-item">
             <button @click="onLogout" type="button" class="btn btn-link">Logout</button>
           </li>
@@ -34,7 +34,7 @@
       </div>
     </nav>
     <div id="view">
-      <router-view v-on:onLogin="onLogin"></router-view>
+      <router-view v-on:login="onLogin"></router-view>
     </div>
   </div>
 </template>
@@ -57,8 +57,10 @@ export default {
     onLogout() {
       $cookies.remove("token");
       this.isLoggedIn = false;
+      this.$router.push("/");
     },
     onLogin() {
+      console.log("login");
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + this.$cookies.get("token");
       this.isLoggedIn = $cookies.isKey("token");
@@ -73,6 +75,11 @@ export default {
   background: #f7f8fb;
 }
 
+.nav-active-heading {
+  font-size: 1.2rem;
+  margin: 0 20px;
+}
+
 html a,
 .text-tudu-blu {
   color: #39d8d8;
@@ -82,7 +89,8 @@ html a:hover {
   color: #afafaf;
 }
 
-.navbar a {
+.navbar a,
+button.btn-link {
   color: #ffffff;
 
   &:hover {
@@ -156,5 +164,15 @@ section h1 {
 
 article hr {
   border: 1px solid #ffffff;
+}
+
+.panel-heading,
+.main-sec {
+  padding-top: 4px;
+}
+
+.task-list {
+  background-color: #ffffff;
+  // height: 100%;
 }
 </style>

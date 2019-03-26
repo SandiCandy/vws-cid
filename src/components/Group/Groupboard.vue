@@ -3,6 +3,7 @@
     <div class="col-12 text-right">
       <router-link
         :to="{name: 'groups.settings', params: { id: this.$route.params.id } }"
+        class="mr-2"
       >Einstellungen</router-link>
     </div>
     <router-link
