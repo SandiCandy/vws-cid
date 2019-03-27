@@ -4,8 +4,9 @@
       <loading class="loading container" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content container" v-else>
-        <section v-if="tasks.length > 0" class="main-sec">
-          <article v-for="(task, index) in tasks" :key="task.id">
+        <button data-toggle="modal" data-target="#filterModal" class="mr-2">Filtern</button>
+        <section v-if="filtered_tasks.length > 0" class="main-sec">
+          <article v-for="(task, index) in filtered_tasks" :key="task.id">
             <task-item
               :task="task"
               :index="index"
@@ -31,6 +32,17 @@
         >
           <delete-task-modal v-bind:task="delete_task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
         </div>
+
+        <div
+          class="modal fade"
+          id="filterModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="filterModalLabel"
+          aria-hidden="true"
+        >
+          <filter-task-modal v-on:setFilter="showFilteredTasks"></filter-task-modal>
+        </div>
       </div>
     </div>
   </div>
@@ -44,13 +56,15 @@ import TaskItem from "./TaskComponents/TaskItem.vue";
 import NoTasks from "./TaskComponents/NoTasks.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
 import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
+import FilterTaskModal from "./TaskComponents/FilterTaskModal.vue";
 export default {
   components: {
     Loading,
     TaskItem,
     NoTasks,
     AddTaskButton,
-    DeleteTaskModal
+    DeleteTaskModal,
+    FilterTaskModal
   },
   data() {
     return {
@@ -58,7 +72,8 @@ export default {
       delete_task: {},
       delete_index: "",
       errors: [],
-      tasks: []
+      all_tasks: [],
+      filtered_tasks: []
     };
   },
 
@@ -69,16 +84,16 @@ export default {
 
   methods: {
     spliceArray(index) {
-      this.tasks.splice(index, 1);
+      this.filtered_tasks.splice(index, 1);
     },
     fetchTask(index) {
-      this.delete_task = this.tasks[index];
+      this.delete_task = this.filtered_tasks[index];
       this.delete_index = index;
       $("#deleteModal").modal("show");
     },
     removeDeletedTask(index) {
       console.log("remove");
-      this.tasks.splice(this.delete_index, 1);
+      this.filtered_tasks.splice(this.delete_index, 1);
     },
 
     fetchTasks() {
@@ -95,7 +110,9 @@ export default {
             "/tasks/current"
         )
         .then(response => {
-          this.tasks = response.data.tasks;
+          this.all_tasks = response.data.tasks;
+          //Filter anwenden, falls vorhanden
+          this.showFilteredTasks();
           console.log(response.data);
           this.$store.commit("isLoading", false);
         })
@@ -103,6 +120,39 @@ export default {
           this.$store.commit("hasError", error.toString());
           this.$store.commit("isLoading", false);
         });
+    },
+    showFilteredTasks() {
+      this.filtered_tasks = [];
+      if (localStorage.getItem("myTasktypes")) {
+        let tasktypes = JSON.parse(localStorage.getItem("myTasktypes"));
+        let filtered_tasktype_ids = [];
+        tasktypes.forEach(function(el) {
+          if (el.show === false) {
+            filtered_tasktype_ids.push(el.id);
+          }
+        });
+
+        for (let i = 0; i < this.all_tasks.length; ++i) {
+          this.filtered_tasks.push(this.all_tasks[i]);
+          for (let j = 0; j < filtered_tasktype_ids.length; ++j) {
+            if (this.all_tasks[i].tasktype_id === filtered_tasktype_ids[j]) {
+              this.filtered_tasks.pop();
+            }
+          }
+        }
+
+        console.log(this.filtered_tasks, filtered_tasktype_ids);
+
+        // this.filtered_tasks.forEach(function(el, index, obj) {
+        //   filtered_tasktype_ids.forEach(function(id) {
+        //     if (el.tasktype_id === id) {
+        //       obj.splice(index, 1);
+        //     }
+        //   });
+        // });
+      }
+
+      console.log("filtered", this.filtered_tasks.length);
     }
   }
 };
