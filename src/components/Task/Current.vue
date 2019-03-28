@@ -4,7 +4,14 @@
       <loading class="loading container" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content container" v-else>
-        <button data-toggle="modal" data-target="#filterModal" class="mr-2">Filtern</button>
+        <div class="text-right">
+          <button
+            type="button"
+            data-toggle="modal"
+            data-target="#filterModal"
+            class="btn text-tudu-blu"
+          >Filtern</button>
+        </div>
         <section v-if="filtered_tasks.length > 0" class="main-sec">
           <article v-for="(task, index) in filtered_tasks" :key="task.id">
             <task-item
@@ -137,19 +144,10 @@ export default {
           for (let j = 0; j < filtered_tasktype_ids.length; ++j) {
             if (this.all_tasks[i].tasktype_id === filtered_tasktype_ids[j]) {
               this.filtered_tasks.pop();
+              break;
             }
           }
         }
-
-        console.log(this.filtered_tasks, filtered_tasktype_ids);
-
-        // this.filtered_tasks.forEach(function(el, index, obj) {
-        //   filtered_tasktype_ids.forEach(function(id) {
-        //     if (el.tasktype_id === id) {
-        //       obj.splice(index, 1);
-        //     }
-        //   });
-        // });
       }
 
       console.log("filtered", this.filtered_tasks.length);

@@ -61,7 +61,6 @@ export default {
           process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/finished"
         )
         .then(response => {
-          //this.tasks.splice(this.index, 1);
           this.$emit("done", this.index);
           console.log("Task finished");
         })

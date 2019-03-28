@@ -81,7 +81,8 @@ export default {
 }
 
 html a,
-.text-tudu-blu {
+.text-tudu-blu,
+.btn.text-tudu-blu {
   color: #39d8d8;
 }
 

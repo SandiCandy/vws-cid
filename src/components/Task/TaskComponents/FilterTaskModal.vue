@@ -5,14 +5,23 @@
         <p>Welche Aufgabenbereiche möchtest du sehen?</p>
         <form>
           <div v-for="tt in tasktypes" v-bind:key="tt.id">
-            <input type="checkbox" id="tasktypes" :name="tt.name" :value="tt.id" v-model="tt.show">
-            <label for="tt.name">{{tt.name}}</label>
+            <div class="form-check">
+              <input
+                type="checkbox"
+                id="tasktypes"
+                class="form-check-input"
+                :name="tt.name"
+                :value="tt.id"
+                v-model="tt.show"
+              >
+              <label for="tt.name" class="form-check-label">{{tt.name}}</label>
+            </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn text-secondary" data-dismiss="modal">Abbrechen</button>
-        <button @click="submitFilter()" type="button" class="btn btn-danger">Bestätigen</button>
+        <button @click="submitFilter()" type="button" class="btn btn-success">Bestätigen</button>
       </div>
     </div>
   </div>
@@ -64,6 +73,7 @@ export default {
     submitFilter() {
       localStorage.setItem("myTasktypes", JSON.stringify(this.tasktypes));
       this.$emit("setFilter");
+      $("#filterModal").modal("hide");
     }
   }
 };
