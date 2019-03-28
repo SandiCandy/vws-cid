@@ -10,9 +10,13 @@
         <h3 class="card-title">{{task.title}}</h3>
         <div class="card-text">
           <p>
-            <small
-              class="text-muted"
-            >{{ moment(task.created_at).format('LL') }} von {{ task.creator.name}}</small>
+            <small class="text-muted">
+              {{ moment(task.created_at).format('LL') }}
+              <span
+                v-if="task.creator"
+              >von {{ task.creator.name}}</span>
+              <span v-else>(automatisch erstellt)</span>
+            </small>
           </p>
           <p>{{task.description}}</p>
 
