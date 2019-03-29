@@ -1,6 +1,6 @@
 {
   "name": "frontend-taskmanager",
-  "description": "A Vue.js project",
+  "description": "Frontend part of Tuudu",
   "version": "1.0.0",
   "author": "SandyCandy <sandratieben@gmail.com>",
   "license": "MIT",
