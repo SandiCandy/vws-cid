@@ -83,7 +83,7 @@ Vue.use(VueRouter);
 Vue.use(VueCookies);
 
 const routes = [
-  { path: "", component: Home },
+  { path: "", component: Home, meta: { guest: true } },
   {
     path: "/group/:id/tasks",
     name: "tasks.current",

@@ -48,7 +48,7 @@ export default {
   },
   created() {
     this.fetchTask();
-    this.$store.commit("changePage", "SingleTaskTODO");
+    this.$store.commit("changePage", this.task.name);
   },
   methods: {
     fetchTask() {

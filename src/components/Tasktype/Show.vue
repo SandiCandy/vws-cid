@@ -38,7 +38,7 @@
           Es gibt noch keine Aufgabenarten 😢. Du könntest z. B. "Allgemein", "Wartung" und "Sonstiges" als Kategorien eintragen. Möchtest du deinen
           <router-link
             :to="{name: 'tasktypes.new', params: { id: this.$route.params.id } }"
-          >ersten Bereich anlegen?</router-link>
+          >erste Aufgabenart anlegen?</router-link>
         </section>
       </div>
 
