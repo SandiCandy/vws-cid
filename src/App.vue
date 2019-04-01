@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark tudu-blu">
-      <a @click="$router.go(-1)">
+      <a @click="$router.go(-1)" v-if="this.$route.name !== 'dashboard'">
         <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
       </a>
       <h1 class="nav-active-heading">{{ $store.getters.pagetitle }}</h1>
@@ -97,6 +97,11 @@ button.btn-link {
   &:hover {
     color: #3dbdbd;
   }
+}
+
+.btn-link-white a {
+  color: white;
+  text-decoration: underline;
 }
 
 .navbar.tudu-blu,

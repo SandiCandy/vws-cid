@@ -17,10 +17,7 @@
             :to="{name: 'tasktypes.show', params: { id: this.$route.params.id} }"
           >Meine Aufgabenarten</router-link>
         </section>
-        <section
-          @click="openDeleteDialog()"
-          class="list-group-item text-danger"
-        >Benutzerkonto löschen</section>
+        <section @click="openDeleteDialog()" class="list-group-item text-danger">Gruppe löschen</section>
       </div>
 
       <div
