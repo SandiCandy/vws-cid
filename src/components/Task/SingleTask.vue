@@ -26,7 +26,7 @@
           </p>
         </div>
         <img
-          :src="'http://localhost:8000/storage/' + task.images[0].name"
+          :src="backend_url + '/storage/' + task.images[0].name"
           class="card-img-top"
           alt="..."
           v-if="task.images && task.images.length > 0"
@@ -43,12 +43,13 @@ export default {
   data() {
     return {
       task: null,
-      room: null
+      room: null,
+      backend_url: process.env.ROOT
     };
   },
   created() {
     this.fetchTask();
-    this.$store.commit("changePage", this.task.name);
+    this.$store.commit("changePage", "Detail");
   },
   methods: {
     fetchTask() {

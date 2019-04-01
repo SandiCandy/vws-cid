@@ -1,7 +1,7 @@
 <template>
   <div class="media" :class="'prio-' + task.priority">
     <img
-      :src="'http://localhost:8000/storage/' + task.images[0].name"
+      :src="backend_url + '/storage/' + task.images[0].name"
       class="mr-3"
       :class="'prio-' + task.priority"
       height="64"
@@ -53,6 +53,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      backend_url: process.env.ROOT
+    };
+  },
   props: ["task", "index"],
   methods: {
     isDone() {
