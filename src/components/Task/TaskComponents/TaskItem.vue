@@ -1,15 +1,16 @@
 <template>
-  <div class="media" :class="'prio-' + task.priority">
-    <img
-      :src="backend_url + '/storage/' + task.images[0].name"
-      class="mr-3"
-      :class="'prio-' + task.priority"
-      height="64"
-      width="64"
-      v-if="task.images.length > 0"
-    >
-    <div class="no-image mr-3" v-else></div>
-    <div class="media-body">
+  <div class="media row" :class="'prio-' + task.priority">
+    <div class="img col-xs-2">
+      <img
+        :src="backend_url + '/storage/' + task.images[0].name"
+        :class="'prio-' + task.priority"
+        v-if="task.images.length > 0"
+        width="45"
+        height="45"
+      >
+      <div class="no-image" v-else></div>
+    </div>
+    <div class="media-body col-xs-10">
       <router-link :to="{name: 'tasks.show', params: { id: $route.params.id, tid: task.id }}">
         <p v-if="task.creator">{{ moment(task.created_at).format('LL') }}von {{ task.creator.name}}</p>
         <p v-else>{{ moment(task.startet_at).format('LL')}}</p>
@@ -43,7 +44,7 @@
     <button
       @click="isDone(index)"
       type="button"
-      class="ml-3 checkbox is-done"
+      class="col-xs-2 checkbox is-done"
       v-if="task.is_done != 1"
     >
       <font-awesome-icon :icon="['fas', 'check']" class="checkbox"></font-awesome-icon>
@@ -81,13 +82,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+div.img,
+button.is-done {
+  box-sizing: border-box;
+  padding: 5px;
+}
 div.no-image {
-  width: 64px;
-  height: 64px;
   background-color: #39d8d8;
   border-style: solid;
-  border-width: 64px 64px 0px 0px;
+  border-width: 45px 45px 0px 0px;
   border-color: green transparent transparent transparent;
+}
+
+.media-body {
+  word-break: break-word;
 }
 
 .prio-0 .no-image {
@@ -105,15 +113,16 @@ div.no-image {
 button.is-done {
   background: transparent;
   border: inherit;
+  position: relative;
+  right: 5px;
 }
 
 svg.checkbox {
-  border: 4px solid #b4b4b4;
-  color: #b4b4b4;
-  height: 50px;
-  width: 50px;
+  border: 2px solid #b4b4b4;
+  color: #dddddd;
+  height: 45px;
+  width: 45px;
   padding: 0px 2px;
-  font-size: 3rem;
 
   &:active {
     color: green;
