@@ -4,14 +4,16 @@
       <loading class="loading container" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content container" v-else>
-        <div class="text-right">
+        <section class="row header">
+          <p class="col-6">{{filtered_tasks.length + " Einträge"}}</p>
           <button
             type="button"
             data-toggle="modal"
             data-target="#filterModal"
-            class="btn text-tudu-blu"
+            class="btn text-tudu-blu col-6 text-right"
           >Filtern</button>
-        </div>
+        </section>
+
         <section v-if="filtered_tasks.length > 0" class="main-sec">
           <article v-for="(task, index) in filtered_tasks" :key="task.id">
             <task-item
@@ -130,8 +132,8 @@ export default {
     },
     showFilteredTasks() {
       this.filtered_tasks = [];
-      if (localStorage.getItem("myTasktypes")) {
-        let tasktypes = JSON.parse(localStorage.getItem("myTasktypes"));
+      if (localStorage.getItem(this.$route.params.id)) {
+        let tasktypes = JSON.parse(localStorage.getItem(this.$route.params.id));
         let filtered_tasktype_ids = [];
         tasktypes.forEach(function(el) {
           if (el.show === false) {
@@ -148,6 +150,8 @@ export default {
             }
           }
         }
+      } else {
+        this.filtered_tasks = this.all_tasks;
       }
 
       console.log("filtered", this.filtered_tasks.length);
@@ -155,5 +159,19 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.header p,
+.header button.btn {
+  padding: 5px 5px 0 5px;
+  line-height: 1.5;
+  vertical-align: 0;
+  margin: 0;
+}
+.header p {
+  color: #777;
+}
+</style>
+
 
 
