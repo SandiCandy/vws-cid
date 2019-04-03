@@ -56,9 +56,11 @@ export default {
         });
     },
     readFiltering() {
-      if (localStorage.getItem("myTasktypes")) {
+      if (localStorage.getItem(this.$route.params.id)) {
         console.log("read localstorage");
-        this.tasktypes = JSON.parse(localStorage.getItem("myTasktypes"));
+        this.tasktypes = JSON.parse(
+          localStorage.getItem(this.$route.params.id)
+        );
       } else {
         console.log("localstorage is empty");
         this.fetchTasktypes();
@@ -68,10 +70,16 @@ export default {
       this.tasktypes.forEach(function(el) {
         el.show = true;
       });
-      localStorage.setItem("myTasktypes", JSON.stringify(this.tasktypes));
+      localStorage.setItem(
+        this.$route.params.id,
+        JSON.stringify(this.tasktypes)
+      );
     },
     submitFilter() {
-      localStorage.setItem("myTasktypes", JSON.stringify(this.tasktypes));
+      localStorage.setItem(
+        this.$route.params.id,
+        JSON.stringify(this.tasktypes)
+      );
       this.$emit("setFilter");
       $("#filterModal").modal("hide");
     }
