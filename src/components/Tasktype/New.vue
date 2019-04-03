@@ -65,6 +65,7 @@ export default {
           this.$emit("newtasktype");
           console.log(response.data);
           this.success = true;
+          this.removeLocalstorage();
           setTimeout(this.reset, 1000);
         })
         .catch(error => {
@@ -79,6 +80,9 @@ export default {
     reset() {
       this.tasktype.name = "";
       history.back();
+    },
+    removeLocalstorage() {
+      localStorage.removeItem(this.$route.params.id);
     }
   }
 };
