@@ -9,7 +9,15 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
-        <input type="text" name="name" id="name" class="form-control" v-model="roomtype.name">
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="form-control"
+          v-model="roomtype.name"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
+        >
+        <div class="invalid-feedback">Gib bitte dem Bereich eine Bezeichnung.</div>
       </div>
 
       <div class="form-group">
@@ -31,8 +39,14 @@ export default {
       roomtype: {
         name: ""
       },
-      errors: []
+      errors: [],
+      attemptSubmit: false
     };
+  },
+  computed: {
+    requiredTitle() {
+      return this.roomtype.name === "";
+    }
   },
   mounted() {
     this.$store.commit("changePage", "Bereich ändern");
@@ -59,6 +73,7 @@ export default {
         });
     },
     updateRoomtype() {
+      this.validateInput();
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
@@ -89,6 +104,11 @@ export default {
     reset() {
       this.roomtype.name = "";
       history.back();
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle) event.preventDefault();
     }
   }
 };

@@ -1,15 +1,17 @@
 <template>
   <div class="tudu-blu vh-100">
-    <div class="alert alert-danger" v-if="errors.length > 0">
-      <ul>
-        <li v-for="error in errors">{{ error }}</li>
-      </ul>
-    </div>
-
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
-        <input type="text" name="name" id="name" class="form-control" v-model="roomtype.name">
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="form-control"
+          v-model="roomtype.name"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
+        >
+        <div class="invalid-feedback">Gib bitte dem Bereich eine Bezeichnung.</div>
       </div>
 
       <div class="form-group">
@@ -28,11 +30,17 @@
 export default {
   data() {
     return {
+      attemptSubmit: false,
       roomtype: {
         name: ""
       },
       errors: []
     };
+  },
+  computed: {
+    requiredTitle() {
+      return this.roomtype.name === "";
+    }
   },
   mounted() {
     this.$store.commit("changePage", "Neuer Bereich");
@@ -40,6 +48,7 @@ export default {
 
   methods: {
     createRoomtype() {
+      this.validateInput();
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
@@ -68,6 +77,11 @@ export default {
     reset() {
       this.roomtype.name = "";
       history.back();
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle) event.preventDefault();
     }
   }
 };

@@ -12,7 +12,15 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
-        <input type="text" name="name" id="name" class="form-control" v-model="tasktype.name">
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="form-control"
+          v-model="tasktype.name"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
+        >
+        <div class="invalid-feedback">Gib bitte dem Aufgabenbereich eine Bezeichnung.</div>
       </div>
 
       <div class="form-group">
@@ -39,8 +47,14 @@ export default {
         name: ""
       },
       errors: [],
-      success: false
+      success: false,
+      attemptSubmit: false
     };
+  },
+  computed: {
+    requiredTitle() {
+      return this.tasktype.name === "";
+    }
   },
   mounted() {
     this.$store.commit("changePage", "Neue Aufgabenart");
@@ -48,6 +62,7 @@ export default {
 
   methods: {
     createTasktype() {
+      this.validateInput();
       this.success = false;
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
@@ -83,6 +98,11 @@ export default {
     },
     removeLocalstorage() {
       localStorage.removeItem(this.$route.params.id);
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle) event.preventDefault();
     }
   }
 };

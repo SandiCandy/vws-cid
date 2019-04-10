@@ -1,18 +1,21 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="tudu-blu">
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
-    <div class="alert alert-danger" v-if="errors.length > 0">
-      <ul>
-        <li v-for="error in errors" :key="error">{{ error }}</li>
-      </ul>
-    </div>
-
+    <loading class="upload" v-if="$store.getters.loading"></loading>
     <form class="col-sm-12">
       <div class="form-group">
         <label for="title">Name *</label>
-        <input type="text" name="title" id="title" class="form-control" v-model="task.title">
+        <input
+          type="text"
+          name="title"
+          id="title"
+          class="form-control"
+          v-model="task.title"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
+        >
+        <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
       </div>
 
       <div class="form-group">
@@ -29,9 +32,16 @@
 
       <div class="form-group">
         <label for="tasktype_id">Aufgabenart *</label>
-        <select v-model="task.tasktype_id" class="form-control" name="tasktype_id" id="tasktype_id">
+        <select
+          v-model="task.tasktype_id"
+          class="form-control"
+          name="tasktype_id"
+          id="tasktype_id"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTasktype }"
+        >
           <option v-for="ttype in tasktypes" :key="ttype.id" :value="ttype.id">{{ ttype.name }}</option>
         </select>
+        <div class="invalid-feedback">Bitte gib einen Aufgabentypen an.</div>
       </div>
 
       <div class="form-group">
@@ -43,7 +53,7 @@
         </select>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" v-if="roomtypes.length > 0">
         <label for="roomtype_id">Bereich</label>
         <select v-model="roomtype_id" class="form-control" name="roomtype_id" id="roomtype_id">
           <option value="-1"></option>
@@ -73,7 +83,9 @@
           class="form-control"
           ref="file"
           accept="image/*"
+          v-bind:class="{ 'is-invalid': attemptSubmit && fileTooLarge }"
         >
+        <div class="invalid-feedback">Deine Datei ist leider zu groß.</div>
       </div>
 
       <div class="form-group">
@@ -86,13 +98,17 @@
 
 <script>
 import Successful from "../common/Successful.vue";
+import Loading from "../common/Loading.vue";
 export default {
   components: {
-    Successful
+    Successful,
+    Loading
   },
   data() {
     return {
       success: false,
+      attemptSubmit: false,
+      is_uploading: false,
       task: {
         title: "",
         description: "",
@@ -106,6 +122,17 @@ export default {
       rooms: [],
       errors: []
     };
+  },
+  computed: {
+    requiredTitle() {
+      return this.task.title === "";
+    },
+    requiredTasktype() {
+      return this.task.tasktype_id === "";
+    },
+    fileTooLarge() {
+      return this.task.file && this.task.file.size > 2000;
+    }
   },
 
   watch: {
@@ -122,6 +149,8 @@ export default {
 
   methods: {
     createTask() {
+      this.validateInput();
+      this.is_uploading = true;
       this.success = false;
       let formData = new FormData();
       formData.append("title", this.task.title);
@@ -149,28 +178,13 @@ export default {
           console.log(response.data);
           this.$emit("newtask");
           this.success = true;
-          setTimeout(this.reset, 800);
+          this.is_uploading = false;
+          setTimeout(this.reset, 1000);
         })
         .catch(error => {
+          this.is_uploading = false;
           this.errors = [];
           console.log(error.response);
-
-          if (error.response.data.errors && error.response.data.errors.title) {
-            this.errors.push(error.response.data.errors.title[0]);
-          }
-          if (
-            error.response.data.errors &&
-            error.response.data.errors.description
-          ) {
-            this.errors.push(error.response.data.errors.description[0]);
-          }
-
-          if (
-            error.response.data.errors &&
-            error.response.data.errors.tasktype
-          ) {
-            this.errors.push(error.response.data.errors.tasktype[0]);
-          }
         });
     },
     reset() {
@@ -180,6 +194,7 @@ export default {
       this.task.priority = 5;
       this.task.roomtype = "";
       this.task.roomname = "";
+      this.attemptSubmit = false;
       history.back();
     },
     fetchTasktypes() {
@@ -238,12 +253,18 @@ export default {
     handleFileUpload() {
       console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
+        event.preventDefault();
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tudu-blu label {
   margin-bottom: 0;
   font-size: 0.9rem;
@@ -259,7 +280,14 @@ export default {
   width: 100vw;
 }
 
-.tudu-blu.vh-100 {
-  min-height: 120vh;
+.upload {
+  z-index: 10;
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: #39d8d8;
+  padding-top: 30vh;
 }
 </style>

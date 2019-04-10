@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="vh-100">
+    <div class="task-list">
       <loading class="loading" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content col-sm-12" v-else>
