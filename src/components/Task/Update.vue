@@ -3,16 +3,18 @@
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
-      <div class="alert alert-danger" v-if="errors.length > 0">
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-      </div>
-
       <form class="col-sm-12">
         <div class="form-group">
-          <label for="title">Name</label>
-          <input type="text" name="title" id="title" class="form-control" v-model="task.title">
+          <label for="title">Name *</label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            class="form-control"
+            v-model="task.title"
+            v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
+          >
+          <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
         </div>
 
         <div class="form-group">
@@ -34,9 +36,11 @@
             class="form-control"
             name="tasktype_id"
             id="tasktype_id"
+            v-bind:class="{ 'is-invalid': attemptSubmit && requiredTasktype }"
           >
             <option v-for="(ttype, index) in tasktypes" :value="ttype.id">{{ ttype.name }}</option>
           </select>
+          <div class="invalid-feedback">Bitte gib einen Aufgabentypen an.</div>
         </div>
 
         <div class="form-group">
@@ -80,7 +84,9 @@
             class="form-control"
             ref="file"
             accept="image/*"
+            v-bind:class="{ 'is-invalid': attemptSubmit && fileTooLarge }"
           >
+          <div class="invalid-feedback">Deine Datei ist leider zu groß.</div>
         </div>
 
         <div class="form-group">
@@ -107,8 +113,20 @@ export default {
       roomtype_id: -1,
       tasktypes: [],
       roomtypes: [],
-      rooms: []
+      rooms: [],
+      attemptSubmit: false
     };
+  },
+  computed: {
+    requiredTitle() {
+      return this.task.title === "";
+    },
+    requiredTasktype() {
+      return this.task.tasktype_id === "";
+    },
+    fileTooLarge() {
+      return this.task.file && this.task.file.size > 2000;
+    }
   },
   watch: {
     roomtype_id: function(newId, oldId) {
@@ -133,6 +151,7 @@ export default {
 
   methods: {
     updateTask() {
+      this.validateInput();
       this.success = false;
       console.log(this.task.room_id);
       let formData = new FormData();
@@ -274,6 +293,12 @@ export default {
     handleFileUpload() {
       console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
+        event.preventDefault();
     }
   }
 };
