@@ -13,7 +13,7 @@
           id="title"
           class="form-control"
           v-model="task.title"
-          v-bind:class="{ 'is-invalid': requiredTitle }"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
         >
         <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
       </div>
@@ -37,7 +37,7 @@
           class="form-control"
           name="tasktype_id"
           id="tasktype_id"
-          v-bind:class="{ 'is-invalid': requiredTasktype }"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTasktype }"
         >
           <option v-for="ttype in tasktypes" :key="ttype.id" :value="ttype.id">{{ ttype.name }}</option>
         </select>
@@ -83,7 +83,7 @@
           class="form-control"
           ref="file"
           accept="image/*"
-          v-bind:class="{ 'is-invalid': fileTooLarge }"
+          v-bind:class="{ 'is-invalid': attemptSubmit && fileTooLarge }"
         >
         <div class="invalid-feedback">Deine Datei ist leider zu groß.</div>
       </div>
@@ -107,6 +107,7 @@ export default {
   data() {
     return {
       success: false,
+      attemptSubmit: false,
       is_uploading: false,
       task: {
         title: "",

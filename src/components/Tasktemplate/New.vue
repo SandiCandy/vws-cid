@@ -18,7 +18,9 @@
           id="title"
           class="form-control"
           v-model="tasktemplate.title"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
         >
+        <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
       </div>
 
       <div class="form-group">
@@ -40,18 +42,27 @@
           class="form-control"
           name="tasktype_id"
           id="tasktype_id"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTasktype }"
         >
           <option v-for="ttype in tasktypes" :key="ttype.id" :value="ttype.id">{{ ttype.name }}</option>
         </select>
+        <div class="invalid-feedback">Bitte gib einen Aufgabentypen an.</div>
       </div>
 
       <div class="form-group">
         <label for="priority">Priorität *</label>
-        <select v-model="tasktemplate.priority" class="form-control" name="priority" id="priority">
+        <select
+          v-model="tasktemplate.priority"
+          class="form-control"
+          name="priority"
+          id="priority"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredPrio }"
+        >
           <option value="0">Niedrig</option>
           <option value="5">Normal</option>
           <option value="10">Hoch</option>
         </select>
+        <div class="invalid-feedback">Gib bitte eine Priorität.</div>
       </div>
 
       <div class="form-group">
@@ -130,6 +141,7 @@ export default {
   data() {
     return {
       success: false,
+      attemptSubmit: false,
       tasktemplate: {
         title: "",
         description: "",
@@ -149,6 +161,18 @@ export default {
     }
   },
 
+  computed: {
+    requiredTitle() {
+      return this.tasktemplate.title === "";
+    },
+    requiredTasktype() {
+      return this.tasktemplate.tasktype_id === "";
+    },
+    requiredPrio() {
+      return this.tasktemplate.priority === "";
+    }
+  },
+
   created() {
     this.$store.commit("changePage", "Neue Aufgabe");
     this.fetchTasktypes();
@@ -157,7 +181,7 @@ export default {
 
   methods: {
     createTasktemplate() {
-      console.log("b", this.tasktemplate.freq);
+      this.validateInput();
       this.success = false;
       let formData = new FormData();
       formData.append("title", this.tasktemplate.title);
@@ -185,23 +209,6 @@ export default {
         .catch(error => {
           this.errors = [];
           console.log(error.response);
-
-          if (error.response.data.errors && error.response.data.errors.title) {
-            this.errors.push(error.response.data.errors.title[0]);
-          }
-          if (
-            error.response.data.errors &&
-            error.response.data.errors.description
-          ) {
-            this.errors.push(error.response.data.errors.description[0]);
-          }
-
-          if (
-            error.response.data.errors &&
-            error.response.data.errors.tasktype
-          ) {
-            this.errors.push(error.response.data.errors.tasktype[0]);
-          }
         });
     },
     reset() {
@@ -263,6 +270,11 @@ export default {
     handleFileUpload() {
       console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle || this.requiredTasktype) event.preventDefault();
     }
   }
 };
