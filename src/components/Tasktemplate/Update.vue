@@ -3,12 +3,6 @@
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
-      <div class="alert alert-danger" v-if="errors.length > 0">
-        <ul>
-          <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-        </ul>
-      </div>
-
       <form class="col-sm-12">
         <div class="form-group">
           <label for="title">Name</label>
@@ -18,7 +12,9 @@
             id="title"
             class="form-control"
             v-model="tasktemplate.title"
+            v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
           >
+          <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
         </div>
 
         <div class="form-group">
@@ -56,11 +52,13 @@
             class="form-control"
             name="priority"
             id="priority"
+            v-bind:class="{ 'is-invalid': attemptSubmit && requiredPrio }"
           >
             <option value="0">Niedrig</option>
             <option value="5">Normal</option>
             <option value="10">Hoch</option>
           </select>
+          <div class="invalid-feedback">Bitte gib einen Aufgabentypen an.</div>
         </div>
 
         <div class="form-group">
@@ -143,8 +141,20 @@ export default {
       errors: [],
       error: null,
       tasktemplate: {},
-      tasktypes: []
+      tasktypes: [],
+      attemptSubmit: false
     };
+  },
+  computed: {
+    requiredTitle() {
+      return this.tasktemplate.title === "";
+    },
+    requiredTasktype() {
+      return this.tasktemplate.tasktype_id === "";
+    },
+    requiredPrio() {
+      return this.tasktemplate.priority === "";
+    }
   },
   created() {
     this.$store.commit("changePage", "Wiederholende Aufgabe ändern");
@@ -154,6 +164,7 @@ export default {
 
   methods: {
     updateTasktemplate() {
+      this.validateInput();
       this.success = false;
       let formData = new FormData();
       formData.append("title", this.tasktemplate.title);
@@ -237,6 +248,11 @@ export default {
         .catch(error => {
           console.log(error.response);
         });
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredTitle || this.requiredTasktype) event.preventDefault();
     }
   }
 };
