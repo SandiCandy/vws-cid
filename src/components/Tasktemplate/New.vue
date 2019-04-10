@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu row vh-100">
+  <div class="tudu-blu">
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>

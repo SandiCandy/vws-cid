@@ -23,7 +23,9 @@ export default {
           $("#deleteModal").modal("hide");
           this.$emit("taskDeleted", id);
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log(error.response);
+        });
     }
   }
 };

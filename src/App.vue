@@ -111,6 +111,10 @@ div.tudu-blu {
   color: #ffffff;
 }
 
+div.tudu-blu {
+  padding-bottom: 1.5rem;
+}
+
 [type="button"].btn {
   -webkit-appearance: inherit;
 }
