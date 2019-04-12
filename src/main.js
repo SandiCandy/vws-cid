@@ -263,6 +263,10 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+router.afterEach((to, from) => {
+  $(".navbar-collapse").collapse("hide");
+});
+
 export default router;
 
 new Vue({
