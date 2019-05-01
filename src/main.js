@@ -53,6 +53,7 @@ import UpdateRoomtype from "./components/Roomtype/Update.vue";
 
 import ShowRoom from "./components/Room/Show.vue";
 import NewRoom from "./components/Room/New.vue";
+import NewRooms from "./components/Room/NewMulti.vue";
 import UpdateRoom from "./components/Room/Update.vue";
 
 import Team from "./components/Team/Team.vue";
@@ -160,6 +161,12 @@ const routes = [
     path: "/roomtype/:id/rooms/new",
     name: "rooms.new",
     component: NewRoom,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/roomtype/:id/rooms/new/multi",
+    name: "rooms.new.multi",
+    component: NewRooms,
     meta: { requiresAuth: true }
   },
   {

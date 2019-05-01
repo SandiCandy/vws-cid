@@ -75,6 +75,14 @@ export default {
   background: #f7f8fb;
 }
 
+.min-h-100 {
+  min-height: calc(100vh - 57px);
+
+  &.tudu-blu {
+    padding-bottom: 0;
+  }
+}
+
 .nav-active-heading {
   font-size: 1.2rem;
   margin: 0 20px;

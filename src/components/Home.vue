@@ -1,6 +1,6 @@
 <!-- groups.vue -->
 <template>
-  <div class="vh-100 tudu-blu row px-1">
+  <div class="tudu-blu min-h-100 row px-1">
     <div class="col-sm-12">
       <h1 class="display-4">Tuu:du. Aufgaben einfach besser im Team verwalten.</h1>
       <button type="button" class="btn tudu-blu-outline-invers ml-2">

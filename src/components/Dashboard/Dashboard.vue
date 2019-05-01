@@ -1,5 +1,5 @@
 <template>
-  <div class="vh-100">
+  <div class="min-h-100">
     <loading class="loading container" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
