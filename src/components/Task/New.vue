@@ -131,7 +131,7 @@ export default {
       return this.task.tasktype_id === "";
     },
     fileTooLarge() {
-      return this.task.file && this.task.file.size > 2000;
+      return this.task.file && this.task.file.size > 15000;
     }
   },
 

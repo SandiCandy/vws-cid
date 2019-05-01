@@ -3,6 +3,7 @@
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
+    <loading class="upload" v-if="$store.getters.loading"></loading>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -55,14 +56,17 @@
 
 <script>
 import Successful from "../common/Successful.vue";
+import Loading from "../common/Loading.vue";
 export default {
   components: {
-    Successful
+    Successful,
+    Loading
   },
   data() {
     return {
       success: false,
       attemptSubmit: false,
+      is_uploading: false,
       room: {
         prefix: "",
         startnum: 1,
@@ -102,12 +106,14 @@ export default {
           }
         )
         .then(response => {
+          this.is_uploading = false;
           this.success = true;
           this.$emit("newrooms");
           console.log(response.data);
           this.reset();
         })
         .catch(error => {
+          this.is_uploading = false;
           this.errors = [];
           console.log(error.response);
 
