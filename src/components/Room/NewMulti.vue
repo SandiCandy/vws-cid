@@ -3,6 +3,7 @@
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
+    <loading class="upload" v-if="$store.getters.loading"></loading>
     <div class="alert alert-danger" v-if="errors.length > 0">
       <ul>
         <li v-for="error in errors">{{ error }}</li>
@@ -11,21 +12,43 @@
 
     <form class="col-sm-12">
       <div class="form-group">
-        <label for="name">Name *</label>
+        <label for="startnum">Präfix</label>
+        <input type="text" name="prefix" id="prefix" class="form-control" v-model="room.prefix">
+      </div>
+
+      <div class="form-group">
+        <label for="startnum">Startwert</label>
         <input
-          type="text"
-          name="name"
-          id="name"
+          type="number"
+          name="startnum"
+          id="startnum"
           class="form-control"
-          v-model="room.name"
-          v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
+          v-model="room.startnum"
+          v-bind:class="{ 'is-invalid': attemptSubmit && startnumTooSmall }"
         >
-        <div class="invalid-feedback">Gib bitte dem Ort eine Bezeichnung.</div>
+        <div class="invalid-feedback">Bitte gib einen positiven Wert an.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="count">Anzahl</label>
+        <input
+          type="number"
+          name="count"
+          id="count"
+          class="form-control"
+          v-model="room.count"
+          v-bind:class="{ 'is-invalid': attemptSubmit && countTooSmall }"
+        >
+        <div class="invalid-feedback">Bitte gib eine positive Zahl an.</div>
       </div>
 
       <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-        <button type="button" @click="createRoom" class="btn btn-outline-light">Ort erstellen</button>
+        <button
+          type="button"
+          @click="createRooms"
+          class="btn btn-outline-light"
+        >{{room.count}} Orte anlegen</button>
       </div>
     </form>
   </div>
@@ -33,31 +56,39 @@
 
 <script>
 import Successful from "../common/Successful.vue";
+import Loading from "../common/Loading.vue";
 export default {
   components: {
-    Successful
+    Successful,
+    Loading
   },
   data() {
     return {
+      success: false,
       attemptSubmit: false,
+      is_uploading: false,
       room: {
-        name: ""
+        prefix: "",
+        startnum: 1,
+        count: 0
       },
-      errors: [],
-      success: false
+      errors: []
     };
   },
   computed: {
-    requiredTitle() {
-      return this.room.name === "";
+    startnumTooSmall() {
+      return this.room.startnum <= 0;
+    },
+    countTooSmall() {
+      return this.room.count <= 0;
     }
   },
   mounted() {
-    this.$store.commit("changePage", "Neuer Ort");
+    this.$store.commit("changePage", "Neue Orte");
   },
 
   methods: {
-    createRoom() {
+    createRooms() {
       this.validateInput();
       this.success = false;
       axios.defaults.headers.common["Authorization"] =
@@ -67,18 +98,22 @@ export default {
           process.env.ROOT_API +
             "/auth/roomtype/" +
             this.$route.params.id +
-            "/room/create",
+            "/room/create/multi",
           {
-            name: this.room.name
+            prefix: this.room.prefix,
+            startnum: this.room.startnum,
+            count: this.room.count
           }
         )
         .then(response => {
+          this.is_uploading = false;
           this.success = true;
-          this.$emit("newroom");
+          this.$emit("newrooms");
           console.log(response.data);
           this.reset();
         })
         .catch(error => {
+          this.is_uploading = false;
           this.errors = [];
           console.log(error.response);
 
@@ -97,7 +132,7 @@ export default {
     validateInput() {
       this.attemptSubmit = true;
       this.errors = [];
-      if (this.requiredTitle) event.preventDefault();
+      if (this.startnumTooSmall || this.countTooSmall) event.preventDefault();
     }
   }
 };

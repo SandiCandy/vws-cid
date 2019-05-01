@@ -1,5 +1,5 @@
 <template>
-  <div class="vh-100 col-sm-12">
+  <div class="min-h-100 col-sm-12">
     <div v-if="success">
       <successful msg="Du wirst jetzt direkt zum Login weitergeleitet."></successful>
     </div>
