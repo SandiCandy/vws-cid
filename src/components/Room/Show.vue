@@ -34,9 +34,46 @@
         </div>
       </div>
 
-      <add-button routename="rooms.new"></add-button>
+      <button
+        @click="showAddDialog()"
+        data-toggle="modal"
+        data-target="#addModal"
+        class="btn btn-plus"
+      >
+        <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
+      </button>
 
-      <!-- Modal -->
+      <!-- Modal AddRoom -->
+      <div
+        class="modal fade"
+        id="addModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="addModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-create modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>
+                <button @click="createRoom()" type="button" class="btn">
+                  <font-awesome-icon class="btn btn-plus-xs" :icon="['fas', 'plus']"></font-awesome-icon>Einen Ort anlegen
+                </button>
+              </p>
+              <p>
+                <button @click="createMultipleRooms()" type="button" class="btn">
+                  <font-awesome-icon class="btn btn-plus-xs" :icon="['fas', 'plus']"></font-awesome-icon>Mehrere Orte anlegen
+                </button>
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn text-secondary" data-dismiss="modal">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal delete -->
       <div
         class="modal fade"
         id="deleteModal"
@@ -67,12 +104,12 @@
 <script>
 import Loading from "../common/Loading.vue";
 import NoContent from "../common/NoContent.vue";
-import AddButton from "../common/AddButton.vue";
+//import AddButton from "../common/AddButton.vue";
 export default {
   components: {
     Loading,
-    NoContent,
-    AddButton
+    NoContent
+    //AddButton
   },
   data() {
     return {
@@ -99,11 +136,29 @@ export default {
       this.delete_index = index;
       $("#deleteModal").modal("show");
     },
+    showAddDialog() {
+      $("#addModal").modal("show");
+    },
+    createRoom() {
+      $("#addModal").modal("hide");
+      this.$router.push({
+        name: "rooms.new",
+        params: { id: this.$route.params.id }
+      });
+    },
+    createMultipleRooms() {
+      $("#addModal").modal("hide");
+      this.$router.push({
+        name: "rooms.new.multi",
+        params: { id: this.$route.params.id }
+      });
+    },
 
     deleteRoom() {
       axios
         .delete(
-          process.env.ROOT_API + "/auth/roomtype/" +
+          process.env.ROOT_API +
+            "/auth/roomtype/" +
             this.$route.params.id +
             "/rooms/" +
             this.rooms[this.delete_index].id
@@ -125,7 +180,8 @@ export default {
 
       axios
         .get(
-          process.env.ROOT_API + "/auth/roomtype/" +
+          process.env.ROOT_API +
+            "/auth/roomtype/" +
             this.$route.params.id +
             "/rooms"
         )
@@ -146,7 +202,8 @@ export default {
 
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/roomtypes/" +
+          process.env.ROOT_API +
+            "/auth/group/roomtypes/" +
             this.$route.params.id
         )
         .then(response => {
@@ -162,8 +219,26 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .list-group {
   padding-top: 10px;
+}
+.btn.btn-plus-xs {
+  height: 38px;
+  width: 38px;
+  font-size: 17px;
+  background-color: #39d8d8;
+  border-radius: 50%;
+  margin-right: 10px;
+  color: #ffffff;
+  box-shadow: 1px 1px 3px #afafaf;
+}
+
+.modal-create .modal-footer {
+  padding: 0;
+}
+
+.modal-create .modal-body {
+  padding: 0.5rem 0 0 0;
 }
 </style>
