@@ -76,7 +76,7 @@
       <div class="form-group">
         <label for="title">Foto</label>
         <input
-          v-on:change="handleFileUpload"
+          v-on:change="handleFileUpload($event.target.name, $event.target.files)"
           type="file"
           name="file"
           id="file"
@@ -109,6 +109,7 @@ export default {
       success: false,
       attemptSubmit: false,
       is_uploading: false,
+      fileTooLarge: false,
       task: {
         title: "",
         description: "",
@@ -129,9 +130,6 @@ export default {
     },
     requiredTasktype() {
       return this.task.tasktype_id === "";
-    },
-    fileTooLarge() {
-      return this.task.file && this.task.file.size > 15000;
     }
   },
 
@@ -251,10 +249,16 @@ export default {
         });
     },
     handleFileUpload() {
-      console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
+      this.checkFileSize();
+    },
+    checkFileSize() {
+      console.log("file", this.task.file);
+      this.fileTooLarge =
+        this.task.file && this.task.file.size > 15000000 ? true : false;
     },
     validateInput() {
+      console.log("TooLarge", this.fileTooLarge);
       this.attemptSubmit = true;
       this.errors = [];
       if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
