@@ -8,10 +8,10 @@ stages:
 update_apiurl:
   stage: update_apiurl
   script:
-    - "echo $QUERY_STRING"
-    - "echo $QUERY_STRING >> .env.blub"
+    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; fi
+    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.blub; fi "
   only:
-    - triggers
+    - master
 
 build site:
   stage: build
