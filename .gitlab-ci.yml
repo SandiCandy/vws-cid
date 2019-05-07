@@ -1,5 +1,18 @@
 image: node:11
 
+stages:
+  - update_apiurl
+  - build
+  - deploy
+
+update_apiurl:
+stage: update_apiurl
+script:
+  - echo $QUERY_STRING
+  - $QUERY_STRING >> .env.blub
+only:
+  - triggers
+
 build site:
   stage: build
   # cache:
