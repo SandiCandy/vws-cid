@@ -16,8 +16,8 @@ update_apiurl:
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
     - git add --all
     - git commit -m "GitLab Runner Push"
-  only:
-    - master
+  # only:
+  #   - master
 
 build site:
   stage: build
