@@ -5,11 +5,18 @@ stages:
   - build
   - deploy
 
+variables:
+  ROOT_API: "http://localhost:8000/api"
+  ROOT: "http://localhost:8000"
+
 update_apiurl:
   stage: update_apiurl
   script:
+    -
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
-    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.blub; fi
+    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
+    - git add --all
+    - git commit -m "GitLab Runner Push"
   only:
     - master
 
