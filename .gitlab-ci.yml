@@ -12,12 +12,13 @@ variables:
 update_apiurl:
   stage: update_apiurl
   script:
-    - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
-    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
+    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
     - git add --all
-    - git commit -m "GitLab Runner Push"
+    - if [ "${QUERY_STRING}" ]; then git commit -m "GitLab Runner Push"; else echo "nothing to commit"; fi
+    - if [ "${QUERY_STRING}" ]; then - git push "https://${GITLAB_USERNAME}:${GITLAB_PASSWORD}@gitlab.com/sandratieben/vuu-tuudu.git" HEAD:master; else echo "no push"; fi
   # only:
   #   - master
 
