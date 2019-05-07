@@ -8,7 +8,7 @@ stages:
 update_apiurl:
   stage: update_apiurl
   script:
-    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; fi
+    - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.blub; fi
   only:
     - master
