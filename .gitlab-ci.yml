@@ -14,6 +14,8 @@ update_apiurl:
   script:
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
+    - git config --global user.name "${GITLAB_USER_NAME}"
+    - git config --global user.email "${GITLAB_USER_EMAIL}"
     - git add --all
     - git commit -m "GitLab Runner Push"
   # only:
