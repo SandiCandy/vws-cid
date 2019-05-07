@@ -3,7 +3,7 @@
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
-    <loading class="upload" v-if="$store.getters.loading"></loading>
+    <loading class="upload" v-if="is_uploading"></loading>
     <form class="col-sm-12">
       <div class="form-group">
         <label for="title">Name *</label>
@@ -253,12 +253,10 @@ export default {
       this.checkFileSize();
     },
     checkFileSize() {
-      console.log("file", this.task.file);
       this.fileTooLarge =
         this.task.file && this.task.file.size > 15000000 ? true : false;
     },
     validateInput() {
-      console.log("TooLarge", this.fileTooLarge);
       this.attemptSubmit = true;
       this.errors = [];
       if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
@@ -286,12 +284,20 @@ export default {
 
 .upload {
   z-index: 10;
-  position: absolute;
-  height: 100vh;
+  position: fixed;
+  height: 100%;
+  width: 100%;
   top: 0;
-  width: 100vw;
   background-color: rgba(255, 255, 255, 0.6);
   color: #39d8d8;
   padding-top: 30vh;
+}
+
+.upload::after {
+  content: "Bild wird hochgeladen...";
+  top: 45vh;
+  left: calc(50vw - 8rem);
+  position: inherit;
+  font-size: 1.5rem;
 }
 </style>

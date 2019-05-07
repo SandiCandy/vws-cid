@@ -1,5 +1,18 @@
 image: node:11
 
+stages:
+  - update_apiurl
+  - build
+  - deploy
+
+update_apiurl:
+  stage: update_apiurl
+  script:
+    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; fi
+    - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.blub; fi "
+  only:
+    - master
+
 build site:
   stage: build
   # cache:
@@ -7,8 +20,6 @@ build site:
   #     - node_modules/
   before_script:
     - echo $(ls -a)
-    # - rm .env
-    #- echo $(ls -a) -a
     - mv -f .env.prod .env
     - echo $(ls -a)
     - apt-get update
