@@ -6,12 +6,12 @@ stages:
   - deploy
 
 update_apiurl:
-stage: update_apiurl
-script:
-  - "echo $QUERY_STRING"
-  - "echo $QUERY_STRING >> .env.blub"
-only:
-  - triggers
+  stage: update_apiurl
+  script:
+    - "echo $QUERY_STRING"
+    - "echo $QUERY_STRING >> .env.blub"
+  only:
+    - triggers
 
 build site:
   stage: build
