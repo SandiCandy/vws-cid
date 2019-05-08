@@ -22,9 +22,9 @@ update_apiurl:
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
   script:
-    - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/taskmanager.git"
+    - git remote set-url origin master "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/taskmanager.git"
     - git checkout $CI_COMMIT_REF_NAME
-    - git pull
+    #- git pull
     #- git tag my-release-1.0
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
