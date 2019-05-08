@@ -22,7 +22,6 @@ update_apiurl:
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
   script:
-    #- git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/sandratieben/vue-tuudu.git &> /dev/null
     - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/vue-tuudu.git"
     - git checkout $CI_COMMIT_REF_NAME
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
