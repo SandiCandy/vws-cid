@@ -18,7 +18,7 @@ update_apiurl:
     - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/vue-tuudu.git"
     - git checkout $CI_COMMIT_REF_NAME
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
-    - if [ -n "${QUERY_STRING}" ]; then rm -f .env.test && touch .env.test; fi
+    - if [ -n "${QUERY_STRING}" ]; then rm -f .env.test && touch .env.test; else mv .env.prod .env.test; fi
     - if [ -n "${QUERY_STRING}" ]; then sed "s/$/?s=${QUERY_STRING}/" .env.prod >> .env.test; fi
     - git add .
     - if [ -n "${QUERY_STRING}" ]; then git commit -m "gitlab ci [ci skip]"; else echo "nothin to commit"; fi
@@ -33,7 +33,7 @@ build site:
   #     - node_modules/
   before_script:
     - echo $(ls -a)
-    - mv -f .env.prod .env
+    - mv -f .env.test .env
     - echo $(ls -a)
     - apt-get update
     - apt-get install zip unzip nodejs -y
