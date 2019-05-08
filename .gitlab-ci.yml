@@ -13,11 +13,11 @@ update_apiurl:
   stage: update_apiurl
   before_script:
     # Install ssh-agent through openssh-client if not present
-    - 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
+    #- 'which ssh-agent || ( apt-get update -qy && apt-get install openssh-client -qqy )'
     # Add the private key to this user
-    - eval $(ssh-agent -s) && ssh-add <(echo "$SSH_PRIVATE_KEY") && mkdir -p ~/.ssh
+    #- eval $(ssh-agent -s) && ssh-add <(echo "$SSH_PRIVATE_KEY") && mkdir -p ~/.ssh
     # Docker specific settings
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    #- '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     # Config git to avoid first usage questions. Set the identity
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
