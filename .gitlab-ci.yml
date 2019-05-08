@@ -30,7 +30,7 @@ update_apiurl:
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
     - git add --all
     - if [ -n "${QUERY_STRING}" ]; then git commit -m "gitlab ci"; else echo "nothin to commit"; fi
-    - if [ -n "${QUERY_STRING}" ]; then git push --follow-tags origin branch; else echo "nthin to push"; fi
+    - if [ -n "${QUERY_STRING}" ]; then git push --follow-tags origin master; else echo "nthin to push"; fi
     #- if [ "${QUERY_STRING}" ]; then git commit -m "GitLab Runner Push"; else echo "nothing to commit"; fi
     #- if [ "${QUERY_STRING}" ]; then git push -u origin my-release-1.0; else echo "no push"; fi
     #- git push -u origin master
