@@ -23,7 +23,7 @@ update_apiurl:
     - git config --global user.email "${GITLAB_USER_EMAIL}"
   script:
     - git checkout $CI_COMMIT_REF_NAME
-    - git remote set-url origin https://${USERNAME}:${CI_PUSH_TOKEN}@gitlab.com/vue-tuudu.git
+    - git remote set-url origin "https://${GITLAB_USER_NAME}:${CI_PUSH_TOKEN}@gitlab.com/vue-tuudu.git"
     #- git tag my-release-1.0
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
