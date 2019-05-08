@@ -29,7 +29,7 @@ update_apiurl:
     #- git tag my-release-1.0
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
     - if [ -n "${QUERY_STRING}" ]; then echo "${QUERY_STRING}" >> .env.test; fi
-    - git add --all
+    - git add .
     - if [ -n "${QUERY_STRING}" ]; then git commit -m "gitlab ci"; else echo "nothin to commit"; fi
     - if [ -n "${QUERY_STRING}" ]; then git push --follow-tags origin master; else echo "nthin to push"; fi
     #- if [ "${QUERY_STRING}" ]; then git commit -m "GitLab Runner Push"; else echo "nothing to commit"; fi
