@@ -24,6 +24,7 @@ update_apiurl:
   script:
     - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/taskmanager.git"
     - git checkout $CI_COMMIT_REF_NAME
+    - git pull origin master
     #- git pull
     #- git tag my-release-1.0
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
