@@ -18,10 +18,10 @@ update_apiurl:
     - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/vue-tuudu.git"
     - git checkout $CI_COMMIT_REF_NAME
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
-    - if [ -n "${QUERY_STRING}" ]; then cp .env.prod .env.neu; fi
+    - if [ -n "${QUERY_STRING}" ]; then rm .env.neu && cp .env.prod .env.neu; fi
     - if [ -n "${QUERY_STRING}" ]; then echo "VERSION=?var=${QUERY_STRING}" >> .env.neu; fi
     - git add .
-    - if [ -n "${QUERY_STRING}" ]; then git commit -m "gitlab ci [ci skip]" &> /dev/null; else echo "nothin to commit"; fi
+    - if [ -n "${QUERY_STRING}" ]; then git commit -m "gitlab ci [ci skip]"; else echo "nothin to commit"; fi
     - if [ -n "${QUERY_STRING}" ]; then git push --follow-tags origin master; else echo "nthin to push"; fi
   only:
     - master
