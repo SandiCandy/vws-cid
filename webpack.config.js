@@ -3,6 +3,7 @@ var webpack = require("webpack");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./src/main.js",
@@ -86,12 +87,19 @@ module.exports = {
           compress: false,
           ecma: 6,
           mangle: true
-        },
-        sourceMap: true
+        }
+        // sourceMap: true
       })
     ]
   },
-  plugins: [new VueLoaderPlugin(), new Dotenv()]
+  plugins: [
+    new VueLoaderPlugin(),
+    new Dotenv(),
+    new HtmlWebpackPlugin({
+      template: "index.html"
+      // hash: true
+    })
+  ]
 };
 
 if (process.env.NODE_ENV === "production") {
