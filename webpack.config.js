@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./dist"),
     publicPath: "/dist/",
-    filename: "build.js"
+    filename: "[name].[contenthash].js"
   },
   module: {
     rules: [
@@ -69,10 +69,6 @@ module.exports = {
     noInfo: true,
     overlay: true,
     port: 8080, // CHANGE YOUR PORT HERE!
-    // https: {
-    //   key: fs.readFileSync("./src/server.key"),
-    //   cert: fs.readFileSync("./scr/server.cert")
-    // },
     open: true,
     hotOnly: false
   },
