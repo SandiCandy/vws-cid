@@ -86,9 +86,11 @@ export default {
     getName() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
-      axios.get(process.env.ROOT_API + "/auth/user").then(response => {
-        this.user = response.data;
-      });
+      axios
+        .get(process.env.ROOT_API + "/auth/user" + process.env.VERSION)
+        .then(response => {
+          this.user = response.data;
+        });
     },
     findGroups() {
       this.$store.commit("isLoading", true);
@@ -96,7 +98,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get(process.env.ROOT_API + "/auth/mygroups")
+        .get(process.env.ROOT_API + "/auth/mygroups" + process.env.VERSION)
         .then(response => {
           this.$store.commit("isLoading", false);
           this.groups = response.data.groups;
@@ -110,7 +112,7 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get(process.env.ROOT_API + "/auth/myinvitations")
+        .get(process.env.ROOT_API + "/auth/myinvitations" + process.env.VERSION)
         .then(response => {
           this.invitations = response.data.invitations;
           this.showInvitationIfExist();
@@ -125,7 +127,10 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/invitation/" + this.invitations[0].id
+          process.env.ROOT_API +
+            "/auth/invitation/" +
+            this.invitations[0].id +
+            process.env.VERSION
         )
         .then(response => {
           this.invitations.splice(0, 1);
@@ -142,7 +147,10 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .delete(
-          process.env.ROOT_API + "/auth/invitation/" + this.invitations[0].id
+          process.env.ROOT_API +
+            "/auth/invitation/" +
+            this.invitations[0].id +
+            process.env.VERSION
         )
         .then(response => {
           this.invitations.splice(0, 1);

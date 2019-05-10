@@ -18,7 +18,9 @@ export default {
   methods: {
     deleteGroup(id) {
       axios
-        .delete(process.env.ROOT_API + "/auth/group/" + id)
+        .delete(
+          process.env.ROOT_API + "/auth/group/" + id + process.env.VERSION
+        )
         .then(response => {
           $("#deleteModal").modal("hide");
           this.$router.push({ name: "dashboard" });
