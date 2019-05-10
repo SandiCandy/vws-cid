@@ -76,7 +76,12 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
-        .get(process.env.ROOT_API + "/auth/group/" + this.$route.params.id)
+        .get(
+          process.env.ROOT_API +
+            "/auth/group/" +
+            this.$route.params.id +
+            process.env.VERSION
+        )
         .then(response => {
           this.group = response.data.group;
           console.log(response.data);
@@ -97,7 +102,8 @@ export default {
           process.env.ROOT_API +
             "/auth/group/" +
             this.$route.params.id +
-            "/campingcare"
+            "/campingcare" +
+            process.env.VERSION
         )
         .then(response => {
           this.roomtypes = response.data.roomtypes;

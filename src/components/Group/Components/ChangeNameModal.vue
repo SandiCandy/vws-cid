@@ -32,9 +32,11 @@ export default {
     changeName() {
       axios
         .put(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
-            "/update",
+            "/update" +
+            process.env.VERSION,
           {
             name: this.name
           }
