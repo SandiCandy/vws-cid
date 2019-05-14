@@ -274,11 +274,27 @@ router.afterEach((to, from) => {
   $(".navbar-collapse").collapse("hide");
 });
 
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    let errorResponse = error.response;
+    if (errorResponse.status === 401) {
+      console.log("401");
+      $cookies.remove("token");
+      location.reload();
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default router;
 
 new Vue({
   el: "#app",
   store,
   router: router,
+  axios: axios,
   render: h => h(App)
 });

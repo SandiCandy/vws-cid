@@ -9,8 +9,9 @@ module.exports = {
   entry: "./src/main.js",
   output: {
     path: path.resolve(__dirname, "./dist"),
-    publicPath: "/dist/",
-    filename: "[name].[contenthash].js"
+    //publicPath: "/dist/",
+    // filename: "[name].[contenthash].js"
+    filename: "build.js"
   },
   module: {
     rules: [
@@ -94,11 +95,11 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new Dotenv(),
-    new HtmlWebpackPlugin({
-      template: "index.html"
-      // hash: true
-    })
+    new Dotenv()
+    // new HtmlWebpackPlugin({
+    //   template: "template.html"
+    //   // hash: true
+    // })
   ]
 };
 
