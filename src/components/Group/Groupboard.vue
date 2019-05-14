@@ -27,7 +27,7 @@
       type="button"
       class="btn btn-default tudu-blu btn-action btn-6"
     >
-      <span>Wiederholungen123</span>
+      <span>Wiederholungen</span>
     </router-link>
 
     <router-link
