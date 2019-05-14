@@ -12,7 +12,9 @@
     </div>
     <div class="media-body col-xs-10">
       <router-link :to="{name: 'tasks.show', params: { id: $route.params.id, tid: task.id }}">
-        <p v-if="task.creator">{{ moment(task.created_at).format('LL') }}von {{ task.creator.name}}</p>
+        <p
+          v-if="task.creator"
+        >{{ moment(task.created_at).format('LL') }}&nbsp;von {{ task.creator.name}}</p>
         <p v-else>{{ moment(task.startet_at).format('LL')}}</p>
         <h3 class="mt-0">{{ task.title }}</h3>
         <p>{{task.description}}</p>
