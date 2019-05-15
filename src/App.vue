@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark tudu-blu">
-      <a @click="$router.go(-1)" v-if="this.$route.name !== 'dashboard'">
+      <a @click="$router.go(-1)" v-if="this.$route.name !== 'dashboard'" class="btn btn-back">
         <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
       </a>
       <h1 class="nav-active-heading">{{ $store.getters.pagetitle }}</h1>
@@ -73,6 +73,11 @@ export default {
 #app {
   margin: 0;
   background: #f7f8fb;
+}
+
+.btn.btn-back {
+  padding: 8px 12px 8px 12px;
+  cursor: pointer;
 }
 
 .min-h-100 {

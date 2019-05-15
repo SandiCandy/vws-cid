@@ -86,15 +86,9 @@ export default {
     getName() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
-      axios
-        .get(process.env.ROOT_API + "/auth/user")
-        .then(response => {
-          console.log("response =", response);
-          this.user = response.data;
-        })
-        .catch(error => {
-          console.log("no username");
-        });
+      axios.get(process.env.ROOT_API + "/auth/user").then(response => {
+        this.user = response.data;
+      });
     },
     findGroups() {
       this.$store.commit("isLoading", true);
