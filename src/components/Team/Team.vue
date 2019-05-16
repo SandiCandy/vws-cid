@@ -11,7 +11,6 @@
                 {{ user.name }}
                 <font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon>
               </h3>
-              <p>bla bla</p>
               <router-link
                 class="btn btn-success btn-xs"
                 style="padding:8px"
@@ -101,7 +100,8 @@ export default {
         "Bearer " + $cookies.get("token");
       axios
         .get(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/team"
         )
