@@ -12,7 +12,7 @@
         <div class="no-image" v-else></div>
       </div>
       <div class="media-body col-xs-10">
-        <router-link :to="{name: 'tasks.show', params: { id: $route.params.id, tid: task.id }}">
+        <router-link :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }">
           <p
             v-if="task.creator"
           >{{ moment(task.created_at).format('LL') }}&nbsp;von {{ task.creator.name}}</p>
@@ -21,22 +21,6 @@
           <p>{{task.description}}</p>
         </router-link>
 
-        <router-link
-          class="btn btn-success btn-xs"
-          style="padding:8px"
-          :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }"
-        >
-          <span class="glyphicon glyphicon-edit"></span>
-        </router-link>
-        <button
-          @click="showDeleteDialog(index)"
-          data-toggle="modal"
-          data-target="#deleteModal"
-          class="btn btn-danger btn-xs"
-          style="padding:8px"
-        >
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
         <p v-if="task.is_done">
           Erledigt
           <span v-if="task.completed_at">am {{ moment(task.completed_at).format('LL') }}</span>
@@ -78,9 +62,6 @@ export default {
         .catch(error => {
           console.log(error.response);
         });
-    },
-    showDeleteDialog(index) {
-      this.$emit("deletemodal", this.index);
     },
     emitDone() {
       this.$emit("done", this.index);
