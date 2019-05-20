@@ -17,7 +17,10 @@
             v-if="task.creator"
           >{{ moment(task.created_at).format('LL') }}&nbsp;von {{ task.creator.name}}</p>
           <p v-else>{{ moment(task.startet_at).format('LL')}}</p>
-          <h3 class="mt-0">{{ task.title }}</h3>
+          <h3 class="mt-0">
+            <span v-if="task.room && task.room.name">{{task.room.name}}</span>
+            {{ task.title }}
+          </h3>
           <p>{{task.description}}</p>
         </router-link>
 
