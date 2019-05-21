@@ -80,6 +80,7 @@ import NewTasktemplate from "./components/Tasktemplate/New.vue";
 import UpdateTasktemplate from "./components/Tasktemplate/Update.vue";
 
 import moment from "moment";
+import './registerServiceWorker'
 moment.locale("de");
 Vue.prototype.moment = moment;
 Vue.use(VueRouter);
