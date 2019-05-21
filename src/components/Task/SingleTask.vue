@@ -31,20 +31,35 @@
           alt="..."
           v-if="task.images && task.images.length > 0"
         >
+        <button data-toggle="modal" data-target="#deleteModal" class="btn text-danger pl-0">
+          <font-awesome-icon :icon="['fas', 'trash']" class="mr-3"></font-awesome-icon>Aufgabe löschen
+        </button>
       </div>
+    </div>
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <delete-task-modal v-bind:task="task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
     </div>
   </div>
 </template>
 
 <script>
 import Loading from "../common/Loading.vue";
+import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
 export default {
-  components: { Loading },
+  components: { DeleteTaskModal, Loading },
   data() {
     return {
-      task: null,
+      //task: null,
       room: null,
-      backend_url: process.env.ROOT
+      backend_url: process.env.ROOT,
+      task: {}
     };
   },
   created() {
@@ -69,6 +84,10 @@ export default {
           this.$store.commit("hasError", error.toString());
           this.$store.commit("isLoading", false);
         });
+    },
+    removeDeletedTask() {
+      this.$emit("deletemodal", this.index);
+      history.back();
     }
   }
 };

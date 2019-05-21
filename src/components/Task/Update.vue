@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="vh-100 bg-white pt-1">
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
@@ -90,18 +90,39 @@
         </div>
 
         <div class="form-group">
-          <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-          <button type="button" @click="updateTask" class="btn btn-outline-light">Änderung speichern</button>
+          <button type="button" @click="reset" class="btn btn-link text-tudu-blu pl-0">Abbrechen</button>
+          <button type="button" @click="updateTask" class="btn tudu-blu">Änderung speichern</button>
         </div>
       </form>
+      <div class="img-wrap" v-if="task.images && task.images.length > 0">
+        <span v-on:click="removeImage()" class="close">&times;</span>
+        <img :src="backend_url + '/storage/' + task.images[0].name" width="400">
+      </div>
+      <hr>
+      <button data-toggle="modal" data-target="#deleteModal" class="btn text-danger">
+        <font-awesome-icon :icon="['fas', 'trash']" class="mr-3"></font-awesome-icon>Aufgabe löschen
+      </button>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <delete-task-modal v-bind:task="task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
     </div>
   </div>
 </template>
 
 <script>
 import Loading from "../common/Loading.vue";
+import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
 export default {
   components: {
+    DeleteTaskModal,
     Loading
   },
   data() {
@@ -114,7 +135,8 @@ export default {
       tasktypes: [],
       roomtypes: [],
       rooms: [],
-      attemptSubmit: false
+      attemptSubmit: false,
+      backend_url: process.env.ROOT
     };
   },
   computed: {
@@ -299,7 +321,40 @@ export default {
       this.errors = [];
       if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
         event.preventDefault();
+    },
+    removeDeletedTask() {
+      this.$emit("deletemodal", this.index);
+      history.back();
+    },
+    removeImage() {
+      console.log("remove image");
+      //TODO: Remove image
     }
   }
 };
 </script>
+<style scoped>
+.img-wrap {
+  position: relative;
+  display: inline-block;
+}
+.img-wrap .close {
+  position: absolute;
+  top: -16px;
+  right: -18px;
+  z-index: 100;
+  background-color: #3dbdbd;
+  color: #ffffff;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 50px;
+  line-height: 28px;
+  border-radius: 50%;
+  opacity: 1;
+}
+.img-wrap:hover .close {
+  background-color: red;
+}
+</style>

@@ -14,7 +14,8 @@ import {
   faPlus,
   faSpinner,
   faStar,
-  faTag
+  faTag,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -27,7 +28,8 @@ library.add(
   faPlus,
   faStar,
   faSpinner,
-  faTag
+  faTag,
+  faTrash
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
