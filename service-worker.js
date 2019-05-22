@@ -2,6 +2,9 @@ importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js"
 );
 
+// Use a cacheName for cache versioning
+//var cacheName = 'v1:static';
+
 if (workbox) {
   console.log(`Yay! Workbox is loaded 🎉`);
 } else {
@@ -10,7 +13,7 @@ if (workbox) {
 
 workbox.routing.registerRoute(
   new RegExp(".*.js"),
-  new workbox.strategies.NetworkFirst()
+  new workbox.strategies.CacheFirst()
 );
 
 workbox.routing.registerRoute(
@@ -25,7 +28,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
   // Cache image files.
-  /\.(?:png|jpg|jpeg|svg|gif)$/,
+  new RegExp("https ?: //.*.(?:png|jpg|jpeg|svg|gif)"),
   // Use the cache if it's available.
   new workbox.strategies.CacheFirst({
     // Use a custom cache name.
@@ -40,3 +43,13 @@ workbox.routing.registerRoute(
     ]
   })
 );
+
+workbox.routing.registerRoute(
+  new RegExp(".+/public/api/.+"),
+  new workbox.strategies.CacheFirst()
+);
+
+workbox.precaching.precacheAndRoute([
+  { url: "/index.html", revision: "abcd1234" }
+  // ... other entries ...
+]);
