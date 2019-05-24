@@ -99,10 +99,12 @@
           <button type="button" @click="updateTask" class="btn tudu-blu">Änderung speichern</button>
         </div>
       </form>
-      <div class="img-wrap" v-if="task.images && task.images.length > 0">
-        <span data-toggle="modal" data-target="#deleteImgModal" class="close">&times;</span>
-        <img :src="backend_url + '/storage/' + task.images[0].name" width="400">
-      </div>
+
+      <image-component
+        v-bind:image="task.images[0]"
+        v-bind:tid="task.id"
+        v-if="task.images && task.images.length > 0"
+      ></image-component>
       <hr>
       <button data-toggle="modal" data-target="#deleteModal" class="btn text-danger">
         <font-awesome-icon :icon="['fas', 'trash']" class="mr-3"></font-awesome-icon>Aufgabe löschen
@@ -119,40 +121,17 @@
     >
       <delete-task-modal v-bind:task="task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
     </div>
-
-    <div
-      class="modal fade"
-      id="deleteImgModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="deleteModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <p>Möchtest du das Bild wirklich löschen?</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn text-secondary" data-dismiss="modal">Abbrechen</button>
-            <button
-              v-on:click="removeImage(task.images[0].id)"
-              type="button"
-              class="btn btn-danger"
-            >Löschen</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import Loading from "../common/Loading.vue";
 import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
+import ImageComponent from "./TaskComponents/ImageComponent.vue";
 export default {
   components: {
     DeleteTaskModal,
+    ImageComponent,
     Loading
   },
   data() {
@@ -357,50 +336,8 @@ export default {
     removeDeletedTask() {
       this.$emit("deletemodal", this.index);
       history.back();
-    },
-    removeImage(iid) {
-      axios
-        .delete(
-          process.env.ROOT_API +
-            "/auth/tasks/" +
-            this.task.id +
-            "/images/" +
-            iid
-        )
-        .then(response => {
-          $("#deleteImgModal").modal("hide");
-          console.log("remove image");
-          window.location.reload();
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
     }
   }
 };
 </script>
-<style scoped>
-.img-wrap {
-  position: relative;
-  display: inline-block;
-}
-.img-wrap .close {
-  position: absolute;
-  top: -16px;
-  right: -18px;
-  z-index: 100;
-  background-color: #3dbdbd;
-  color: #ffffff;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  font-size: 50px;
-  line-height: 28px;
-  border-radius: 50%;
-  opacity: 1;
-}
-.img-wrap:hover .close {
-  background-color: red;
-}
-</style>
+
