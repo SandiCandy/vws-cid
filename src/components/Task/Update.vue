@@ -89,13 +89,18 @@
           <div class="invalid-feedback">Deine Datei ist leider zu groß.</div>
         </div>
 
+        <div class="form-group" v-if="task.editor_id">
+          <input type="checkbox" id="is_done" name="is_done" v-model="task.is_done">
+          <label for="checkbox">Aufgabe erledigt</label>
+        </div>
+
         <div class="form-group">
           <button type="button" @click="reset" class="btn btn-link text-tudu-blu pl-0">Abbrechen</button>
           <button type="button" @click="updateTask" class="btn tudu-blu">Änderung speichern</button>
         </div>
       </form>
       <div class="img-wrap" v-if="task.images && task.images.length > 0">
-        <span v-on:click="removeImage()" class="close">&times;</span>
+        <span data-toggle="modal" data-target="#deleteImgModal" class="close">&times;</span>
         <img :src="backend_url + '/storage/' + task.images[0].name" width="400">
       </div>
       <hr>
@@ -113,6 +118,31 @@
       aria-hidden="true"
     >
       <delete-task-modal v-bind:task="task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteImgModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>Möchtest du das Bild wirklich löschen?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn text-secondary" data-dismiss="modal">Abbrechen</button>
+            <button
+              v-on:click="removeImage(task.images[0].id)"
+              type="button"
+              class="btn btn-danger"
+            >Löschen</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -187,7 +217,9 @@ export default {
         formData.append("room_id", this.task.room_id);
       }
       formData.append("file", this.task.file);
+      formData.append("is_done", +this.task.is_done);
       console.log(formData.get("title"));
+      console.log(formData.get("is_done"));
       axios
         .post(
           process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/update",
@@ -326,9 +358,23 @@ export default {
       this.$emit("deletemodal", this.index);
       history.back();
     },
-    removeImage() {
-      console.log("remove image");
-      //TODO: Remove image
+    removeImage(iid) {
+      axios
+        .delete(
+          process.env.ROOT_API +
+            "/auth/tasks/" +
+            this.task.id +
+            "/images/" +
+            iid
+        )
+        .then(response => {
+          $("#deleteImgModal").modal("hide");
+          console.log("remove image");
+          window.location.reload();
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     }
   }
 };
