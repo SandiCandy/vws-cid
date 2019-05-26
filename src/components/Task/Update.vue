@@ -1,5 +1,6 @@
 <template>
   <div class="vh-100 bg-white pt-1">
+  <div class="arrow-right" :class="'prio-' + task.priority"></div>
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
@@ -340,4 +341,34 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+div.vh-100 {
+  overflow: hidden;
+  position: relative;
+}
+
+.arrow-right {
+  background-color: #444;
+  height: 70px;
+  left: -35px;
+  position: absolute;
+  top: -35px;
+  width: 70px;
+  
+  -webkit-transform: rotate(-45deg);
+}
+
+.prio-0.arrow-right {
+  background-color: green;
+}
+
+.prio-5.arrow-right {
+  background-color: yellow;
+}
+
+.prio-10.arrow-right {
+  background-color: red;
+}
+</style>
 
