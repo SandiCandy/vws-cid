@@ -46,7 +46,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
   new RegExp(".+/public/api/.+"),
-  new workbox.strategies.CacheFirst()
+  new workbox.strategies.StaleWhileRevalidate()
 );
 
 workbox.precaching.precacheAndRoute([
