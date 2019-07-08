@@ -20,7 +20,7 @@
             class="form-control"
             v-model="email"
             autocomplete="username"
-          >
+          />
         </div>
 
         <div class="form-group">
@@ -32,11 +32,12 @@
             class="form-control"
             v-model="password"
             autocomplete="current-password"
-          >
+            v-on:keyup.enter="login"
+          />
         </div>
 
         <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="remember_me" v-model="remember_me">
+          <input type="checkbox" class="form-check-input" id="remember_me" v-model="remember_me" />
           <label class="form-check-label" for="remember_me">Eingeloggt bleiben</label>
         </div>
 
@@ -79,6 +80,9 @@ export default {
   },
 
   methods: {
+    callEvent() {
+      alert("Enter!");
+    },
     login() {
       this.$store.commit("isLoading", true);
       axios

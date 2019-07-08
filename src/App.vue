@@ -70,6 +70,9 @@ export default {
 </script>
 
 <style lang="scss">
+$highlight-color: #39D8D8;
+$light-color: #ffffff;
+
 #app {
   margin: 0;
   background: #f7f8fb;
@@ -96,7 +99,7 @@ export default {
 html a,
 .text-tudu-blu,
 .btn.text-tudu-blu {
-  color: #39d8d8;
+  color: $highlight-color;
 }
 
 html a:hover {
@@ -105,7 +108,7 @@ html a:hover {
 
 .navbar a,
 button.btn-link {
-  color: #ffffff;
+  color: $light-color;
 
   &:hover {
     color: #3dbdbd;
@@ -113,14 +116,14 @@ button.btn-link {
 }
 
 .btn-link-white a {
-  color: white;
+  color: $light-color;
   text-decoration: underline;
 }
 
 .navbar.tudu-blu,
 .btn.tudu-blu,
 div.tudu-blu {
-  background-color: #39d8d8;
+  background-color: $highlight-color;
   color: #ffffff;
 }
 
@@ -133,15 +136,15 @@ div.tudu-blu {
 }
 
 .btn.tudu-blu-outline {
-  background-color: #ffffff;
-  border: 2px solid #39d8d8;
-  color: #39d8d8;
+  background-color: $light-color;
+  border: 2px solid $highlight-color;
+  color: $highlight-color;
 }
 
 .btn.tudu-blu-outline-invers {
-  border: 2px solid #ffffff;
+  border: 2px solid $light-color;
   & a {
-    color: #ffffff;
+    color: $light-color;
   }
 }
 
@@ -152,7 +155,7 @@ div.tudu-blu {
 section h1 {
   font-size: 16px;
   font-weight: initial;
-  color: #39d8d8;
+  color: $highlight-color;
 }
 
 .btn.btn-plus {
@@ -162,10 +165,10 @@ section h1 {
   height: 60px;
   width: 60px;
   font-size: 29px;
-  background-color: #39d8d8;
+  background-color: $highlight-color;
   border-radius: 50%;
   box-shadow: 2px 2px 4px #afafaf;
-  color: #ffffff;
+  color: $light-color;
   z-index: 100;
 }
 
@@ -186,7 +189,7 @@ section h1 {
 }
 
 article hr {
-  border: 1px solid #ffffff;
+  border: 1px solid $light-color;
 }
 
 .panel-heading,
@@ -195,7 +198,6 @@ article hr {
 }
 
 .task-list {
-  background-color: #ffffff;
-  // height: 100%;
+  background-color: $light-color;
 }
 </style>

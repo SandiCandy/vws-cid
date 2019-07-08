@@ -17,7 +17,7 @@
             v-model="username"
             autocomplete="name"
             v-bind:class="{ 'is-invalid': attemptSubmit && missingName }"
-          >
+          />
           <div class="invalid-feedback">Name fehlt.</div>
         </div>
 
@@ -31,7 +31,7 @@
             v-model="email"
             autocomplete="username"
             v-bind:class="{ 'is-invalid': attemptSubmit && !validEmail }"
-          >
+          />
           <div class="invalid-feedback">E-Mail-Adresse ist ungültig.</div>
         </div>
 
@@ -45,7 +45,7 @@
             v-model="password"
             autocomplete="current-password"
             v-bind:class="{ 'is-invalid': attemptSubmit && shortPassword }"
-          >
+          />
           <div class="invalid-feedback">Das Passwort muss mindestens 6 Zeichen haben.</div>
         </div>
 
@@ -59,7 +59,8 @@
             v-model="password_confirmation"
             autocomplete="current-password"
             v-bind:class="{ 'is-invalid': attemptSubmit && confirmationFailed }"
-          >
+            v-on:keyup.enter="login"
+          />
           <div class="invalid-feedback">Passwörter stimmen nicht überein.</div>
         </div>
 
