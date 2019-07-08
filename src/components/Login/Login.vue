@@ -80,9 +80,6 @@ export default {
   },
 
   methods: {
-    callEvent() {
-      alert("Enter!");
-    },
     login() {
       this.$store.commit("isLoading", true);
       axios

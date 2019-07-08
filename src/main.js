@@ -80,7 +80,7 @@ import NewTasktemplate from "./components/Tasktemplate/New.vue";
 import UpdateTasktemplate from "./components/Tasktemplate/Update.vue";
 
 import moment from "moment";
-import './registerServiceWorker'
+import "./registerServiceWorker";
 moment.locale("de");
 Vue.prototype.moment = moment;
 Vue.use(VueRouter);
@@ -284,7 +284,7 @@ axios.interceptors.response.use(
   error => {
     let errorResponse = error.response;
     if (errorResponse.status === 401) {
-      console.log("401");
+      console.log("401", errorResponse);
       $cookies.remove("token");
       location.reload();
     }
