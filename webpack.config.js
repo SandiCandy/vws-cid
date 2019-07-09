@@ -3,15 +3,14 @@ var webpack = require("webpack");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WorkboxPlugin = require("workbox-webpack-plugin");
 
 module.exports = {
   entry: "./src/main.js",
   output: {
     path: path.resolve(__dirname, "./dist"),
-    //publicPath: "/dist/",
-    filename: "[name].[contenthash].js",
+    publicPath: "/dist/",
+    //filename: "[name].[contenthash].js",
     filename: "build.js"
   },
   module: {
@@ -67,7 +66,7 @@ module.exports = {
     extensions: ["*", ".js", ".vue", ".json"]
   },
   devServer: {
-    host: "0.0.0.0",
+    host: "localhost",
     historyApiFallback: true,
     noInfo: true,
     overlay: true,

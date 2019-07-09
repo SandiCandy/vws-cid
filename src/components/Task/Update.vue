@@ -1,5 +1,6 @@
 <template>
   <div class="vh-100 bg-white pt-1">
+  <div class="arrow-right" :class="'prio-' + task.priority"></div>
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
@@ -89,15 +90,22 @@
           <div class="invalid-feedback">Deine Datei ist leider zu groß.</div>
         </div>
 
+        <div class="form-group" v-if="task.editor_id">
+          <input type="checkbox" id="is_done" name="is_done" v-model="task.is_done">
+          <label for="checkbox">Aufgabe erledigt</label>
+        </div>
+
         <div class="form-group">
           <button type="button" @click="reset" class="btn btn-link text-tudu-blu pl-0">Abbrechen</button>
           <button type="button" @click="updateTask" class="btn tudu-blu">Änderung speichern</button>
         </div>
       </form>
-      <div class="img-wrap" v-if="task.images && task.images.length > 0">
-        <span v-on:click="removeImage()" class="close">&times;</span>
-        <img :src="backend_url + '/storage/' + task.images[0].name" width="400">
-      </div>
+
+      <image-component
+        v-bind:image="task.images[0]"
+        v-bind:tid="task.id"
+        v-if="task.images && task.images.length > 0"
+      ></image-component>
       <hr>
       <button data-toggle="modal" data-target="#deleteModal" class="btn text-danger">
         <font-awesome-icon :icon="['fas', 'trash']" class="mr-3"></font-awesome-icon>Aufgabe löschen
@@ -120,9 +128,11 @@
 <script>
 import Loading from "../common/Loading.vue";
 import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
+import ImageComponent from "./TaskComponents/ImageComponent.vue";
 export default {
   components: {
     DeleteTaskModal,
+    ImageComponent,
     Loading
   },
   data() {
@@ -187,7 +197,9 @@ export default {
         formData.append("room_id", this.task.room_id);
       }
       formData.append("file", this.task.file);
+      formData.append("is_done", +this.task.is_done);
       console.log(formData.get("title"));
+      console.log(formData.get("is_done"));
       axios
         .post(
           process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/update",
@@ -325,36 +337,38 @@ export default {
     removeDeletedTask() {
       this.$emit("deletemodal", this.index);
       history.back();
-    },
-    removeImage() {
-      console.log("remove image");
-      //TODO: Remove image
     }
   }
 };
 </script>
+
 <style scoped>
-.img-wrap {
+div.vh-100 {
+  overflow: hidden;
   position: relative;
-  display: inline-block;
 }
-.img-wrap .close {
+
+.arrow-right {
+  background-color: #444;
+  height: 70px;
+  left: -35px;
   position: absolute;
-  top: -16px;
-  right: -18px;
-  z-index: 100;
-  background-color: #3dbdbd;
-  color: #ffffff;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  font-size: 50px;
-  line-height: 28px;
-  border-radius: 50%;
-  opacity: 1;
+  top: -35px;
+  width: 70px;
+  
+  -webkit-transform: rotate(-45deg);
 }
-.img-wrap:hover .close {
+
+.prio-0.arrow-right {
+  background-color: green;
+}
+
+.prio-5.arrow-right {
+  background-color: yellow;
+}
+
+.prio-10.arrow-right {
   background-color: red;
 }
 </style>
+

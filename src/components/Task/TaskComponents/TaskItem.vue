@@ -6,10 +6,9 @@
           :src="backend_url + '/storage/' + task.images[0].name"
           :class="'prio-' + task.priority"
           v-if="task.images.length > 0"
-          width="45"
           height="45"
         >
-        <div class="no-image" v-else></div>
+        <div class="arrow-right"></div>
       </div>
       <div class="media-body col-xs-10">
         <router-link :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }">
@@ -74,32 +73,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.img,
-button.is-done {
-  box-sizing: border-box;
-  padding: 5px;
-}
-div.no-image {
+
+div.img {
+  overflow: hidden;
+  position: relative;
+  margin-right: 1rem;
   background-color: #39d8d8;
-  border-style: solid;
-  border-width: 45px 45px 0px 0px;
-  border-color: green transparent transparent transparent;
+  width: 45px;
+  height: 45px;
+}
+
+.arrow-right {
+  background-color: #444;
+  height: 40px;
+  left: -20px;
+  position: absolute;
+  top: -20px;
+  width: 40px;
+  
+  -webkit-transform: rotate(-45deg);
 }
 
 .media-body {
   word-break: break-word;
 }
 
-.prio-0 .no-image {
-  border-color: green transparent transparent transparent;
+.prio-0 .arrow-right {
+  background-color: green;
 }
 
-.prio-5 .no-image {
-  border-color: yellow transparent transparent transparent;
+.prio-5 .arrow-right {
+  background-color: yellow;
 }
 
-.prio-10 .no-image {
-  border-color: red transparent transparent transparent;
+.prio-10 .arrow-right {
+  background-color: red;
 }
 
 button.is-done {
@@ -107,6 +115,7 @@ button.is-done {
   border: inherit;
   position: relative;
   right: 5px;
+  
 }
 
 svg.checkbox {
