@@ -70,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss">
-$highlight-color: #39D8D8;
+$highlight-color: #39d8d8;
 $light-color: #ffffff;
 
 #app {
@@ -125,6 +125,7 @@ button.btn-link {
 div.tudu-blu {
   background-color: $highlight-color;
   color: #ffffff;
+  z-index: 10;
 }
 
 div.tudu-blu {
