@@ -14,7 +14,7 @@
           class="form-control"
           v-model="task.title"
           v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
-        >
+        />
         <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
       </div>
 
@@ -84,7 +84,7 @@
           ref="file"
           accept="image/*"
           v-bind:class="{ 'is-invalid': attemptSubmit && fileTooLarge }"
-        >
+        />
         <div class="invalid-feedback">Deine Datei ist leider zu groß.</div>
       </div>
 
@@ -193,7 +193,11 @@ export default {
       this.task.roomtype = "";
       this.task.roomname = "";
       this.attemptSubmit = false;
-      history.back();
+      //history.back();
+      this.$router.push({
+        name: "tasks.current",
+        params: { id: this.$route.params.id }
+      });
     },
     fetchTasktypes() {
       axios.defaults.headers.common["Authorization"] =
