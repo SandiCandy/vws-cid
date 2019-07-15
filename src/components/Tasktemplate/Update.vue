@@ -115,12 +115,8 @@
         </div>
 
         <div class="form-group">
-          <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-          <button
-            type="button"
-            @click="updateTasktemplate"
-            class="btn btn-outline-light"
-          >Änderung speichern</button>
+          <button type="button" @click="reset" class="btn btn-link text-tudu-blu pl-0">Abbrechen</button>
+          <button type="button" @click="updateTasktemplate" class="btn tudu-blu">Änderung speichern</button>
         </div>
       </form>
       <hr />
