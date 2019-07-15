@@ -2,7 +2,7 @@
   <div>
     <div class="img-wrap">
       <span data-toggle="modal" data-target="#deleteImgModal" class="close">&times;</span>
-      <img :src="backend_url + '/storage/' + image.name" width="400">
+      <img :src="backend_url + '/storage/' + image.name" width="400" />
     </div>
 
     <div
@@ -84,6 +84,6 @@ export default {
   opacity: 1;
 }
 .img-wrap:hover .close {
-  background-color: red;
+  background-color: $red;
 }
 </style>

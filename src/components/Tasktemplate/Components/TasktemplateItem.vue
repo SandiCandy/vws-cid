@@ -1,6 +1,9 @@
 <template>
-  <div class="media" :class="'prio-' + tasktemplate.priority">
-    <div class="media-body">
+  <div class="media">
+    <div class="col-xs-2 icon" :class="'prio-' + tasktemplate.priority">
+      <font-awesome-icon :icon="['fas', 'clock']"></font-awesome-icon>
+    </div>
+    <div class="media-body col-xs-10">
       <router-link
         :to="{name: 'tasktemplates.update', params: { id: $route.params.id, tid: tasktemplate.id } }"
       >
@@ -21,38 +24,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.no-image {
-  width: 64px;
-  height: 64px;
-  background-color: #39d8d8;
-  border-style: solid;
-  border-width: 64px 64px 0px 0px;
-  border-color: green transparent transparent transparent;
+div.icon {
+  padding: 1.5rem;
+  font-size: 2.5rem;
+  color: $green;
 }
 
-.prio-0 .no-image {
-  border-color: green transparent transparent transparent;
+.icon.prio-0 {
+  color: $green;
 }
 
-.prio-5 .no-image {
-  border-color: yellow transparent transparent transparent;
+.icon.prio-5 {
+  color: $yellow;
 }
 
-.prio-10 .no-image {
-  border-color: red transparent transparent transparent;
-}
-
-svg.checkbox {
-  border: 4px solid #b4b4b4;
-  color: #b4b4b4;
-  height: 50px;
-  width: 50px;
-  padding: 0px 2px;
-  font-size: 3rem;
-
-  &:active {
-    color: green;
-    border-color: green;
-  }
+.icon.prio-10 {
+  color: $red;
 }
 </style>

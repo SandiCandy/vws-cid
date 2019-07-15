@@ -104,7 +104,7 @@ div.vh-100 {
 }
 
 .arrow-right {
-  background-color: yellow;
+  background-color: transparent;
   height: 70px;
   left: -35px;
   position: absolute;
@@ -115,15 +115,15 @@ div.vh-100 {
   z-index: 5;
 
   &.prio-0 {
-    background-color: green;
+    background-color: $green;
   }
 
   &.prio-5 {
-    background-color: yellow;
+    background-color: $yellow;
   }
 
   &.prio-10 {
-    background-color: red;
+    background-color: $red;
   }
 }
 </style>
