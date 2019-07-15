@@ -70,9 +70,6 @@ export default {
 </script>
 
 <style lang="scss">
-$highlight-color: #39d8d8;
-$light-color: #ffffff;
-
 #app {
   margin: 0;
   background: #f7f8fb;

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faCheck,
   faChevronLeft,
+  faClock,
   faEllipsisV,
   faHammer,
   faHome,
@@ -20,8 +21,9 @@ import {
 
 library.add(
   faCheck,
-  faEllipsisV,
   faChevronLeft,
+  faClock,
+  faEllipsisV,
   faHammer,
   faHome,
   faMapMarkerAlt,

@@ -7,7 +7,7 @@
           :class="'prio-' + task.priority"
           v-if="task.images.length > 0"
           height="45"
-        >
+        />
         <div class="arrow-right"></div>
       </div>
       <div class="media-body col-xs-10">
@@ -73,12 +73,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 div.img {
   overflow: hidden;
   position: relative;
   margin-right: 1rem;
-  background-color: #39d8d8;
+  background-color: $highlight-color;
   width: 45px;
   height: 45px;
 }
@@ -90,7 +89,7 @@ div.img {
   position: absolute;
   top: -20px;
   width: 40px;
-  
+
   -webkit-transform: rotate(-45deg);
 }
 
@@ -99,15 +98,15 @@ div.img {
 }
 
 .prio-0 .arrow-right {
-  background-color: green;
+  background-color: $green;
 }
 
 .prio-5 .arrow-right {
-  background-color: yellow;
+  background-color: $yellow;
 }
 
 .prio-10 .arrow-right {
-  background-color: red;
+  background-color: $red;
 }
 
 button.is-done {
@@ -115,7 +114,6 @@ button.is-done {
   border: inherit;
   position: relative;
   right: 5px;
-  
 }
 
 svg.checkbox {
@@ -138,7 +136,7 @@ svg.checkbox {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
   & h3 {
-    color: #39d8d8;
+    color: $highlight-color;
   }
 }
 </style>

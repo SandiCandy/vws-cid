@@ -5,7 +5,7 @@
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content col-sm-12" v-else>
         <section v-if="tasktemplates.length > 0">
-          <article v-for="(tasktemplate, index) in tasktemplates" :key="tasktemplate.id">
+          <article v-for="(tasktemplate) in tasktemplates" :key="tasktemplate.id">
             <tasktemplate-item
               :tasktemplate="tasktemplate"
               v-on:done="spliceArray"
