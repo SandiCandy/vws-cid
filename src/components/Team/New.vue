@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu row vh-100">
+  <div class="tudu-blu .min-h-100">
     <div v-if="success">
       <successful :msg="msg"></successful>
     </div>
@@ -12,7 +12,14 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="email">E-mail *</label>
-        <input type="email" name="email" id="email" class="form-control" v-model="member.email">
+        <input
+          type="email"
+          name="email"
+          id="email"
+          class="form-control"
+          v-model="member.email"
+          v-bind:class="{ 'is-invalid': attemptSubmit && requiredEmail }"
+        />
       </div>
 
       <div class="form-group">
@@ -32,6 +39,7 @@ export default {
   data() {
     return {
       success: false,
+      attemptSubmit: false,
       member: {
         name: "",
         role: "Admin"
@@ -40,6 +48,11 @@ export default {
       msg: ""
     };
   },
+  computed: {
+    requiredEmail() {
+      return this.task.title === "";
+    }
+  },
 
   created() {
     this.$store.commit("changePage", "Neues Teammitglied");
@@ -47,12 +60,14 @@ export default {
 
   methods: {
     createTask() {
+      this.validateInput();
       this.success = false;
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
         .post(
-          process.env.ROOT_API + "/auth/group/" +
+          process.env.ROOT_API +
+            "/auth/group/" +
             this.$route.params.id +
             "/team/create",
           {
@@ -79,6 +94,11 @@ export default {
       this.member.email = "";
       this.member.role = "Admin";
       history.back();
+    },
+    validateInput() {
+      this.attemptSubmit = true;
+      this.errors = [];
+      if (this.requiredEmail) event.preventDefault();
     }
   }
 };
