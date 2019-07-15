@@ -294,7 +294,7 @@ export default {
 }
 
 .upload::after {
-  content: "Bild wird hochgeladen...";
+  content: "Uploading ...";
   top: 45vh;
   left: calc(50vw - 8rem);
   position: inherit;
