@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="tudu-blu min-h-100">
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
@@ -19,7 +19,7 @@
           class="form-control"
           v-model="room.name"
           v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
-        >
+        />
         <div class="invalid-feedback">Gib bitte dem Ort eine Bezeichnung.</div>
       </div>
 

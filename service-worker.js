@@ -44,6 +44,13 @@ workbox.routing.registerRoute(
   })
 );
 
+// Besser wäre es, wenn auch für diese Route StaleWhileRevalidate()
+// genutzt wurde und die aktuellen Daten aus dem Cache geholt werden
+workbox.routing.registerRoute(
+  new RegExp(".+/public/api/auth/group/[0-9]*/tasks.+"),
+  new workbox.strategies.NetworkFirst()
+);
+
 workbox.routing.registerRoute(
   new RegExp(".+/public/api/.+"),
   new workbox.strategies.StaleWhileRevalidate({
@@ -53,13 +60,6 @@ workbox.routing.registerRoute(
       })
     ]
   })
-);
-
-// Besser wäre es, wenn auch für diese Route StaleWhileRevalidate()
-// genutzt wurde und die aktuellen Daten aus dem Cache geholt werden
-workbox.routing.registerRoute(
-  new RegExp(".+/public/api/auth/group/[0-9]*/tasks.+"),
-  new workbox.strategies.NetworkFirst()
 );
 
 workbox.precaching.precacheAndRoute([

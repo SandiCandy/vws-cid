@@ -1,5 +1,5 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="tudu-blu .min-h-100">
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
@@ -10,7 +10,7 @@
           class="form-control"
           v-model="roomtype.name"
           v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
-        >
+        />
         <div class="invalid-feedback">Gib bitte dem Bereich eine Bezeichnung.</div>
       </div>
 

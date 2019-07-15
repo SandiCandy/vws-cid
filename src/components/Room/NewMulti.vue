@@ -1,19 +1,14 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="tudu-blu min-h-100">
     <div v-if="success">
       <successful msg="Aufgabe erfolgreich angelegt."></successful>
     </div>
     <loading class="upload" v-if="$store.getters.loading"></loading>
-    <div class="alert alert-danger" v-if="errors.length > 0">
-      <ul>
-        <li v-for="error in errors">{{ error }}</li>
-      </ul>
-    </div>
 
     <form class="col-sm-12">
       <div class="form-group">
         <label for="startnum">Präfix</label>
-        <input type="text" name="prefix" id="prefix" class="form-control" v-model="room.prefix">
+        <input type="text" name="prefix" id="prefix" class="form-control" v-model="room.prefix" />
       </div>
 
       <div class="form-group">
@@ -25,7 +20,7 @@
           class="form-control"
           v-model="room.startnum"
           v-bind:class="{ 'is-invalid': attemptSubmit && startnumTooSmall }"
-        >
+        />
         <div class="invalid-feedback">Bitte gib einen positiven Wert an.</div>
       </div>
 
@@ -38,7 +33,7 @@
           class="form-control"
           v-model="room.count"
           v-bind:class="{ 'is-invalid': attemptSubmit && countTooSmall }"
-        >
+        />
         <div class="invalid-feedback">Bitte gib eine positive Zahl an.</div>
       </div>
 
