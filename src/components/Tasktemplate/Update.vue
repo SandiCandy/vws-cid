@@ -249,10 +249,7 @@ export default {
         });
     },
     reset() {
-      this.$router.push({
-        name: "tasktemplates.show",
-        params: { id: this.$route.params.id }
-      });
+      history.back();
     },
     fetchTasktypes() {
       axios.defaults.headers.common["Authorization"] =
