@@ -8,15 +8,14 @@
           <article v-for="(tasktemplate, index) in tasktemplates" :key="tasktemplate.id">
             <tasktemplate-item
               :tasktemplate="tasktemplate"
-              :index="index"
               v-on:done="spliceArray"
               v-on:deletemodal="fetchTasktemplate"
             ></tasktemplate-item>
-            <hr>
+            <hr />
           </article>
         </section>
         <div v-else>
-          <no-content contenttype="wiederholende Aufgaben" routename="tasktemplates.new"></no-content>
+          <no-content contenttype="Wiederholende Aufgaben" routename="tasktemplates.new"></no-content>
         </div>
 
         <add-button routename="tasktemplates.new"></add-button>
@@ -67,7 +66,7 @@ export default {
 
   created() {
     this.fetchTasktemplates();
-    this.$store.commit("changePage", "Wiederholende Aufgaben");
+    this.$store.commit("changePage", "Wiederholungen");
   },
 
   methods: {

@@ -193,11 +193,7 @@ export default {
       this.task.roomtype = "";
       this.task.roomname = "";
       this.attemptSubmit = false;
-      //history.back();
-      this.$router.push({
-        name: "tasks.current",
-        params: { id: this.$route.params.id }
-      });
+      history.back();
     },
     fetchTasktypes() {
       axios.defaults.headers.common["Authorization"] =
@@ -298,7 +294,7 @@ export default {
 }
 
 .upload::after {
-  content: "Bild wird hochgeladen...";
+  content: "Uploading ...";
   top: 45vh;
   left: calc(50vw - 8rem);
   position: inherit;

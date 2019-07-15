@@ -19,7 +19,7 @@
           class="form-control"
           v-model="tasktemplate.title"
           v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
-        >
+        />
         <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
       </div>
 
@@ -79,7 +79,7 @@
             id="freq1"
             value="daily"
             v-model="tasktemplate.freq"
-          >
+          />
           <label class="form-check-label" for="freq1">Täglich</label>
         </div>
         <div class="form-check">
@@ -90,7 +90,7 @@
             id="freq2"
             value="weekly"
             v-model="tasktemplate.freq"
-          >
+          />
           <label class="form-check-label" for="freq2">Wöchentlich</label>
         </div>
         <div class="form-check">
@@ -101,7 +101,7 @@
             id="freq3"
             value="monthly"
             v-model="tasktemplate.freq"
-          >
+          />
           <label class="form-check-label" for="freq3">Monatlich</label>
         </div>
 
@@ -113,7 +113,7 @@
             id="freq4"
             value="yearly"
             v-model="tasktemplate.freq"
-          >
+          />
           <label class="form-check-label" for="freq4">Jährlich</label>
         </div>
       </div>

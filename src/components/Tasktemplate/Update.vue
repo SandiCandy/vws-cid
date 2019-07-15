@@ -1,11 +1,11 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="vh-100 bg-white pt-1">
     <loading class="loading col-sm-12" v-if="$store.getters.loading"></loading>
     <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
     <div class="content container" v-else>
       <form class="col-sm-12">
         <div class="form-group">
-          <label for="title">Name</label>
+          <label for="title">Name *</label>
           <input
             type="text"
             name="title"
@@ -13,7 +13,7 @@
             class="form-control"
             v-model="tasktemplate.title"
             v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
-          >
+          />
           <div class="invalid-feedback">Bitte gib eine Aufgabenbezeichnung an.</div>
         </div>
 
@@ -75,7 +75,7 @@
               id="freq1"
               value="daily"
               v-model="tasktemplate.freq"
-            >
+            />
             <label class="form-check-label" for="freq1">Täglich</label>
           </div>
           <div class="form-check">
@@ -86,7 +86,7 @@
               id="freq2"
               value="weekly"
               v-model="tasktemplate.freq"
-            >
+            />
             <label class="form-check-label" for="freq2">Wöchentlich</label>
           </div>
           <div class="form-check">
@@ -97,7 +97,7 @@
               id="freq3"
               value="monthly"
               v-model="tasktemplate.freq"
-            >
+            />
             <label class="form-check-label" for="freq3">Monatlich</label>
           </div>
 
@@ -109,20 +109,34 @@
               id="freq4"
               value="yearly"
               v-model="tasktemplate.freq"
-            >
+            />
             <label class="form-check-label" for="freq4">Jährlich</label>
           </div>
         </div>
 
         <div class="form-group">
-          <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-          <button
-            type="button"
-            @click="updateTasktemplate"
-            class="btn btn-outline-light"
-          >Änderung speichern</button>
+          <button type="button" @click="reset" class="btn btn-link text-tudu-blu pl-0">Abbrechen</button>
+          <button type="button" @click="updateTasktemplate" class="btn tudu-blu">Änderung speichern</button>
         </div>
       </form>
+      <hr />
+      <button data-toggle="modal" data-target="#deleteModal" class="btn text-danger">
+        <font-awesome-icon :icon="['fas', 'trash']" class="mr-3"></font-awesome-icon>Aufgabe löschen
+      </button>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <delete-tasktemplate-modal
+        v-bind:tasktemplate="tasktemplate"
+        v-on:tasktemplateDeleted="removeDeletedTasktemplate"
+      ></delete-tasktemplate-modal>
     </div>
   </div>
 </template>
@@ -130,9 +144,11 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Loading from "../common/Loading.vue";
+import DeleteTasktemplateModal from "./Components/DeleteTasktemplateModal.vue";
 export default {
   components: {
     Datepicker,
+    DeleteTasktemplateModal,
     Loading
   },
   data() {
@@ -253,6 +269,10 @@ export default {
       this.attemptSubmit = true;
       this.errors = [];
       if (this.requiredTitle || this.requiredTasktype) event.preventDefault();
+    },
+    removeDeletedTasktemplate() {
+      this.$emit("deletetasktemplatemodal", this.index);
+      history.back();
     }
   }
 };
