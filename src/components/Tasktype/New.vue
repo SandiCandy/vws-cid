@@ -1,12 +1,7 @@
 <template>
-  <div class="tudu-blu vh-100">
+  <div class="tudu-blu min-h-100">
     <div v-if="success">
       <successful msg="Aufgabentyp erfolgreich angelegt."></successful>
-    </div>
-    <div class="alert alert-danger" v-if="errors.length > 0">
-      <ul>
-        <li v-for="error in errors">{{ error }}</li>
-      </ul>
     </div>
 
     <form class="col-sm-12">
@@ -19,7 +14,7 @@
           class="form-control"
           v-model="tasktype.name"
           v-bind:class="{ 'is-invalid': attemptSubmit && requiredTitle }"
-        >
+        />
         <div class="invalid-feedback">Gib bitte dem Aufgabenbereich eine Bezeichnung.</div>
       </div>
 
