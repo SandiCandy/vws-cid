@@ -193,11 +193,11 @@ export default {
       this.task.roomtype = "";
       this.task.roomname = "";
       this.attemptSubmit = false;
-      //history.back();
-      this.$router.push({
-        name: "tasks.current",
-        params: { id: this.$route.params.id }
-      });
+      history.back();
+      // this.$router.push({
+      //   name: "tasks.current",
+      //   params: { id: this.$route.params.id }
+      // });
     },
     fetchTasktypes() {
       axios.defaults.headers.common["Authorization"] =

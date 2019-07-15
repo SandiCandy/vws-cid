@@ -1,37 +1,21 @@
 <template>
   <div class="media" :class="'prio-' + tasktemplate.priority">
     <div class="media-body">
-      <p>Erstellt am {{ moment(tasktemplate.created_at).format('LL') }}</p>
-      <h3 class="mt-0">{{ tasktemplate.title }}</h3>
-      <p>{{tasktemplate.description}}</p>
-
       <router-link
-        class="btn btn-success btn-xs"
-        style="padding:8px"
         :to="{name: 'tasktemplates.update', params: { id: $route.params.id, tid: tasktemplate.id } }"
       >
-        <span class="glyphicon glyphicon-edit"></span>
+        <p>Erstellt am {{ moment(tasktemplate.created_at).format('LL') }}</p>
+        <h3 class="mt-0">{{ tasktemplate.title }}</h3>
+        <p>{{tasktemplate.description}}</p>
       </router-link>
-      <button
-        @click="showDeleteDialog(index)"
-        data-toggle="modal"
-        data-target="#deleteModal"
-        class="btn btn-danger btn-xs"
-        style="padding:8px"
-      >
-        <span class="glyphicon glyphicon-trash"></span>
-      </button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["tasktemplate", "index"],
-  methods: {
-    showDeleteDialog(index) {
-      this.$emit("deletemodal", this.index);
-    }
+  props: {
+    tasktemplate: Object
   }
 };
 </script>

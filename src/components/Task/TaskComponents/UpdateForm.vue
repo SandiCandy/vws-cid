@@ -253,11 +253,7 @@ export default {
       this.task.title = "";
       this.task.description = "";
       this.task.tasktype_id = "";
-      //history.back();
-      this.$router.push({
-        name: "tasks.current",
-        params: { id: this.$route.params.id }
-      });
+      history.back();
     }
   }
 };
