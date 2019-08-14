@@ -98,7 +98,6 @@ export default {
         .catch(error => {
           this.errors = [];
           this.errors.push(error.response.data.message);
-          console.log(error.reponse);
           this.$store.commit("isLoading", false);
         });
     },
