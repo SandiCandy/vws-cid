@@ -8,7 +8,7 @@
         :to="{name: 'tasktemplates.update', params: { id: $route.params.id, tid: tasktemplate.id } }"
       >
         <p>Erstellt am {{ moment(tasktemplate.created_at).format('LL') }}</p>
-        <h3 class="mt-0">{{ tasktemplate.title }}</h3>
+        <h3 class="mt-0">{{ tasktemplate.title + " " + freq}}</h3>
         <p>{{tasktemplate.description}}</p>
       </router-link>
     </div>
@@ -19,6 +19,34 @@
 export default {
   props: {
     tasktemplate: Object
+  },
+  data() {
+    return {
+      freq: ""
+    };
+  },
+  created() {
+    this.showFreq(this.tasktemplate.freq);
+  },
+  methods: {
+    showFreq(frequenz) {
+      switch (frequenz) {
+        case "daily":
+          this.freq = "(täglich)";
+          break;
+        case "weekly":
+          this.freq = "(wöchentlich)";
+          break;
+        case "monthly":
+          this.freq = "(monatlich)";
+          break;
+        case "yearly":
+          this.freq = "(jährlich)";
+          break;
+        default:
+          break;
+      }
+    }
   }
 };
 </script>
