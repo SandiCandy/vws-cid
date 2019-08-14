@@ -53,13 +53,14 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
   new RegExp(".+/public/api/.+"),
-  new workbox.strategies.StaleWhileRevalidate({
-    plugins: [
-      new workbox.broadcastUpdate.Plugin({
-        channelName: "api-updates"
-      })
-    ]
-  })
+  new workbox.strategies.NetworkFirst()
+  // new workbox.strategies.StaleWhileRevalidate({
+  //   plugins: [
+  //     new workbox.broadcastUpdate.Plugin({
+  //       channelName: "api-updates"
+  //     })
+  //   ]
+  // })
 );
 
 workbox.precaching.precacheAndRoute([
