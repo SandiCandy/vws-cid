@@ -285,8 +285,10 @@ axios.interceptors.response.use(
   },
   error => {
     let errorResponse = error.response;
-    if (errorResponse.status === 401) {
-      console.log("401", errorResponse);
+    if (
+      errorResponse.status === 401 &&
+      errorResponse.config.url !== process.env.ROOT_API + "/auth/login"
+    ) {
       $cookies.remove("token");
       location.reload();
     }
