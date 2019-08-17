@@ -23,7 +23,7 @@
             <button @click="onLogout" type="button" class="btn btn-link">Logout</button>
           </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" v-else>
+        <ul class="nav navbar-nav ml-auto" v-else>
           <li class="nav-item">
             <router-link to="/login">Login</router-link>
           </li>
