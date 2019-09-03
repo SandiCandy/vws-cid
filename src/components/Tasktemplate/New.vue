@@ -67,7 +67,7 @@
 
       <div class="form-group">
         <label for="dtstart">Erste Ausführung</label>
-        <datepicker v-model="tasktemplate.dtstart"></datepicker>
+        <datepicker class="datetimeselect" v-model="tasktemplate.dtstart"></datepicker>
       </div>
 
       <div class="form-group">
@@ -298,5 +298,13 @@ export default {
 
 .tudu-blu.vh-100 {
   min-height: 120vh;
+}
+
+.datetimeselect {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  line-height: 1.5;
+  padding: 0.375rem 0.75rem;
 }
 </style>
