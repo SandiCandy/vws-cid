@@ -170,7 +170,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="css">
 button.btn-group {
   margin: 2px 0;
 }

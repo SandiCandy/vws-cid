@@ -73,15 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.img {
-  overflow: hidden;
-  position: relative;
-  margin-right: 1rem;
-  background-color: $highlight-color;
-  width: 45px;
-  height: 45px;
-}
-
 .arrow-right {
   background-color: #444;
   height: 40px;
@@ -91,6 +82,15 @@ div.img {
   width: 40px;
 
   -webkit-transform: rotate(-45deg);
+}
+
+div.img {
+  overflow: hidden;
+  position: relative;
+  margin-right: 1rem;
+  background-color: $highlight-color;
+  width: 45px;
+  height: 45px;
 }
 
 .media-body {

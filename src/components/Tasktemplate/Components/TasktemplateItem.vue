@@ -52,12 +52,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.icon {
-  padding: 1.5rem;
-  font-size: 2.5rem;
-  color: $green;
-}
-
 .icon.prio-0 {
   color: $green;
 }
@@ -68,5 +62,11 @@ div.icon {
 
 .icon.prio-10 {
   color: $red;
+}
+
+div.icon {
+  padding: 1.5rem;
+  font-size: 2.5rem;
+  color: $green;
 }
 </style>

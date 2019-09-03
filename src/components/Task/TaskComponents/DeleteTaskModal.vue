@@ -14,7 +14,9 @@
 
 <script>
 export default {
-  props: ["task"],
+  props: {
+    task: Object
+  },
   methods: {
     deleteTask(id) {
       axios
