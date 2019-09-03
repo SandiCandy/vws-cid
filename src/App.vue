@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <nav class="navbar navbar-expand-lg navbar-dark tudu-blu">
       <a @click="$router.go(-1)" v-if="this.$route.name !== 'dashboard'" class="btn btn-back">
         <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
@@ -36,7 +36,7 @@
     <div id="view">
       <router-view v-on:login="onLogin"></router-view>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -197,5 +197,11 @@ article hr {
 
 .task-list {
   background-color: $light-color;
+}
+
+/********************** Vuetify **********/
+/**** Time Picker ****/
+.v-menu .v-menu__content {
+  // top: 0 !important;
 }
 </style>

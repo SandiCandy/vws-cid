@@ -5,6 +5,8 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const Dotenv = require("dotenv-webpack");
 const WorkboxPlugin = require("workbox-webpack-plugin");
 
+const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
+
 module.exports = {
   entry: "./src/main.js",
   output: {
@@ -27,7 +29,10 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              data: `@import "./src/scss/_variables.scss";`
+              data: `@import "./src/scss/_variables.scss";`,
+              implementation: require("sass"),
+              fiber: require("fibers"),
+              indentedSyntax: false
             }
           }
         ]
@@ -65,6 +70,10 @@ module.exports = {
         options: {
           name: "[name].[ext]?[hash]"
         }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: ["file-loader"]
       }
     ]
   },
@@ -107,7 +116,8 @@ module.exports = {
     new Dotenv(),
     new WorkboxPlugin.InjectManifest({
       swSrc: "./service-worker.js"
-    })
+    }),
+    new VuetifyLoaderPlugin()
     // new HtmlWebpackPlugin({
     //   template: "template.html"
     //    hash: true
