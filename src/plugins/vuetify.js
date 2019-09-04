@@ -2,6 +2,7 @@
 // import "@fortawesome/fontawesome-free/css/all.css";
 import "@mdi/font/css/materialdesignicons.css"; // Ensure you are using css-loader
 import colors from "vuetify/lib/util/colors";
+import de from "vuetify/es5/locale/de";
 import Vue from "vue";
 import Vuetify from "vuetify/lib";
 
@@ -14,12 +15,17 @@ export default new Vuetify({
   icons: {
     iconfont: "mdi" // default - only for display purposes
   },
+  lang: {
+    locales: { de },
+    current: "de"
+  },
   theme: {
     themes: {
       light: {
-        primary: colors.shades.white, // #E53935
-        secondary: colors.red.lighten4, // #FFCDD2
-        accent: colors.indigo.base // #3F51B5
+        primary: colors.cyan
+        // primary: colors.shades.white, //
+        // secondary: colors.red.lighten4, // #FFCDD2
+        // accent: colors.indigo.base // #3F51B5
       }
     }
   }

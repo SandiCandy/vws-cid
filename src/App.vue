@@ -94,6 +94,7 @@ export default {
 }
 
 html a,
+.theme--light a,
 .text-tudu-blu,
 .btn.text-tudu-blu {
   color: $highlight-color;

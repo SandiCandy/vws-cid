@@ -1,6 +1,6 @@
 <template>
   <div class="row flex-container">
-    <div class="col-12 text-right">
+    <div class="col-12 text-right primary--text">
       <router-link
         :to="{name: 'groups.settings', params: { id: this.$route.params.id } }"
         class="mr-2"

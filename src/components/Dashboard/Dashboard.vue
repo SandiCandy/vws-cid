@@ -170,9 +170,10 @@ export default {
 };
 </script>
 
-<style lang="css">
-button.btn-group {
+<style lang="scss">
+.btn.btn-group {
   margin: 2px 0;
+  color: $light-color;
 }
 button.btn-new-group {
   margin: 5px 0;
