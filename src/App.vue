@@ -103,7 +103,7 @@ html a:hover {
   color: #afafaf;
 }
 
-.navbar a,
+.navbar .nav a,
 button.btn-link {
   color: $light-color;
 
@@ -197,11 +197,5 @@ article hr {
 
 .task-list {
   background-color: $light-color;
-}
-
-/********************** Vuetify **********/
-/**** Time Picker ****/
-.v-menu .v-menu__content {
-  // top: 0 !important;
 }
 </style>
