@@ -14,6 +14,10 @@
       <button data-toggle="modal" data-target="#deleteModal" class="btn text-danger">
         <font-awesome-icon :icon="['fas', 'trash']" class="mr-3"></font-awesome-icon>Aufgabe löschen
       </button>
+      <p
+        class="text-right"
+        v-if="task.creator"
+      >Erstellt am {{ moment(task.created_at).format('LL') }}&nbsp;von {{ task.creator.name}}.</p>
     </div>
 
     <div
@@ -99,10 +103,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.vh-100 {
-  position: relative;
-}
-
 .arrow-right {
   background-color: transparent;
   height: 70px;
@@ -125,5 +125,9 @@ div.vh-100 {
   &.prio-10 {
     background-color: $red;
   }
+}
+
+div.vh-100 {
+  position: relative;
 }
 </style>

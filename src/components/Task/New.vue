@@ -45,6 +45,19 @@
       </div>
 
       <div class="form-group">
+        <label for="tasktype_id">Ausführbar ab *</label>
+        <v-row>
+          <v-col cols="12" sm="6" md="4">
+            <date-menu v-bind:old_date="task.startet_at_date" v-on:startdate="updateTaskDate"></date-menu>
+          </v-col>
+
+          <v-col cols="11" sm="5">
+            <time-menu v-bind:old_time="task.startet_at_time" v-on:starttime="updateTaskTime"></time-menu>
+          </v-col>
+        </v-row>
+      </div>
+
+      <div class="form-group">
         <label for="priority">Priorität *</label>
         <select v-model="task.priority" class="form-control" name="priority" id="priority">
           <option value="0">Niedrig</option>
@@ -99,8 +112,13 @@
 <script>
 import Successful from "../common/Successful.vue";
 import Loading from "../common/Loading.vue";
+import DateMenu from "./TaskComponents/DateMenu.vue";
+import TimeMenu from "./TaskComponents/TimeMenu.vue";
+
 export default {
   components: {
+    DateMenu,
+    TimeMenu,
     Successful,
     Loading
   },
@@ -115,7 +133,9 @@ export default {
         description: "",
         tasktype_id: "",
         priority: 5,
-        room_id: ""
+        room_id: "",
+        startet_at_date: this.moment().format("YYYY-MM-DD"),
+        startet_at_time: this.moment().format("HH:mm")
       },
       roomtype_id: -1,
       tasktypes: [],
@@ -147,6 +167,10 @@ export default {
 
   methods: {
     createTask() {
+      console.log(this.task);
+      this.task.startet_at = this.moment(
+        this.task.startet_at_date + " " + this.task.startet_at_time
+      ).format();
       this.validateInput();
       this.is_uploading = true;
       this.success = false;
@@ -154,6 +178,10 @@ export default {
       formData.append("title", this.task.title);
       formData.append("description", this.task.description);
       formData.append("priority", this.task.priority);
+      formData.append(
+        "startet_at",
+        this.task.startet_at_date + " " + this.task.startet_at_time
+      );
       formData.append("tasktype_id", this.task.tasktype_id);
       formData.append("room_id", this.task.room_id);
       if (this.task.file) {
@@ -261,6 +289,12 @@ export default {
       this.errors = [];
       if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
         event.preventDefault();
+    },
+    updateTaskDate(val) {
+      this.task.startet_at_date = val;
+    },
+    updateTaskTime(val) {
+      this.task.startet_at_time = val;
     }
   }
 };
@@ -274,7 +308,7 @@ export default {
 
 .success {
   z-index: 10;
-  background-color: green;
+  background-color: $green;
   position: fixed;
   top: 0;
   left: 0;
@@ -289,7 +323,7 @@ export default {
   width: 100%;
   top: 0;
   background-color: rgba(255, 255, 255, 0.6);
-  color: #39d8d8;
+  color: $highlight-color;
   padding-top: 30vh;
 }
 

@@ -12,10 +12,7 @@
       </div>
       <div class="media-body col-xs-10">
         <router-link :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }">
-          <p
-            v-if="task.creator"
-          >{{ moment(task.created_at).format('LL') }}&nbsp;von {{ task.creator.name}}</p>
-          <p v-else>{{ moment(task.startet_at).format('LL')}}</p>
+          <p>{{ moment(task.startet_at).format('lll')}}</p>
           <h3 class="mt-0">
             <span v-if="task.room && task.room.name">{{task.room.name}}</span>
             {{ task.title }}

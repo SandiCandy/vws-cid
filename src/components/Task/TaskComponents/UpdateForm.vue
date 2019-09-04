@@ -40,6 +40,19 @@
     </div>
 
     <div class="form-group">
+      <label for="tasktype_id">Ausführbar ab *</label>
+      <v-row>
+        <v-col cols="12" sm="6" md="4">
+          <date-menu v-bind:old_date="startet_at_date" v-on:startdate="updateTaskDate"></date-menu>
+        </v-col>
+
+        <v-col cols="11" sm="5">
+          <time-menu v-bind:old_time="startet_at_time" v-on:starttime="updateTaskTime"></time-menu>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="form-group">
       <label for="priority">Priorität *</label>
       <select v-model="task.priority" class="form-control" name="priority" id="priority">
         <option value="0">Niedrig</option>
@@ -95,13 +108,24 @@
 </template>
 
 <script>
+import DateMenu from "./DateMenu.vue";
+import TimeMenu from "./TimeMenu.vue";
+
 export default {
+  components: {
+    DateMenu,
+    TimeMenu
+  },
   props: {
     task: Object,
     roomtype_id: Number
   },
   data() {
     return {
+      menu_date: null,
+      menu_time: null,
+      startet_at_date: this.moment(this.task.startet_at).format("YYYY-MM-DD"),
+      startet_at_time: this.moment(this.task.startet_at).format("LT"),
       success: false,
       error: null,
       tasktypes: [],
@@ -149,6 +173,10 @@ export default {
       if (this.task.description) {
         formData.append("description", this.task.description);
       }
+      this.task.startet_at = this.moment(
+        this.startet_at_date + " " + this.startet_at_time
+      ).format();
+      formData.append("startet_at", this.task.startet_at);
       formData.append("priority", this.task.priority);
       formData.append("tasktype_id", this.task.tasktype_id);
       if (this.task.room_id) {
@@ -156,8 +184,6 @@ export default {
       }
       formData.append("file", this.task.file);
       formData.append("is_done", +this.task.is_done);
-      console.log(formData.get("title"));
-      console.log(formData.get("is_done"));
       axios
         .post(
           process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/update",
@@ -254,6 +280,12 @@ export default {
       this.task.description = "";
       this.task.tasktype_id = "";
       history.back();
+    },
+    updateTaskDate(val) {
+      this.startet_at_date = val;
+    },
+    updateTaskTime(val) {
+      this.startet_at_time = val;
     }
   }
 };
