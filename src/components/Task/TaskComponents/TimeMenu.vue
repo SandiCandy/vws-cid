@@ -13,7 +13,7 @@
     <template v-slot:activator="{ on }">
       <v-text-field
         v-model="my_time"
-        label="Startzeit"
+        :label="my_label"
         prepend-icon="mdi-calendar-clock"
         readonly
         v-on="on"
@@ -33,7 +33,9 @@
 <script>
 export default {
   props: {
-    old_time: String
+    old_time: String,
+    my_label: String,
+    emit: String
   },
   data() {
     return {
@@ -44,7 +46,7 @@ export default {
   methods: {
     emitTime() {
       this.$refs.menu.save(this.my_time);
-      this.$emit("starttime", this.my_time);
+      this.$emit(this.emit, this.my_time);
     }
   }
 };

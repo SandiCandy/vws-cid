@@ -12,7 +12,7 @@
     <template v-slot:activator="{ on }">
       <v-text-field
         v-model="my_date"
-        label="Frühste Ausführung ab"
+        :label="my_label"
         prepend-icon="mdi-calendar-edit"
         readonly
         v-on="on"
@@ -25,7 +25,9 @@
 <script>
 export default {
   props: {
-    old_date: String
+    old_date: String,
+    my_label: String,
+    emit: String
   },
   data() {
     return {
@@ -36,7 +38,7 @@ export default {
   methods: {
     emitDate(val) {
       this.menu1 = false;
-      this.$emit("startdate", val);
+      this.$emit(this.emit, val);
     }
   }
 };

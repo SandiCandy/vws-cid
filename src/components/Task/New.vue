@@ -48,11 +48,44 @@
         <label for="tasktype_id">Ausführbar ab *</label>
         <v-row>
           <v-col cols="12" sm="6" md="4">
-            <date-menu v-bind:old_date="task.startet_at_date" v-on:startdate="updateTaskDate"></date-menu>
+            <date-menu
+              v-bind:old_date="task.startet_at_date"
+              my_label="Ausführbar ab"
+              emit="startdate"
+              v-on:startdate="updateTaskDate"
+            ></date-menu>
           </v-col>
 
           <v-col cols="11" sm="5">
-            <time-menu v-bind:old_time="task.startet_at_time" v-on:starttime="updateTaskTime"></time-menu>
+            <time-menu
+              v-bind:old_time="task.startet_at_time"
+              my_label="Startzeit"
+              emit="starttime"
+              v-on:starttime="updateTaskTime"
+            ></time-menu>
+          </v-col>
+        </v-row>
+      </div>
+
+      <div class="form-group">
+        <label for="tasktype_id">Erledigung bis</label>
+        <v-row>
+          <v-col cols="12" sm="6" md="4">
+            <date-menu
+              v-bind:old_date="task.deadline_date"
+              my_label="Erledigung bis"
+              emit="deadlinedate"
+              v-on:deadlinedate="updateDeadlineDate"
+            ></date-menu>
+          </v-col>
+
+          <v-col cols="11" sm="5">
+            <time-menu
+              v-bind:old_time="task.deadline_time"
+              my_label="Endzeit"
+              emit="deadlinetime"
+              v-on:deadlinetime="updateDeadlineTime"
+            ></time-menu>
           </v-col>
         </v-row>
       </div>
@@ -135,7 +168,9 @@ export default {
         priority: 5,
         room_id: "",
         startet_at_date: this.moment().format("YYYY-MM-DD"),
-        startet_at_time: this.moment().format("HH:mm")
+        startet_at_time: this.moment().format("HH:mm"),
+        deadline_time: null,
+        deadline_date: null
       },
       roomtype_id: -1,
       tasktypes: [],
@@ -167,21 +202,24 @@ export default {
 
   methods: {
     createTask() {
+      this.validateInput();
+      this.is_uploading = true;
+      this.success = false;
+
       console.log(this.task);
       this.task.startet_at = this.moment(
         this.task.startet_at_date + " " + this.task.startet_at_time
       ).format();
-      this.validateInput();
-      this.is_uploading = true;
-      this.success = false;
+      this.task.deadline_at = this.moment(
+        this.task.deadline_date + " " + this.task.deadline_time
+      ).format();
+
       let formData = new FormData();
       formData.append("title", this.task.title);
       formData.append("description", this.task.description);
       formData.append("priority", this.task.priority);
-      formData.append(
-        "startet_at",
-        this.task.startet_at_date + " " + this.task.startet_at_time
-      );
+      formData.append("startet_at", this.task.startet_at);
+      formData.append("deadline_at", this.task.deadline_at);
       formData.append("tasktype_id", this.task.tasktype_id);
       formData.append("room_id", this.task.room_id);
       if (this.task.file) {
@@ -295,6 +333,12 @@ export default {
     },
     updateTaskTime(val) {
       this.task.startet_at_time = val;
+    },
+    updateDeadlineDate(val) {
+      this.task.deadline_date = val;
+    },
+    updateDeadlineTime(val) {
+      this.task.deadline_time = val;
     }
   }
 };

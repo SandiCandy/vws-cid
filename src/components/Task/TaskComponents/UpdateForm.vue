@@ -43,11 +43,44 @@
       <label for="tasktype_id">Ausführbar ab *</label>
       <v-row>
         <v-col cols="12" sm="6" md="4">
-          <date-menu v-bind:old_date="startet_at_date" v-on:startdate="updateTaskDate"></date-menu>
+          <date-menu
+            v-bind:old_date="startet_at_date"
+            my_label="Ausführbar ab"
+            emit="startdate"
+            v-on:startdate="updateTaskDate"
+          ></date-menu>
         </v-col>
 
         <v-col cols="11" sm="5">
-          <time-menu v-bind:old_time="startet_at_time" v-on:starttime="updateTaskTime"></time-menu>
+          <time-menu
+            v-bind:old_time="startet_at_time"
+            my_label="Startzeit"
+            emit="starttime"
+            v-on:starttime="updateTaskTime"
+          ></time-menu>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="form-group">
+      <label for="tasktype_id">Erledigung bis</label>
+      <v-row>
+        <v-col cols="12" sm="6" md="4">
+          <date-menu
+            v-bind:old_date="deadline_date"
+            my_label="Erledigung bis"
+            emit="deadlinedate"
+            v-on:deadlinedate="updateDeadlineDate"
+          ></date-menu>
+        </v-col>
+
+        <v-col cols="11" sm="5">
+          <time-menu
+            v-bind:old_time="deadline_time"
+            my_label="Endzeit"
+            emit="deadlinetime"
+            v-on:deadlinetime="updateDeadlineTime"
+          ></time-menu>
         </v-col>
       </v-row>
     </div>
@@ -122,10 +155,10 @@ export default {
   },
   data() {
     return {
-      menu_date: null,
-      menu_time: null,
       startet_at_date: this.moment(this.task.startet_at).format("YYYY-MM-DD"),
       startet_at_time: this.moment(this.task.startet_at).format("LT"),
+      deadline_date: this.moment(this.task.deadline_at).format("YYYY-MM-DD"),
+      deadline_time: this.moment(this.task.deadline_at).format("LT"),
       success: false,
       error: null,
       tasktypes: [],
@@ -160,6 +193,12 @@ export default {
   created() {
     this.fetchTasktypes();
     this.fetchRoomtypes();
+    if (this.deadline_date === "Invalid date") {
+      this.deadline_date = null;
+    }
+    if (this.deadline_time === "Invalid date") {
+      this.deadline_time = null;
+    }
     //TODO: Handling von Rooms & Roomtypes
     //
   },
@@ -177,6 +216,13 @@ export default {
         this.startet_at_date + " " + this.startet_at_time
       ).format();
       formData.append("startet_at", this.task.startet_at);
+      if (this.deadline_time && this.deadline_date) {
+        this.task.deadline_at = this.moment(
+          this.deadline_date + " " + this.deadline_time
+        ).format();
+        console.log(this.task.deadline_at);
+        formData.append("deadline_at", this.task.deadline_at);
+      }
       formData.append("priority", this.task.priority);
       formData.append("tasktype_id", this.task.tasktype_id);
       if (this.task.room_id) {
@@ -286,6 +332,12 @@ export default {
     },
     updateTaskTime(val) {
       this.startet_at_time = val;
+    },
+    updateDeadlineDate(val) {
+      this.deadline_date = val;
+    },
+    updateDeadlineTime(val) {
+      this.deadline_time = val;
     }
   }
 };
