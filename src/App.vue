@@ -199,4 +199,18 @@ article hr {
 .task-list {
   background-color: $light-color;
 }
+
+/***** Datepicker with invalid Data ******/
+.datepicker-formcontrol.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.datepicker-formcontrol.is-invalid
+  > div
+  > .v-text-field
+  > .v-input__control
+  > .v-input__slot::before {
+  border-color: #dc3545;
+}
+/************* ****/
 </style>

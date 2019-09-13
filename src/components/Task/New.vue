@@ -76,16 +76,38 @@
               my_label="Erledigung bis"
               emit="deadlinedate"
               v-on:deadlinedate="updateDeadlineDate"
+              class="datepicker-formcontrol"
+              v-bind:class="{ 'is-invalid': attemptSubmit && invalidDeadline }"
+              :key="task.deadline_date"
             ></date-menu>
+            <div class="invalid-feedback">Das Enddatum muss hinter dem Startdatum liegen.</div>
           </v-col>
 
-          <v-col cols="11" sm="5">
+          <v-col cols="9" sm="5">
             <time-menu
               v-bind:old_time="task.deadline_time"
               my_label="Endzeit"
               emit="deadlinetime"
               v-on:deadlinetime="updateDeadlineTime"
+              class="datepicker-formcontrol"
+              v-bind:class="{ 'is-invalid': attemptSubmit && invalidDeadlineTime }"
+              :key="task.deadline_time"
             ></time-menu>
+            <div class="invalid-feedback">Bitte gebe eine Uhrzeit an.</div>
+          </v-col>
+
+          <v-col cols="3">
+            <v-btn
+              class="mx-2 my-4"
+              text
+              icon
+              small
+              color="red"
+              @click="removeDeadline"
+              :disabled="(task.deadline_time === null && task.deadline_date === null)"
+            >
+              <v-icon dark>mdi-close</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </div>
@@ -170,7 +192,8 @@ export default {
         startet_at_date: this.moment().format("YYYY-MM-DD"),
         startet_at_time: this.moment().format("HH:mm"),
         deadline_time: null,
-        deadline_date: null
+        deadline_date: null,
+        deadline_at: null
       },
       roomtype_id: -1,
       tasktypes: [],
@@ -185,6 +208,17 @@ export default {
     },
     requiredTasktype() {
       return this.task.tasktype_id === "";
+    },
+    invalidDeadline() {
+      return (
+        this.task.deadline_date !== null &&
+        this.moment(this.task.startet_at_date).isAfter(this.task.deadline_date)
+      );
+    },
+    invalidDeadlineTime() {
+      return (
+        this.task.deadline_date !== null && this.task.deadline_time === null
+      );
     }
   },
 
@@ -202,24 +236,32 @@ export default {
 
   methods: {
     createTask() {
-      this.validateInput();
+      if (this.invalidInput()) {
+        return true;
+      }
       this.is_uploading = true;
       this.success = false;
 
-      console.log(this.task);
       this.task.startet_at = this.moment(
         this.task.startet_at_date + " " + this.task.startet_at_time
       ).format();
-      this.task.deadline_at = this.moment(
-        this.task.deadline_date + " " + this.task.deadline_time
-      ).format();
 
+      console.log(this.task);
       let formData = new FormData();
       formData.append("title", this.task.title);
       formData.append("description", this.task.description);
       formData.append("priority", this.task.priority);
       formData.append("startet_at", this.task.startet_at);
-      formData.append("deadline_at", this.task.deadline_at);
+
+      if (
+        this.task.deadline_date !== null &&
+        this.task.deadline_time !== null
+      ) {
+        this.task.deadline_at = this.moment(
+          this.task.deadline_date + " " + this.task.deadline_time
+        ).format();
+        formData.append("deadline_at", this.task.deadline_at);
+      }
       formData.append("tasktype_id", this.task.tasktype_id);
       formData.append("room_id", this.task.room_id);
       if (this.task.file) {
@@ -322,11 +364,17 @@ export default {
       this.fileTooLarge =
         this.task.file && this.task.file.size > 15000000 ? true : false;
     },
-    validateInput() {
+    invalidInput() {
       this.attemptSubmit = true;
       this.errors = [];
-      if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
-        event.preventDefault();
+      if (
+        this.requiredTitle ||
+        this.requiredTasktype ||
+        this.fileTooLarge ||
+        this.invalidDeadline ||
+        this.invalidDeadlineTime
+      )
+        return true;
     },
     updateTaskDate(val) {
       this.task.startet_at_date = val;
@@ -339,6 +387,10 @@ export default {
     },
     updateDeadlineTime(val) {
       this.task.deadline_time = val;
+    },
+    removeDeadline() {
+      this.updateDeadlineDate(null);
+      this.updateDeadlineTime(null);
     }
   }
 };

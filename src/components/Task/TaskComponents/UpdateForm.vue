@@ -65,22 +65,43 @@
     <div class="form-group">
       <label for="tasktype_id">Erledigung bis</label>
       <v-row>
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="12" sm="5" md="4">
           <date-menu
             v-bind:old_date="deadline_date"
             my_label="Erledigung bis"
             emit="deadlinedate"
             v-on:deadlinedate="updateDeadlineDate"
+            class="datepicker-formcontrol"
+            v-bind:class="{ 'is-invalid': attemptSubmit && invalidDeadline }"
+            :key="deadline_date"
           ></date-menu>
+          <div class="invalid-feedback">Das Enddatum muss hinter dem Startdatum liegen.</div>
         </v-col>
 
-        <v-col cols="11" sm="5">
+        <v-col cols="9" sm="5">
           <time-menu
             v-bind:old_time="deadline_time"
             my_label="Endzeit"
             emit="deadlinetime"
             v-on:deadlinetime="updateDeadlineTime"
+            class="datepicker-formcontrol"
+            v-bind:class="{ 'is-invalid': attemptSubmit && invalidDeadlineTime }"
+            :key="deadline_time"
           ></time-menu>
+          <div class="invalid-feedback">Bitte gebe eine Uhrzeit an.</div>
+        </v-col>
+
+        <v-col cols="3">
+          <v-btn
+            class="mx-2 my-4"
+            text
+            icon
+            color="red"
+            @click="removeDeadline"
+            :disabled="(deadline_time === null && deadline_date === null)"
+          >
+            <v-icon dark>mdi-close</v-icon>
+          </v-btn>
         </v-col>
       </v-row>
     </div>
@@ -176,6 +197,15 @@ export default {
     },
     fileTooLarge() {
       return this.task.file && this.task.file.size > 15000000;
+    },
+    invalidDeadline() {
+      return (
+        this.deadline_date !== null &&
+        this.moment(this.startet_at_date).isAfter(this.deadline_date)
+      );
+    },
+    invalidDeadlineTime() {
+      return this.deadline_date !== null && this.deadline_time === null;
     }
   },
   watch: {
@@ -204,9 +234,10 @@ export default {
   },
   methods: {
     updateTask() {
-      this.validateInput();
+      if (this.invalidInput()) {
+        return true;
+      }
       this.success = false;
-      console.log(this.task.room_id);
       let formData = new FormData();
       formData.append("title", this.task.title);
       if (this.task.description) {
@@ -216,11 +247,10 @@ export default {
         this.startet_at_date + " " + this.startet_at_time
       ).format();
       formData.append("startet_at", this.task.startet_at);
-      if (this.deadline_time && this.deadline_date) {
+      if (this.deadline_date !== null && this.deadline_time !== null) {
         this.task.deadline_at = this.moment(
           this.deadline_date + " " + this.deadline_time
         ).format();
-        console.log(this.task.deadline_at);
         formData.append("deadline_at", this.task.deadline_at);
       }
       formData.append("priority", this.task.priority);
@@ -316,10 +346,16 @@ export default {
       console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
     },
-    validateInput() {
+    invalidInput() {
       this.attemptSubmit = true;
-      if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
-        event.preventDefault();
+      if (
+        this.requiredTitle ||
+        this.requiredTasktype ||
+        this.fileTooLarge ||
+        this.invalidDeadline ||
+        this.invalidDeadlineTime
+      )
+        return true;
     },
     reset() {
       this.task.title = "";
@@ -333,11 +369,15 @@ export default {
     updateTaskTime(val) {
       this.startet_at_time = val;
     },
-    updateDeadlineDate(val) {
-      this.deadline_date = val;
+    updateDeadlineDate(newDate) {
+      this.deadline_date = newDate;
     },
-    updateDeadlineTime(val) {
-      this.deadline_time = val;
+    updateDeadlineTime(newTime) {
+      this.deadline_time = newTime;
+    },
+    removeDeadline() {
+      this.updateDeadlineDate(null);
+      this.updateDeadlineTime(null);
     }
   }
 };
