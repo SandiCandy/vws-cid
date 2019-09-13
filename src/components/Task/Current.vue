@@ -15,7 +15,7 @@
         </section>
 
         <section v-if="filtered_tasks.length > 0" class="main-sec">
-          <h1>Aktuelle Aufgaben</h1>
+          <h1 class="display-1">Aktuelle Aufgaben</h1>
           <article v-for="(task, index) in filtered_tasks" :key="task.id">
             <task-item
               :task="task"
@@ -44,7 +44,7 @@
         </div>
 
         <section v-if="future_tasks.length > 0" class="main-sec">
-          <h1>Zukünftige Aufgaben</h1>
+          <h1 class="display-1">Zukünftige Aufgaben</h1>
           <article v-for="(task, index) in future_tasks" :key="task.id">
             <task-item
               :task="task"
