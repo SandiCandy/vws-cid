@@ -34,17 +34,6 @@
 
         <div
           class="modal fade"
-          id="deleteModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="deleteModalLabel"
-          aria-hidden="true"
-        >
-          <delete-task-modal v-bind:task="delete_task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
-        </div>
-
-        <div
-          class="modal fade"
           id="filterModal"
           tabindex="-1"
           role="dialog"
@@ -60,8 +49,8 @@
             <task-item
               :task="task"
               :index="index"
-              v-on:done="spliceArray"
-              v-on:deletemodal="fetchTask"
+              v-on:done="spliceFutureArray"
+              v-on:deletemodal="fetchFutureTask"
             ></task-item>
             <hr />
           </article>
@@ -78,7 +67,6 @@ import Loading from "../common/Loading.vue";
 import TaskItem from "./TaskComponents/TaskItem.vue";
 import NoTasks from "./TaskComponents/NoTasks.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
-import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
 import FilterTaskModal from "./TaskComponents/FilterTaskModal.vue";
 export default {
   components: {
@@ -86,7 +74,6 @@ export default {
     TaskItem,
     NoTasks,
     AddTaskButton,
-    DeleteTaskModal,
     FilterTaskModal
   },
   data() {
@@ -111,14 +98,18 @@ export default {
     spliceArray(index) {
       this.filtered_tasks.splice(index, 1);
     },
+    spliceFutureArray(index) {
+      this.future_tasks.splice(index, 1);
+    },
     fetchTask(index) {
       this.delete_task = this.filtered_tasks[index];
       this.delete_index = index;
       $("#deleteModal").modal("show");
     },
-    removeDeletedTask(index) {
-      console.log("remove");
-      this.filtered_tasks.splice(this.delete_index, 1);
+    fetchFutureTask(index) {
+      this.delete_task = this.future_tasks[index];
+      this.delete_index = index;
+      $("#deleteModal").modal("show");
     },
 
     fetchTasks() {
@@ -185,12 +176,9 @@ export default {
         )
         .then(response => {
           this.future_tasks = response.data.tasks;
-          //Filter anwenden, falls vorhanden
-          //this.showFilteredTasks();
-          console.log(response.data);
         })
         .catch(error => {
-          this.$store.commit("hasError", error.toString());
+          console.warn("Error with future tasks", error.toString());
         });
     }
   }
