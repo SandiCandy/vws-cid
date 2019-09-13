@@ -1,12 +1,7 @@
 <template>
-  <div class="tudu-blu .min-h-100">
+  <div class="tudu-blu min-h-100">
     <div v-if="success">
       <successful :msg="msg"></successful>
-    </div>
-    <div class="alert alert-danger" v-if="errors.length > 0">
-      <ul>
-        <li v-for="error in errors">{{ error }}</li>
-      </ul>
     </div>
 
     <form class="col-sm-12">
@@ -18,13 +13,14 @@
           id="email"
           class="form-control"
           v-model="member.email"
-          v-bind:class="{ 'is-invalid': attemptSubmit && requiredEmail }"
+          v-bind:class="{ 'is-invalid': attemptSubmit && invalidEmail }"
         />
+        <div class="invalid-feedback">Bitte gebe eine gültige E-Mailadresse an.</div>
       </div>
 
       <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-        <button type="button" @click="createTask" class="btn btn-outline-light">Einladen</button>
+        <button type="button" @click="createMember" class="btn btn-outline-light">Einladen</button>
       </div>
     </form>
   </div>
@@ -42,15 +38,16 @@ export default {
       attemptSubmit: false,
       member: {
         name: "",
-        role: "Admin"
+        role: "Admin",
+        email: ""
       },
       errors: [],
       msg: ""
     };
   },
   computed: {
-    requiredEmail() {
-      return this.task.title === "";
+    invalidEmail() {
+      return this.member.email === "";
     }
   },
 
@@ -59,8 +56,10 @@ export default {
   },
 
   methods: {
-    createTask() {
-      this.validateInput();
+    createMember() {
+      if (this.invalidInput()) {
+        return true;
+      }
       this.success = false;
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
@@ -95,10 +94,10 @@ export default {
       this.member.role = "Admin";
       history.back();
     },
-    validateInput() {
+    invalidInput() {
       this.attemptSubmit = true;
       this.errors = [];
-      if (this.requiredEmail) event.preventDefault();
+      if (this.invalidEmail) return true;
     }
   }
 };
