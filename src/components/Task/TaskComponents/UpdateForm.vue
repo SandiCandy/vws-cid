@@ -40,6 +40,73 @@
     </div>
 
     <div class="form-group">
+      <label for="tasktype_id">Ausführbar ab *</label>
+      <v-row>
+        <v-col cols="12" sm="6" md="4">
+          <date-menu
+            v-bind:old_date="startet_at_date"
+            my_label="Ausführbar ab"
+            emit="startdate"
+            v-on:startdate="updateTaskDate"
+          ></date-menu>
+        </v-col>
+
+        <v-col cols="11" sm="5">
+          <time-menu
+            v-bind:old_time="startet_at_time"
+            my_label="Startzeit"
+            emit="starttime"
+            v-on:starttime="updateTaskTime"
+          ></time-menu>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="form-group">
+      <label for="tasktype_id">Erledigung bis</label>
+      <v-row>
+        <v-col cols="12" sm="5" md="4">
+          <date-menu
+            v-bind:old_date="deadline_date"
+            my_label="Erledigung bis"
+            emit="deadlinedate"
+            v-on:deadlinedate="updateDeadlineDate"
+            class="datepicker-formcontrol"
+            v-bind:class="{ 'is-invalid': attemptSubmit && invalidDeadline }"
+            :key="deadline_date"
+          ></date-menu>
+          <div class="invalid-feedback">Das Enddatum muss hinter dem Startdatum liegen.</div>
+        </v-col>
+
+        <v-col cols="9" sm="5">
+          <time-menu
+            v-bind:old_time="deadline_time"
+            my_label="Endzeit"
+            emit="deadlinetime"
+            v-on:deadlinetime="updateDeadlineTime"
+            class="datepicker-formcontrol"
+            v-bind:class="{ 'is-invalid': attemptSubmit && invalidDeadlineTime }"
+            :key="deadline_time"
+          ></time-menu>
+          <div class="invalid-feedback">Bitte gebe eine Uhrzeit an.</div>
+        </v-col>
+
+        <v-col cols="3">
+          <v-btn
+            class="mx-2 my-4"
+            text
+            icon
+            color="red"
+            @click="removeDeadline"
+            :disabled="(deadline_time === null && deadline_date === null)"
+          >
+            <v-icon dark>mdi-close</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="form-group">
       <label for="priority">Priorität *</label>
       <select v-model="task.priority" class="form-control" name="priority" id="priority">
         <option value="0">Niedrig</option>
@@ -95,13 +162,24 @@
 </template>
 
 <script>
+import DateMenu from "./DateMenu.vue";
+import TimeMenu from "./TimeMenu.vue";
+
 export default {
+  components: {
+    DateMenu,
+    TimeMenu
+  },
   props: {
     task: Object,
     roomtype_id: Number
   },
   data() {
     return {
+      startet_at_date: this.moment(this.task.startet_at).format("YYYY-MM-DD"),
+      startet_at_time: this.moment(this.task.startet_at).format("LT"),
+      deadline_date: this.moment(this.task.deadline_at).format("YYYY-MM-DD"),
+      deadline_time: this.moment(this.task.deadline_at).format("LT"),
       success: false,
       error: null,
       tasktypes: [],
@@ -119,6 +197,15 @@ export default {
     },
     fileTooLarge() {
       return this.task.file && this.task.file.size > 15000000;
+    },
+    invalidDeadline() {
+      return (
+        this.deadline_date !== null &&
+        this.moment(this.startet_at_date).isAfter(this.deadline_date)
+      );
+    },
+    invalidDeadlineTime() {
+      return this.deadline_date !== null && this.deadline_time === null;
     }
   },
   watch: {
@@ -136,18 +223,35 @@ export default {
   created() {
     this.fetchTasktypes();
     this.fetchRoomtypes();
+    if (this.deadline_date === "Invalid date") {
+      this.deadline_date = null;
+    }
+    if (this.deadline_time === "Invalid date") {
+      this.deadline_time = null;
+    }
     //TODO: Handling von Rooms & Roomtypes
     //
   },
   methods: {
     updateTask() {
-      this.validateInput();
+      if (this.invalidInput()) {
+        return true;
+      }
       this.success = false;
-      console.log(this.task.room_id);
       let formData = new FormData();
       formData.append("title", this.task.title);
       if (this.task.description) {
         formData.append("description", this.task.description);
+      }
+      this.task.startet_at = this.moment(
+        this.startet_at_date + " " + this.startet_at_time
+      ).format();
+      formData.append("startet_at", this.task.startet_at);
+      if (this.deadline_date !== null && this.deadline_time !== null) {
+        this.task.deadline_at = this.moment(
+          this.deadline_date + " " + this.deadline_time
+        ).format();
+        formData.append("deadline_at", this.task.deadline_at);
       }
       formData.append("priority", this.task.priority);
       formData.append("tasktype_id", this.task.tasktype_id);
@@ -156,8 +260,6 @@ export default {
       }
       formData.append("file", this.task.file);
       formData.append("is_done", +this.task.is_done);
-      console.log(formData.get("title"));
-      console.log(formData.get("is_done"));
       axios
         .post(
           process.env.ROOT_API + "/auth/tasks/" + this.task.id + "/update",
@@ -244,16 +346,38 @@ export default {
       console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
     },
-    validateInput() {
+    invalidInput() {
       this.attemptSubmit = true;
-      if (this.requiredTitle || this.requiredTasktype || this.fileTooLarge)
-        event.preventDefault();
+      if (
+        this.requiredTitle ||
+        this.requiredTasktype ||
+        this.fileTooLarge ||
+        this.invalidDeadline ||
+        this.invalidDeadlineTime
+      )
+        return true;
     },
     reset() {
       this.task.title = "";
       this.task.description = "";
       this.task.tasktype_id = "";
       history.back();
+    },
+    updateTaskDate(val) {
+      this.startet_at_date = val;
+    },
+    updateTaskTime(val) {
+      this.startet_at_time = val;
+    },
+    updateDeadlineDate(newDate) {
+      this.deadline_date = newDate;
+    },
+    updateDeadlineTime(newTime) {
+      this.deadline_time = newTime;
+    },
+    removeDeadline() {
+      this.updateDeadlineDate(null);
+      this.updateDeadlineTime(null);
     }
   }
 };

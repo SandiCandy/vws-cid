@@ -171,8 +171,9 @@ export default {
 </script>
 
 <style lang="scss">
-button.btn-group {
+.btn.btn-group {
   margin: 2px 0;
+  color: $light-color;
 }
 button.btn-new-group {
   margin: 5px 0;

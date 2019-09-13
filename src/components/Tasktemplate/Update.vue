@@ -63,7 +63,17 @@
 
         <div class="form-group">
           <label for="dtstart">Erste Ausführung</label>
-          <datepicker v-model="tasktemplate.dtstart"></datepicker>
+          <v-row>
+            <v-col cols="12" sm="6" md="4">
+              <date-menu
+                v-bind:old_date="moment(tasktemplate.dtstart).format('YYYY-MM-DD')"
+                my_label="Erster Termin"
+                emit="startdate"
+                v-on:startdate="updateTaskDate"
+              ></date-menu>
+            </v-col>
+          </v-row>
+          <!-- <datepicker v-model="dtstart"></datepicker> -->
         </div>
 
         <div class="form-group">
@@ -142,12 +152,12 @@
 </template>
 
 <script>
-import Datepicker from "vuejs-datepicker";
+import DateMenu from "../Task/TaskComponents/DateMenu.vue";
 import Loading from "../common/Loading.vue";
 import DeleteTasktemplateModal from "./Components/DeleteTasktemplateModal.vue";
 export default {
   components: {
-    Datepicker,
+    DateMenu,
     DeleteTasktemplateModal,
     Loading
   },
@@ -273,6 +283,9 @@ export default {
     removeDeletedTasktemplate() {
       this.$emit("deletetasktemplatemodal", this.index);
       history.back();
+    },
+    updateTaskDate(val) {
+      this.tasktemplate.dtstart = this.moment(val).format();
     }
   }
 };

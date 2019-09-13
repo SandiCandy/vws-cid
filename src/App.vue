@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <nav class="navbar navbar-expand-lg navbar-dark tudu-blu">
       <a @click="$router.go(-1)" v-if="this.$route.name !== 'dashboard'" class="btn btn-back">
         <font-awesome-icon :icon="['fas', 'chevron-left']"></font-awesome-icon>
@@ -23,7 +23,7 @@
             <button @click="onLogout" type="button" class="btn btn-link">Logout</button>
           </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" v-else>
+        <ul class="nav navbar-nav ml-auto" v-else>
           <li class="nav-item">
             <router-link to="/login">Login</router-link>
           </li>
@@ -36,7 +36,7 @@
     <div id="view">
       <router-view v-on:login="onLogin"></router-view>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -94,6 +94,7 @@ export default {
 }
 
 html a,
+.theme--light a,
 .text-tudu-blu,
 .btn.text-tudu-blu {
   color: $highlight-color;
@@ -103,7 +104,7 @@ html a:hover {
   color: #afafaf;
 }
 
-.navbar a,
+.navbar .nav a,
 button.btn-link {
   color: $light-color;
 
@@ -198,4 +199,18 @@ article hr {
 .task-list {
   background-color: $light-color;
 }
+
+/***** Datepicker with invalid Data ******/
+.datepicker-formcontrol.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.datepicker-formcontrol.is-invalid
+  > div
+  > .v-text-field
+  > .v-input__control
+  > .v-input__slot::before {
+  border-color: #dc3545;
+}
+/************* ****/
 </style>

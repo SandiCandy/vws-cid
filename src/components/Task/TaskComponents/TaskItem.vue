@@ -12,10 +12,10 @@
       </div>
       <div class="media-body col-xs-10">
         <router-link :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }">
-          <p
-            v-if="task.creator"
-          >{{ moment(task.created_at).format('LL') }}&nbsp;von {{ task.creator.name}}</p>
-          <p v-else>{{ moment(task.startet_at).format('LL')}}</p>
+          <p>
+            {{ moment(task.startet_at).format('lll')}}
+            <span v-if="task.deadline_at">- {{ moment(task.deadline_at).format('lll')}}</span>
+          </p>
           <h3 class="mt-0">
             <span v-if="task.room && task.room.name">{{task.room.name}}</span>
             {{ task.title }}
@@ -73,15 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.img {
-  overflow: hidden;
-  position: relative;
-  margin-right: 1rem;
-  background-color: $highlight-color;
-  width: 45px;
-  height: 45px;
-}
-
 .arrow-right {
   background-color: #444;
   height: 40px;
@@ -91,6 +82,15 @@ div.img {
   width: 40px;
 
   -webkit-transform: rotate(-45deg);
+}
+
+div.img {
+  overflow: hidden;
+  position: relative;
+  margin-right: 1rem;
+  background-color: $highlight-color;
+  width: 45px;
+  height: 45px;
 }
 
 .media-body {

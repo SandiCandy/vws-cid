@@ -67,7 +67,16 @@
 
       <div class="form-group">
         <label for="dtstart">Erste Ausführung</label>
-        <datepicker v-model="tasktemplate.dtstart"></datepicker>
+        <v-row>
+          <v-col>
+            <date-menu
+              v-bind:old_date="tasktemplate.dtstart"
+              my_label="Erste Ausführung"
+              emit="firstdate"
+              v-on:firstdate="updateTaskDate"
+            ></date-menu>
+          </v-col>
+        </v-row>
       </div>
 
       <div class="form-group">
@@ -131,12 +140,12 @@
 </template>
 
 <script>
-import Datepicker from "vuejs-datepicker";
+import DateMenu from "../Task/TaskComponents/DateMenu.vue";
 import Successful from "../common/Successful.vue";
 export default {
   components: {
     Successful,
-    Datepicker
+    DateMenu
   },
   data() {
     return {
@@ -147,7 +156,7 @@ export default {
         description: "",
         tasktype_id: "",
         priority: 5,
-        dtstart: this.moment().format(),
+        dtstart: this.moment().format("YYYY-MM-DD"),
         freq: "daily"
       },
       tasktypes: [],
@@ -275,6 +284,9 @@ export default {
       this.attemptSubmit = true;
       this.errors = [];
       if (this.requiredTitle || this.requiredTasktype) event.preventDefault();
+    },
+    updateTaskDate(val) {
+      this.tasktemplate.dtstart = val;
     }
   }
 };
@@ -298,5 +310,13 @@ export default {
 
 .tudu-blu.vh-100 {
   min-height: 120vh;
+}
+
+.datetimeselect {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  line-height: 1.5;
+  padding: 0.375rem 0.75rem;
 }
 </style>

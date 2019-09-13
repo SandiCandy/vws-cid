@@ -1,10 +1,12 @@
 require("./bootstrap");
-
 import Vue from "vue";
+
+//import vuetify from "src/plugins/vuetify";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
+  faCalendar,
   faCheck,
   faChevronLeft,
   faClock,
@@ -20,6 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
+  faCalendar,
   faCheck,
   faChevronLeft,
   faClock,
@@ -80,6 +83,8 @@ import CampingCare from "./components/Group/Campingcare.vue";
 import TasktemplateList from "./components/Tasktemplate/TasktemplateList.vue";
 import NewTasktemplate from "./components/Tasktemplate/New.vue";
 import UpdateTasktemplate from "./components/Tasktemplate/Update.vue";
+
+import vuetify from "./plugins/vuetify";
 
 import moment from "moment";
 import "./registerServiceWorker";
@@ -301,6 +306,7 @@ export default router;
 new Vue({
   el: "#app",
   store,
+  vuetify,
   router: router,
   axios: axios,
   render: h => h(App)
