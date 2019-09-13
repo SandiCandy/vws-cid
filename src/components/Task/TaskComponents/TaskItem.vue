@@ -12,7 +12,7 @@
       </div>
       <div class="media-body col-xs-10">
         <router-link :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }">
-          <p>{{ moment(task.startet_at).format('lll')}}</p>
+          <p v-if="task.deadline_at">{{ moment(task.deadline_at).format('lll')}}</p>
           <h3 class="mt-0">
             <span v-if="task.room && task.room.name">{{task.room.name}}</span>
             {{ task.title }}

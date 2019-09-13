@@ -15,6 +15,7 @@
         </section>
 
         <section v-if="filtered_tasks.length > 0" class="main-sec">
+          <h1>Aktuelle Aufgaben</h1>
           <article v-for="(task, index) in filtered_tasks" :key="task.id">
             <task-item
               :task="task"
@@ -22,7 +23,7 @@
               v-on:done="spliceArray"
               v-on:deletemodal="fetchTask"
             ></task-item>
-            <hr>
+            <hr />
           </article>
         </section>
         <div v-else>
@@ -52,6 +53,19 @@
         >
           <filter-task-modal v-on:setFilter="showFilteredTasks"></filter-task-modal>
         </div>
+
+        <section v-if="future_tasks.length > 0" class="main-sec">
+          <h1>Zukünftige Aufgaben</h1>
+          <article v-for="(task, index) in future_tasks" :key="task.id">
+            <task-item
+              :task="task"
+              :index="index"
+              v-on:done="spliceArray"
+              v-on:deletemodal="fetchTask"
+            ></task-item>
+            <hr />
+          </article>
+        </section>
       </div>
     </div>
   </div>
@@ -82,12 +96,14 @@ export default {
       delete_index: "",
       errors: [],
       all_tasks: [],
-      filtered_tasks: []
+      filtered_tasks: [],
+      future_tasks: []
     };
   },
 
   created() {
     this.fetchTasks();
+    this.fetchFutureTasks();
     this.$store.commit("changePage", "Aufgaben");
   },
 
@@ -155,6 +171,27 @@ export default {
       }
 
       console.log("filtered", this.filtered_tasks.length);
+    },
+
+    fetchFutureTasks() {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + $cookies.get("token");
+      axios
+        .get(
+          process.env.ROOT_API +
+            "/auth/group/" +
+            this.$route.params.id +
+            "/tasks/future"
+        )
+        .then(response => {
+          this.future_tasks = response.data.tasks;
+          //Filter anwenden, falls vorhanden
+          //this.showFilteredTasks();
+          console.log(response.data);
+        })
+        .catch(error => {
+          this.$store.commit("hasError", error.toString());
+        });
     }
   }
 };
