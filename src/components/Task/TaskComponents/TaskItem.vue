@@ -2,19 +2,15 @@
   <transition name="fade">
     <div class="media row" :class="'prio-' + task.priority" v-if="show">
       <div class="img col-xs-2">
-        <img
-          :src="backend_url + '/storage/' + task.images[0].name"
-          :class="'prio-' + task.priority"
-          v-if="task.images.length > 0"
-          height="45"
-        />
-        <div class="arrow-right"></div>
+        <task-image :images="task.images" :priority="task.priority"></task-image>
       </div>
       <div class="media-body col-xs-10">
         <router-link :to="{name: 'tasks.update', params: { id: $route.params.id, tid: task.id } }">
           <p>
             {{ moment(task.startet_at).format('lll')}}
-            <span v-if="task.deadline_at">- {{ moment(task.deadline_at).format('lll')}}</span>
+            <span
+              v-if="task.deadline_at"
+            >- {{ moment(task.deadline_at).format('lll')}}</span>
           </p>
           <h3 class="mt-0">
             <span v-if="task.room && task.room.name">{{task.room.name}}</span>
@@ -30,27 +26,28 @@
         </p>
       </div>
 
-      <button
-        @click="isDone(index)"
-        type="button"
-        class="col-xs-2 checkbox is-done"
-        v-if="task.is_done != 1"
-      >
-        <font-awesome-icon :icon="['fas', 'check']" class="checkbox"></font-awesome-icon>
-      </button>
+      <task-done-button @click.native="isDone(index)" v-if="!task.is_done"></task-done-button>
     </div>
   </transition>
 </template>
 
 <script>
+import TaskImage from "./TaskListComponents/TaskImage.vue";
+import TaskDoneButton from "./TaskListComponents/TaskDoneButton.vue";
 export default {
+  components: {
+    TaskDoneButton,
+    TaskImage
+  },
   data() {
     return {
-      backend_url: process.env.ROOT,
       show: true
     };
   },
-  props: ["task", "index"],
+  props: {
+    task: Object,
+    index: Number
+  },
   methods: {
     isDone() {
       this.show = false;
@@ -73,60 +70,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.arrow-right {
-  background-color: #444;
-  height: 40px;
-  left: -20px;
-  position: absolute;
-  top: -20px;
-  width: 40px;
-
-  -webkit-transform: rotate(-45deg);
-}
-
-div.img {
-  overflow: hidden;
-  position: relative;
-  margin-right: 1rem;
-  background-color: $highlight-color;
-  width: 45px;
-  height: 45px;
-}
-
 .media-body {
   word-break: break-word;
-}
-
-.prio-0 .arrow-right {
-  background-color: $green;
-}
-
-.prio-5 .arrow-right {
-  background-color: $yellow;
-}
-
-.prio-10 .arrow-right {
-  background-color: $red;
-}
-
-button.is-done {
-  background: transparent;
-  border: inherit;
-  position: relative;
-  right: 5px;
-}
-
-svg.checkbox {
-  border: 2px solid #b4b4b4;
-  color: #dddddd;
-  height: 45px;
-  width: 45px;
-  padding: 0px 2px;
-
-  &:active {
-    color: green;
-    border-color: green;
-  }
 }
 
 .fade-enter-active,

@@ -5,7 +5,7 @@
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content container" v-else>
         <section class="row header">
-          <p class="col-6">{{filtered_tasks.length + " Einträge"}}</p>
+          <p class="col-6">{{filteredCurrentTasks.length + filteredFutureTasks.length}} Einträge</p>
           <button
             type="button"
             data-toggle="modal"
@@ -14,21 +14,9 @@
           >Filtern</button>
         </section>
 
-        <section v-if="filtered_tasks.length > 0" class="main-sec">
-          <h1 class="display-1">Aktuelle Aufgaben</h1>
-          <article v-for="(task, index) in filtered_tasks" :key="task.id">
-            <task-item
-              :task="task"
-              :index="index"
-              v-on:done="spliceArray"
-              v-on:deletemodal="fetchTask"
-            ></task-item>
-            <hr />
-          </article>
-        </section>
-        <div v-else>
-          <no-tasks></no-tasks>
-        </div>
+        <task-list title="Aktuelle Aufgaben" :tasks="filteredCurrentTasks"></task-list>
+
+        <task-list title="Zukünftige Aufgaben123" :tasks="filteredFutureTasks"></task-list>
 
         <add-task-button></add-task-button>
 
@@ -40,79 +28,63 @@
           aria-labelledby="filterModalLabel"
           aria-hidden="true"
         >
-          <filter-task-modal v-on:setFilter="showFilteredTasks"></filter-task-modal>
+          <filter-task-modal :tasktypes="tasktypes" v-on:setFilter="readTasktypeFilter"></filter-task-modal>
         </div>
-
-        <section v-if="future_tasks.length > 0" class="main-sec">
-          <h1 class="display-1">Zukünftige Aufgaben</h1>
-          <article v-for="(task, index) in future_tasks" :key="task.id">
-            <task-item
-              :task="task"
-              :index="index"
-              v-on:done="spliceFutureArray"
-              v-on:deletemodal="fetchFutureTask"
-            ></task-item>
-            <hr />
-          </article>
-        </section>
       </div>
     </div>
   </div>
 </template>
 
-
-
 <script>
 import Loading from "../common/Loading.vue";
-import TaskItem from "./TaskComponents/TaskItem.vue";
-import NoTasks from "./TaskComponents/NoTasks.vue";
+import TaskList from "./TaskComponents/TaskList.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
 import FilterTaskModal from "./TaskComponents/FilterTaskModal.vue";
 export default {
   components: {
     Loading,
-    TaskItem,
-    NoTasks,
+    TaskList,
     AddTaskButton,
     FilterTaskModal
   },
   data() {
     return {
       error: null,
-      delete_task: {},
-      delete_index: "",
-      errors: [],
-      all_tasks: [],
-      filtered_tasks: [],
-      future_tasks: []
+      allCurrentTasks: [],
+      allFutureTasks: [],
+      tasktypes: []
     };
+  },
+  computed: {
+    filteredCurrentTasks() {
+      return this.allCurrentTasks.filter(task =>
+        this.filteredTasktypes.includes(task.tasktype_id)
+      );
+    },
+    filteredFutureTasks() {
+      return this.allFutureTasks.filter(task =>
+        this.filteredTasktypes.includes(task.tasktype_id)
+      );
+    },
+    filteredTasktypes() {
+      return this.tasktypes.reduce(function(filtered, option) {
+        if (option.show) {
+          filtered.push(option.id);
+        }
+        return filtered;
+      }, []);
+    }
   },
 
   created() {
-    this.fetchTasks();
+    this.fetchCurrentTasks();
     this.fetchFutureTasks();
+    this.readTasktypeFilter();
     this.$store.commit("changePage", "Aufgaben");
   },
 
   methods: {
-    spliceArray(index) {
-      this.filtered_tasks.splice(index, 1);
-    },
-    spliceFutureArray(index) {
-      this.future_tasks.splice(index, 1);
-    },
-    fetchTask(index) {
-      this.delete_task = this.filtered_tasks[index];
-      this.delete_index = index;
-      $("#deleteModal").modal("show");
-    },
-    fetchFutureTask(index) {
-      this.delete_task = this.future_tasks[index];
-      this.delete_index = index;
-      $("#deleteModal").modal("show");
-    },
-
-    fetchTasks() {
+    fetchCurrentTasks() {
       this.$store.commit("isLoading", true);
       this.error = null;
 
@@ -126,10 +98,7 @@ export default {
             "/tasks/current"
         )
         .then(response => {
-          this.all_tasks = response.data.tasks;
-          //Filter anwenden, falls vorhanden
-          this.showFilteredTasks();
-          console.log(response.data);
+          this.allCurrentTasks = response.data.tasks;
           this.$store.commit("isLoading", false);
         })
         .catch(error => {
@@ -137,31 +106,31 @@ export default {
           this.$store.commit("isLoading", false);
         });
     },
-    showFilteredTasks() {
-      this.filtered_tasks = [];
+    readTasktypeFilter() {
       if (localStorage.getItem(this.$route.params.id)) {
-        let tasktypes = JSON.parse(localStorage.getItem(this.$route.params.id));
-        let filtered_tasktype_ids = [];
-        tasktypes.forEach(function(el) {
-          if (el.show === false) {
-            filtered_tasktype_ids.push(el.id);
-          }
-        });
-
-        for (let i = 0; i < this.all_tasks.length; ++i) {
-          this.filtered_tasks.push(this.all_tasks[i]);
-          for (let j = 0; j < filtered_tasktype_ids.length; ++j) {
-            if (this.all_tasks[i].tasktype_id === filtered_tasktype_ids[j]) {
-              this.filtered_tasks.pop();
-              break;
-            }
-          }
-        }
+        this.tasktypes = JSON.parse(
+          localStorage.getItem(this.$route.params.id)
+        );
       } else {
-        this.filtered_tasks = this.all_tasks;
+        this.fetchTasktypes();
       }
+    },
 
-      console.log("filtered", this.filtered_tasks.length);
+    fetchTasktypes() {
+      axios
+        .get(
+          process.env.ROOT_API +
+            "/auth/group/" +
+            this.$route.params.id +
+            "/tasktypes"
+        )
+        .then(response => {
+          this.tasktypes = response.data.tasktypes;
+          this.tasktypes.forEach(element => (element.show = true));
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     },
 
     fetchFutureTasks() {
@@ -175,7 +144,8 @@ export default {
             "/tasks/future"
         )
         .then(response => {
-          this.future_tasks = response.data.tasks;
+          this.allFutureTasks = response.data.tasks;
+          this.readTasktypeFilter();
         })
         .catch(error => {
           console.warn("Error with future tasks", error.toString());
@@ -197,6 +167,3 @@ export default {
   color: #777;
 }
 </style>
-
-
-
