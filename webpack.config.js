@@ -29,7 +29,7 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              data: `@import "./src/scss/_variables.scss";`,
+              data: `@import "./src/styles/_variables.scss";`,
               implementation: require("sass"),
               fiber: require("fibers"),
               indentedSyntax: false

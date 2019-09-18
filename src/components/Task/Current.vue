@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { tasktypeFilterMixin } from "../../mixins/tasktypeFilterMixin";
 import Loading from "../common/Loading.vue";
 import TaskList from "./TaskComponents/TaskList.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
@@ -45,12 +46,12 @@ export default {
     AddTaskButton,
     FilterTaskModal
   },
+  mixins: [tasktypeFilterMixin],
   data() {
     return {
       error: null,
       allCurrentTasks: [],
-      allFutureTasks: [],
-      tasktypes: []
+      allFutureTasks: []
     };
   },
   computed: {
@@ -63,21 +64,12 @@ export default {
       return this.allFutureTasks.filter(task =>
         this.filteredTasktypes.includes(task.tasktype_id)
       );
-    },
-    filteredTasktypes() {
-      return this.tasktypes.reduce(function(filtered, option) {
-        if (option.show) {
-          filtered.push(option.id);
-        }
-        return filtered;
-      }, []);
     }
   },
 
   created() {
     this.fetchCurrentTasks();
     this.fetchFutureTasks();
-    this.readTasktypeFilter();
     this.$store.commit("changePage", "Aufgaben");
   },
 
@@ -104,32 +96,6 @@ export default {
           this.$store.commit("isLoading", false);
         });
     },
-    readTasktypeFilter() {
-      if (localStorage.getItem(this.$route.params.id)) {
-        this.tasktypes = JSON.parse(
-          localStorage.getItem(this.$route.params.id)
-        );
-      } else {
-        this.fetchTasktypes();
-      }
-    },
-
-    fetchTasktypes() {
-      axios
-        .get(
-          process.env.ROOT_API +
-            "/auth/group/" +
-            this.$route.params.id +
-            "/tasktypes"
-        )
-        .then(response => {
-          this.tasktypes = response.data.tasktypes;
-          this.tasktypes.forEach(element => (element.show = true));
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-    },
 
     fetchFutureTasks() {
       axios.defaults.headers.common["Authorization"] =
@@ -153,15 +119,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.header p,
-.header button.btn {
-  padding: 5px 5px 0 5px;
-  line-height: 1.5;
-  vertical-align: 0;
-  margin: 0;
-}
-.header p {
-  color: #777;
-}
+<style scoped>
+@import "../../styles/taskOverview.css";
 </style>

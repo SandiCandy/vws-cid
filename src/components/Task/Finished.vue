@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { tasktypeFilterMixin } from "../../mixins/tasktypeFilterMixin";
 import Loading from "../common/Loading.vue";
 import TaskList from "./TaskComponents/TaskList.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
@@ -45,13 +46,12 @@ export default {
     AddTaskButton,
     FilterTaskModal
   },
+  mixins: [tasktypeFilterMixin],
   data() {
     return {
       loading: false,
-
       error: null,
-      tasks: [],
-      tasktypes: []
+      tasks: []
     };
   },
   computed: {
@@ -59,36 +59,15 @@ export default {
       return this.tasks.filter(task =>
         this.filteredTasktypes.includes(task.tasktype_id)
       );
-    },
-    filteredTasktypes() {
-      return this.tasktypes.reduce(function(filtered, option) {
-        if (option.show) {
-          filtered.push(option.id);
-        }
-        return filtered;
-      }, []);
     }
   },
   created() {
     this.readTasks();
-    this.readTasktypeFilter();
+    //this.readTasktypeFilter();
     this.$store.commit("changePage", "Aufgaben");
   },
 
   methods: {
-    spliceArray(index) {
-      this.tasks.splice(index, 1);
-    },
-    fetchTask(index) {
-      this.delete_task = this.tasks[index];
-      this.delete_index = index;
-      $("#deleteModal").modal("show");
-    },
-    removeDeletedTask(index) {
-      console.log("remove");
-      this.tasks.splice(this.delete_index, 1);
-    },
-
     readTasks() {
       this.$store.commit("isLoading", true);
       this.error = null;
@@ -109,32 +88,11 @@ export default {
           this.$store.commit("hasError", error.toString());
           this.$store.commit("isLoading", false);
         });
-    },
-    readTasktypeFilter() {
-      if (localStorage.getItem(this.$route.params.id)) {
-        this.tasktypes = JSON.parse(
-          localStorage.getItem(this.$route.params.id)
-        );
-      } else {
-        this.fetchTasktypes();
-      }
-    },
-    fetchTasktypes() {
-      axios
-        .get(
-          process.env.ROOT_API +
-            "/auth/group/" +
-            this.$route.params.id +
-            "/tasktypes"
-        )
-        .then(response => {
-          this.tasktypes = response.data.tasktypes;
-          this.tasktypes.forEach(element => (element.show = true));
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
     }
   }
 };
 </script>
+
+<style scoped>
+@import "../../styles/taskOverview.css";
+</style>
