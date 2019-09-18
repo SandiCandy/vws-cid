@@ -4,87 +4,70 @@
       <loading class="loading container" v-if="$store.getters.loading"></loading>
       <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
       <div class="content container" v-else>
-        <div class="list-group">
-          <section v-if="tasks.length > 0" class="main-sec">
-            <article v-for="(task, index) in tasks" :key="task.id">
-              <task-item
-                :task="task"
-                :index="index"
-                v-on:done="spliceArray"
-                v-on:deletemodal="fetchTask"
-              ></task-item>
-              <hr>
-            </article>
-          </section>
-          <div v-else>
-            <no-tasks></no-tasks>
-          </div>
-        </div>
+        <section class="row header">
+          <p class="col-6">{{filteredTasks.length}} Einträge</p>
+          <button
+            type="button"
+            data-toggle="modal"
+            data-target="#filterModal"
+            class="btn text-tudu-blu col-6 text-right"
+          >Filtern</button>
+        </section>
+
+        <task-list :tasks="filteredTasks"></task-list>
 
         <add-task-button></add-task-button>
 
         <div
           class="modal fade"
-          id="deleteModal"
+          id="filterModal"
           tabindex="-1"
           role="dialog"
-          aria-labelledby="deleteModalLabel"
+          aria-labelledby="filterModalLabel"
           aria-hidden="true"
         >
-          <delete-task-modal v-bind:task="delete_task" v-on:taskDeleted="removeDeletedTask"></delete-task-modal>
+          <filter-task-modal :tasktypes="tasktypes" v-on:setFilter="readTasktypeFilter"></filter-task-modal>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
-
 <script>
+import { tasktypeFilterMixin } from "../../mixins/tasktypeFilterMixin";
 import Loading from "../common/Loading.vue";
-import TaskItem from "./TaskComponents/TaskItem.vue";
-import NoTasks from "./TaskComponents/NoTasks.vue";
+import TaskList from "./TaskComponents/TaskList.vue";
 import AddTaskButton from "./TaskComponents/AddTaskButton.vue";
-import DeleteTaskModal from "./TaskComponents/DeleteTaskModal.vue";
+import FilterTaskModal from "./TaskComponents/FilterTaskModal.vue";
 export default {
   components: {
     Loading,
-    TaskItem,
-    NoTasks,
+    TaskList,
     AddTaskButton,
-    DeleteTaskModal
+    FilterTaskModal
   },
+  mixins: [tasktypeFilterMixin],
   data() {
     return {
       loading: false,
-      delete_task: {},
-      delete_index: "",
-
-      error: {},
-      errors: [],
+      error: null,
       tasks: []
     };
   },
-
+  computed: {
+    filteredTasks() {
+      return this.tasks.filter(task =>
+        this.filteredTasktypes.includes(task.tasktype_id)
+      );
+    }
+  },
   created() {
     this.readTasks();
+    //this.readTasktypeFilter();
     this.$store.commit("changePage", "Aufgaben");
   },
 
   methods: {
-    spliceArray(index) {
-      this.tasks.splice(index, 1);
-    },
-    fetchTask(index) {
-      this.delete_task = this.tasks[index];
-      this.delete_index = index;
-      $("#deleteModal").modal("show");
-    },
-    removeDeletedTask(index) {
-      console.log("remove");
-      this.tasks.splice(this.delete_index, 1);
-    },
-
     readTasks() {
       this.$store.commit("isLoading", true);
       this.error = null;
@@ -99,7 +82,6 @@ export default {
         )
         .then(response => {
           this.tasks = response.data.tasks;
-          console.log(response.data);
           this.$store.commit("isLoading", false);
         })
         .catch(error => {
@@ -110,3 +92,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@import "../../styles/taskOverview.css";
+</style>

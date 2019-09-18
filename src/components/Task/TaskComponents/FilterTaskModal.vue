@@ -13,7 +13,7 @@
                 :name="tt.name"
                 :value="tt.id"
                 v-model="tt.show"
-              >
+              />
               <label for="tt.name" class="form-check-label">{{tt.name}}</label>
             </div>
           </div>
@@ -29,52 +29,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      tasktypes: []
-    };
-  },
-  created() {
-    this.readFiltering();
+  props: {
+    tasktypes: Array
   },
   methods: {
-    fetchTasktypes() {
-      axios
-        .get(
-          process.env.ROOT_API +
-            "/auth/group/" +
-            this.$route.params.id +
-            "/tasktypes"
-        )
-        .then(response => {
-          console.log(response.data);
-          this.tasktypes = response.data.tasktypes;
-          this.initFilter();
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-    },
-    readFiltering() {
-      if (localStorage.getItem(this.$route.params.id)) {
-        console.log("read localstorage");
-        this.tasktypes = JSON.parse(
-          localStorage.getItem(this.$route.params.id)
-        );
-      } else {
-        console.log("localstorage is empty");
-        this.fetchTasktypes();
-      }
-    },
-    initFilter() {
-      this.tasktypes.forEach(function(el) {
-        el.show = true;
-      });
-      localStorage.setItem(
-        this.$route.params.id,
-        JSON.stringify(this.tasktypes)
-      );
-    },
     submitFilter() {
       localStorage.setItem(
         this.$route.params.id,

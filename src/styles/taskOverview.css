@@ -1,0 +1,10 @@
+.header p,
+.header button.btn {
+  padding: 5px 5px 0 5px;
+  line-height: 1.5;
+  vertical-align: 0;
+  margin: 0;
+}
+.header p {
+  color: #777;
+}

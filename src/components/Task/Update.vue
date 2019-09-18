@@ -95,7 +95,6 @@ export default {
         });
     },
     removeDeletedTask() {
-      this.$emit("deletemodal", this.index);
       history.back();
     }
   }
