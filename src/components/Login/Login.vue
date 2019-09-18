@@ -36,9 +36,8 @@
           />
         </div>
 
-        <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="remember_me" v-model="remember_me" />
-          <label class="form-check-label" for="remember_me">Eingeloggt bleiben</label>
+        <div class="form-group">
+          <v-checkbox v-model="remember_me" label="Eingeloggt bleiben"></v-checkbox>
         </div>
 
         <div class="form-group">
@@ -54,8 +53,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script>
 import Successful from "../common/Successful.vue";

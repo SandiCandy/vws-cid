@@ -7,20 +7,11 @@
         <router-link to="/signup">Jetzt registrieren!</router-link>
       </button>
       <button type="button" class="btn btn-link-white">
-        <router-link to="/login" class="link-white-underlined">...oder direkt zur Anmeldung</router-link>
+        <router-link
+          to="/login"
+          class="link-white-underlined white--text"
+        >...oder direkt zur Anmeldung</router-link>
       </button>
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {};
-  },
-  methods: {}
-};
-</script>
-
-<style lang="scss" scoped>
-</style>

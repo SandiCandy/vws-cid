@@ -73,55 +73,16 @@
               ></date-menu>
             </v-col>
           </v-row>
-          <!-- <datepicker v-model="dtstart"></datepicker> -->
         </div>
 
         <div class="form-group">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="freq1"
-              id="freq1"
-              value="daily"
-              v-model="tasktemplate.freq"
-            />
-            <label class="form-check-label" for="freq1">Täglich</label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="freq2"
-              id="freq2"
-              value="weekly"
-              v-model="tasktemplate.freq"
-            />
-            <label class="form-check-label" for="freq2">Wöchentlich</label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="freq3"
-              id="freq3"
-              value="monthly"
-              v-model="tasktemplate.freq"
-            />
-            <label class="form-check-label" for="freq3">Monatlich</label>
-          </div>
-
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="freq"
-              id="freq4"
-              value="yearly"
-              v-model="tasktemplate.freq"
-            />
-            <label class="form-check-label" for="freq4">Jährlich</label>
-          </div>
+          <p>Rhythmus</p>
+          <v-radio-group v-model="tasktemplate.freq" row>
+            <v-radio label="Täglich" value="daily"></v-radio>
+            <v-radio label="Wöchentlich" value="weekly"></v-radio>
+            <v-radio label="Monatlich" value="monthly"></v-radio>
+            <v-radio label="Jährlich" value="yearly"></v-radio>
+          </v-radio-group>
         </div>
 
         <div class="form-group">
@@ -152,10 +113,12 @@
 </template>
 
 <script>
+import { fetchTasktypesMixin } from "../../mixins/fetchTasktypesMixin";
 import DateMenu from "../Task/TaskComponents/DateMenu.vue";
 import Loading from "../common/Loading.vue";
 import DeleteTasktemplateModal from "./Components/DeleteTasktemplateModal.vue";
 export default {
+  mixins: [fetchTasktypesMixin],
   components: {
     DateMenu,
     DeleteTasktemplateModal,
@@ -164,10 +127,8 @@ export default {
   data() {
     return {
       success: false,
-      errors: [],
       error: null,
       tasktemplate: {},
-      tasktypes: [],
       attemptSubmit: false
     };
   },
@@ -185,12 +146,13 @@ export default {
   created() {
     this.$store.commit("changePage", "Wiederholende Aufgabe ändern");
     this.fetchTasktemplate();
-    this.fetchTasktypes();
   },
 
   methods: {
     updateTasktemplate() {
-      this.validateInput();
+      if (this.invalidInput()) {
+        return true;
+      }
       this.success = false;
       let formData = new FormData();
       formData.append("title", this.tasktemplate.title);
@@ -218,20 +180,7 @@ export default {
           setTimeout(this.reset, 1000);
         })
         .catch(error => {
-          console.log(error.response);
-          this.errors = [];
-
-          if (error.response.data.errors.title) {
-            this.errors.push(error.response.data.errors.title[0]);
-          }
-
-          if (error.response.data.errors.priority) {
-            this.errors.push(error.response.data.errors.priority[0]);
-          }
-
-          if (error.response.data.errors.tasktype_id) {
-            this.errors.push(error.response.data.errors.tasktype_id[0]);
-          }
+          console.warn(error.response);
         });
     },
     fetchTasktemplate() {
@@ -257,28 +206,10 @@ export default {
     reset() {
       history.back();
     },
-    fetchTasktypes() {
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + $cookies.get("token");
-      axios
-        .get(
-          process.env.ROOT_API +
-            "/auth/group/" +
-            this.$route.params.id +
-            "/tasktypes"
-        )
-        .then(response => {
-          console.log(response.data);
-          this.tasktypes = response.data.tasktypes;
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-    },
-    validateInput() {
+    invalidInput() {
       this.attemptSubmit = true;
       this.errors = [];
-      if (this.requiredTitle || this.requiredTasktype) event.preventDefault();
+      if (this.requiredTitle || this.requiredTasktype) return true;
     },
     removeDeletedTasktemplate() {
       this.$emit("deletetasktemplatemodal", this.index);
@@ -290,4 +221,3 @@ export default {
   }
 };
 </script>
-
