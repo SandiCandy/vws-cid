@@ -1,35 +1,33 @@
 <template>
-  <div>
-    <div class="task-list">
-      <loading class="loading container" v-if="$store.getters.loading"></loading>
-      <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
-      <div class="content container" v-else>
-        <section class="row header">
-          <p class="col-6">{{filteredCurrentTasks.length + filteredFutureTasks.length}} Einträge</p>
-          <button
-            type="button"
-            data-toggle="modal"
-            data-target="#filterModal"
-            class="btn text-tudu-blu col-6 text-right"
-          >Filtern</button>
-        </section>
+  <div class="task-list">
+    <loading class="loading container" v-if="$store.getters.loading"></loading>
+    <div class="error" v-else-if="$store.getters.error">{{ $store.getters.error }}</div>
+    <div class="content container" v-else>
+      <section class="row header">
+        <p class="col-6">{{filteredCurrentTasks.length + filteredFutureTasks.length}} Einträge</p>
+        <button
+          type="button"
+          data-toggle="modal"
+          data-target="#filterModal"
+          class="btn text-tudu-blu col-6 text-right"
+        >Filtern</button>
+      </section>
 
-        <task-list title="Aktuelle Aufgaben" :tasks="filteredCurrentTasks"></task-list>
+      <task-list title="Aktuelle Aufgaben" :tasks="filteredCurrentTasks"></task-list>
 
-        <task-list title="Zukünftige Aufgaben123" :tasks="filteredFutureTasks"></task-list>
+      <task-list title="Zukünftige Aufgaben123" :tasks="filteredFutureTasks"></task-list>
 
-        <add-task-button></add-task-button>
+      <add-task-button></add-task-button>
 
-        <div
-          class="modal fade"
-          id="filterModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="filterModalLabel"
-          aria-hidden="true"
-        >
-          <filter-task-modal :tasktypes="tasktypes" v-on:setFilter="readTasktypeFilter"></filter-task-modal>
-        </div>
+      <div
+        class="modal fade"
+        id="filterModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="filterModalLabel"
+        aria-hidden="true"
+      >
+        <filter-task-modal :tasktypes="tasktypes" v-on:setFilter="readTasktypeFilter"></filter-task-modal>
       </div>
     </div>
   </div>
