@@ -80,51 +80,13 @@
       </div>
 
       <div class="form-group">
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="freq1"
-            id="freq1"
-            value="daily"
-            v-model="tasktemplate.freq"
-          />
-          <label class="form-check-label" for="freq1">Täglich</label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="freq2"
-            id="freq2"
-            value="weekly"
-            v-model="tasktemplate.freq"
-          />
-          <label class="form-check-label" for="freq2">Wöchentlich</label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="freq3"
-            id="freq3"
-            value="monthly"
-            v-model="tasktemplate.freq"
-          />
-          <label class="form-check-label" for="freq3">Monatlich</label>
-        </div>
-
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="freq"
-            id="freq4"
-            value="yearly"
-            v-model="tasktemplate.freq"
-          />
-          <label class="form-check-label" for="freq4">Jährlich</label>
-        </div>
+        <p>Rhythmus</p>
+        <v-radio-group v-model="tasktemplate.freq" row dark>
+          <v-radio label="Täglich" value="daily"></v-radio>
+          <v-radio label="Wöchentlich" value="weekly"></v-radio>
+          <v-radio label="Monatlich" value="monthly"></v-radio>
+          <v-radio label="Jährlich" value="yearly"></v-radio>
+        </v-radio-group>
       </div>
 
       <div class="form-group">
@@ -140,9 +102,11 @@
 </template>
 
 <script>
+import { fetchTasktypesMixin } from "../../mixins/fetchTasktypesMixin";
 import DateMenu from "../Task/TaskComponents/DateMenu.vue";
 import Successful from "../common/Successful.vue";
 export default {
+  mixins: [fetchTasktypesMixin],
   components: {
     Successful,
     DateMenu
@@ -159,7 +123,7 @@ export default {
         dtstart: this.moment().format("YYYY-MM-DD"),
         freq: "daily"
       },
-      tasktypes: [],
+      //tasktypes: [],
       errors: []
     };
   },
@@ -184,13 +148,15 @@ export default {
 
   created() {
     this.$store.commit("changePage", "Neue Aufgabe");
-    this.fetchTasktypes();
+    //this.fetchTasktypes();
     this.fetchRoomtypes();
   },
 
   methods: {
     createTasktemplate() {
-      this.validateInput();
+      if (this.invalidInput()) {
+        return true;
+      }
       this.success = false;
       let formData = new FormData();
       formData.append("title", this.tasktemplate.title);
@@ -223,24 +189,24 @@ export default {
     reset() {
       history.back();
     },
-    fetchTasktypes() {
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + $cookies.get("token");
-      axios
-        .get(
-          process.env.ROOT_API +
-            "/auth/group/" +
-            this.$route.params.id +
-            "/tasktypes"
-        )
-        .then(response => {
-          console.log(response.data);
-          this.tasktypes = response.data.tasktypes;
-        })
-        .catch(error => {
-          console.log(error.response);
-        });
-    },
+    // fetchTasktypes() {
+    //   axios.defaults.headers.common["Authorization"] =
+    //     "Bearer " + $cookies.get("token");
+    //   axios
+    //     .get(
+    //       process.env.ROOT_API +
+    //         "/auth/group/" +
+    //         this.$route.params.id +
+    //         "/tasktypes"
+    //     )
+    //     .then(response => {
+    //       console.log(response.data);
+    //       this.tasktypes = response.data.tasktypes;
+    //     })
+    //     .catch(error => {
+    //       console.log(error.response);
+    //     });
+    // },
     fetchRoomtypes() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
@@ -280,10 +246,10 @@ export default {
       console.log(this.$refs);
       this.task.file = this.$refs.file.files[0];
     },
-    validateInput() {
+    invalidInput() {
       this.attemptSubmit = true;
       this.errors = [];
-      if (this.requiredTitle || this.requiredTasktype) event.preventDefault();
+      if (this.requiredTitle || this.requiredTasktype) return true;
     },
     updateTaskDate(val) {
       this.tasktemplate.dtstart = val;

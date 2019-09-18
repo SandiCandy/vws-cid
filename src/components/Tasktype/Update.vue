@@ -9,12 +9,16 @@
     <form class="col-sm-12">
       <div class="form-group">
         <label for="name">Name *</label>
-        <input type="text" name="name" id="name" class="form-control" v-model="tasktype.name">
+        <input type="text" name="name" id="name" class="form-control" v-model="tasktype.name" />
       </div>
 
       <div class="form-group">
         <button type="button" @click="reset" class="btn btn-link text-white">Abbrechen</button>
-        <button type="button" @click="updateTask" class="btn btn-outline-light">Änderung speichern</button>
+        <button
+          type="button"
+          @click="updateTasktype"
+          class="btn btn-outline-light"
+        >Änderung speichern</button>
       </div>
     </form>
   </div>
@@ -24,17 +28,17 @@
 export default {
   data() {
     return {
-      tasktype: null,
+      tasktype: {},
       errors: []
     };
   },
   mounted() {
     this.$store.commit("changePage", "Aufgabenart ändern");
-    this.fetchTask();
+    this.fetchTasktype();
   },
 
   methods: {
-    fetchTask() {
+    fetchTasktype() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
 
@@ -52,7 +56,7 @@ export default {
           console.log(error.response);
         });
     },
-    updateTask() {
+    updateTasktype() {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + $cookies.get("token");
       axios
@@ -68,12 +72,10 @@ export default {
           }
         )
         .then(response => {
-          console.log(response);
           this.reset();
         })
         .catch(error => {
           this.errors = [];
-          console.log(error.response);
 
           if (error.response.data.errors && error.response.data.errors.name) {
             this.errors.push(error.response.data.errors.name[0]);
