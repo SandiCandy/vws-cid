@@ -1,19 +1,34 @@
 name: CI
 
 on: [push]
+#
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
+test:
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      node-version: ["12", "10"]
+  name: Node ${{ matrix.node }} sample
+  steps:
     - uses: actions/checkout@v1
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
-    - name: build
-        run: |
-          npm install
-          npm run build
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm test
+#   build:
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v1
+#     - name: Run a multi-line script
+#       run: |
+#         echo Add other actions to build,
+#         echo test, and deploy your project.
+#     - name: build
+#         run: |
+#           npm install
+#           npm run build
