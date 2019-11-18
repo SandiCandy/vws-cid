@@ -1,9 +1,10 @@
 language: node_js
 node_js:
-  - "stable"
-cache:
-  directories:
-    - "node_modules"
+  - node
+  - "lts/*"
+
+cache: npm
+
 install:
   - npm install
 # build:
