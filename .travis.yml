@@ -21,11 +21,11 @@ cache:
 install:
   - npm install
 
-  jobs:
-    include:
-      build:
-        - npm build
-      test:
-        - npm test
-      upload:
-        - echo "Uploading..."
+jobs:
+  include:
+    build:
+      - npm build
+    test:
+      - npm test
+    upload:
+      - echo "Uploading..."
