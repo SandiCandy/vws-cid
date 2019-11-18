@@ -4,20 +4,20 @@ on: [push]
 #
 
 jobs:
-test:
-  runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      node-version: ["12", "10"]
-  name: Node ${{ matrix.node }} sample
-  steps:
-    - uses: actions/checkout@v1
-    - name: Setup node
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm test
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["12", "10"]
+    name: Node ${{ matrix.node }} sample
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm test
 #   build:
 
 #     runs-on: ubuntu-latest
