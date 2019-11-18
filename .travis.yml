@@ -30,4 +30,4 @@ jobs:
     -stage: upload
       script: echo "Uploading..."
     -stage: deploy
-      script: echo "Deploy.."
+      script: echo "Deploy..."
