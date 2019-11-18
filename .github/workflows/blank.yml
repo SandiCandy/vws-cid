@@ -19,6 +19,7 @@ jobs:
       - run: npm test
   build:
     runs-on: ubuntu-latest
+    name: Build bla blub
     steps:
       - uses: actions/checkout@v1
       - name: NPM build
