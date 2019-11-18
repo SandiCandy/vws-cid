@@ -22,14 +22,22 @@ jobs:
       - uses: actions/checkout@v1
       - run: npm install
       - run: npm run build
-  deploy:
-    name: ✅ Deploy
+  upload:
+    name: 🔝Upload to Staging Server
     runs-on: ubuntu-latest
     # This job will only run if both `test` and `build` jobs run successfully.
     needs: [test, build]
     steps:
       - uses: actions/checkout@v1
-      - run: echo "Deploy to production server..."
+      - run: echo "Upload started ..."
+  deploy:
+    name: ✅ Deploy
+    runs-on: ubuntu-latest
+    # This job will only run if both `test` and `build` jobs run successfully.
+    needs: [test, build, upload]
+    steps:
+      - uses: actions/checkout@v1
+      - run: echo "Deploy to staging server..."
   report:
     name: 📋 Reporting
     runs-on: ubuntu-latest
