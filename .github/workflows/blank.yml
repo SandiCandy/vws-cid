@@ -25,3 +25,11 @@ jobs:
       - run: npm run build
       # Publish to NPM if everything went well
       # - run: npm run semantic-release
+  deploy:
+    name: ✅ Deploy
+    runs-on: ubuntu-latest
+    # This job will only run if both `test` and `lint` jobs run successfully.
+    needs: [test, build]
+    steps:
+      - uses: actions/checkout@v1
+      - run: echo "Deploy to production server..."
