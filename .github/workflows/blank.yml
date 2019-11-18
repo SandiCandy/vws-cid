@@ -18,10 +18,13 @@ jobs:
       - run: npm install
       - run: npm test
   build:
+    name: 🛠 Build
     runs-on: ubuntu-latest
-    name: Build bla blub
+    # This job will only run if both `test` and `lint` jobs run successfully.
+    needs: [test]
     steps:
       - uses: actions/checkout@v1
-      - name: NPM build
       - run: npm install
       - run: npm run build
+      # Publish to NPM if everything went well
+      - run: npm run semantic-release
