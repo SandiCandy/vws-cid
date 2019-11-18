@@ -5,10 +5,7 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ["12", "10"]
-    name: Node ${{ matrix.node }} sample
+    name: 🧪 Test
     steps:
       - uses: actions/checkout@v1
       - name: Setup node
