@@ -23,9 +23,11 @@ install:
 
 jobs:
   include:
-    build:
-      - npm build
-    test:
-      - npm test
-    upload:
-      - echo "Uploading..."
+    - stage: build
+      script: npm run build
+    - stage: test
+      script: npm test
+    -stage: upload
+      script: echo "Uploading..."
+    -stage: deploy
+      script: echo "Deploy.."
