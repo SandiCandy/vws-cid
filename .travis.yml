@@ -2,9 +2,13 @@ language: node_js
 node_js:
   - "lts/*"
 
-cache: npm
+cache:
+  npm: true
+  node_modules: true
 
 install:
   - npm install
 build:
   - npm run build
+test:
+  - npm test
