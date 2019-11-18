@@ -2,15 +2,30 @@ language: node_js
 node_js:
   - "lts/*"
 
+os:
+  - linux
+  - osx
+
+stages:
+  - build
+  - test
+  - upload
+  - name: deploy
+    if: branch = master
+
 cache:
   npm: true
-  node_modules: true
+  directories:
+    - node_modules #NPM packages
 
 install:
   - npm install
-build:
-  - npm run build
-test:
-  - npm test
-upload:
-  - echo "Uploading..."
+
+  jobs:
+    include:
+      build:
+        - npm build
+      test:
+        - npm test
+      upload:
+        - echo "Uploading..."
