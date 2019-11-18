@@ -2,7 +2,7 @@
 <html lang="de">
   <head>
     <meta charset="utf-8" />
-    <title>Tuudu - besser arbeiten!</title>
+    <title>My project</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta name="theme-color" content="#39d8d8" />
     <link rel="manifest" href="/manifest.json" />
@@ -10,7 +10,6 @@
   </head>
   <body>
     <div id="app"></div>
-    <!-- <script src="<%= htmlWebpackPlugin.files %>"></script> -->
     <script type="text/javascript" src="/dist/build.js"></script>
     <script>
       // Check that service workers are registered
@@ -26,10 +25,6 @@
       const updatesChannel = new BroadcastChannel("api-updates");
       updatesChannel.addEventListener("message", async event => {
         const { cacheName, updatedUrl } = event.data.payload;
-
-        // Do something with cacheName and updatedUrl.
-        // For example, get the cached content and update
-        // the content on the page.
         const cache = await caches.open(cacheName);
         const updatedResponse = await cache.match(updatedUrl);
         const updatedText = await updatedResponse.text();
