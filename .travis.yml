@@ -24,10 +24,12 @@ install:
 jobs:
   include:
     - stage: build
+      name: "Build"
       script: npm run build
     - stage: test
       script: npm test
-    -stage: upload
+    - stage: upload
       script: echo "Uploading..."
-    -stage: deploy
+    - stage: deploy
+      name: "Deploy to stagig server"
       script: echo "Deploy..."
