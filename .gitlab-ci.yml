@@ -2,7 +2,7 @@ image: node:11
 
 stages:
   - update_apiurl
-  - unitest
+  - unittest
   - build
   - deploy
 
@@ -46,12 +46,12 @@ build site: #for deployed version
     paths:
       - dist
 
-unit test:
+unittest:
   image: node:11
   stage: test
   script:
     - npm install --progress=false
-    - npm run unit
+    - npm run test
 
 deploy:
   stage: deploy
