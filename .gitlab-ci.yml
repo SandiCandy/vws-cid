@@ -2,12 +2,13 @@ image: node:11
 
 stages:
   - update_apiurl
+  - unitest
   - build
   - deploy
 
 variables:
-  ROOT_API: "http://localhost:8000/api"
-  ROOT: "http://localhost:8000"
+  ROOT_API: "path/to/api"
+  ROOT: "path/to/root"
 
 update_apiurl:
   stage: update_apiurl
@@ -15,7 +16,7 @@ update_apiurl:
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
   script:
-    - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@gitlab.com/sandratieben/vue-tuudu.git"
+    - git remote set-url origin "https://$GITLAB_USER_NAME:$GITLAB_PASSWORD@$GITLAB_URL"
     - git checkout $CI_COMMIT_REF_NAME
     - if [ "${QUERY_STRING}" ]; then echo "${QUERY_STRING}"; else echo "no query_string"; fi
     - if [ -n "${QUERY_STRING}" ]; then rm .env.neu && cp .env.prod .env.neu; fi
@@ -28,9 +29,9 @@ update_apiurl:
 
 build site: #for deployed version
   stage: build
-  # cache:
-  #   paths:
-  #     - node_modules/
+  cache:
+    paths:
+      - node_modules/
   before_script:
     - echo $(ls -a)
     - mv -f .env.neu .env
@@ -45,37 +46,28 @@ build site: #for deployed version
     paths:
       - dist
 
-# unit test:
-#   #image: node:11
-#   stage: test
-#   script:
-#   #   - npm install --progress=false
-#   #   - npm run unit
+unit test:
+  image: node:11
+  stage: test
+  script:
+    - npm install --progress=false
+    - npm run unit
 
 deploy:
   stage: deploy
   image: ubuntu:latest
-  #when: manual
+  #when: manual (damit nicht automatisch deployed wird)
   before_script:
-    # Install ssh-agent if not already installed, it is required by Docker
     - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
-    # Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    #- echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
 
   script:
     - echo "Deploy to production server..."
-    - echo $(ls)
-    - ssh ssh-w0138428@vegane-prinzessin.de "ls"
-    - ssh ssh-w0138428@vegane-prinzessin.de "ls www/htdocs/w0138428/tuudu.emsgold.de"
-    - ssh ssh-w0138428@vegane-prinzessin.de "rm -rf www/htdocs/w0138428/tuudu.emsgold.de/* "
-
-    - scp index.html favicon.ico service-worker.js manifest.json ssh-w0138428@vegane-prinzessin.de:/www/htdocs/w0138428/tuudu.emsgold.de
-    - scp -r dist ssh-w0138428@vegane-prinzessin.de:www/htdocs/w0138428/tuudu.emsgold.de
-    - ssh ssh-w0138428@vegane-prinzessin.de "ls www/htdocs/w0138428/tuudu.emsgold.de"
+    - ssh ssh-w0138428@vegane-prinzessin.de "rm -rf www/htdocs/path/to/web/folder/* "
+    - scp -r dist my-ssh-account:/www/htdocs/path/to/web/folder"
   only:
     - master
