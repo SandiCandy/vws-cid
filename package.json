@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "@fortawesome/vue-fontawesome": "^0.1.5",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "dotenv-webpack": "^1.7.0",
     "i": "^0.3.6",
     "npm": "^6.10.3",
